@@ -2,7 +2,8 @@
   "name": "actions-toolkit",
   "version": "0.0.1",
   "description": "A toolkit for building GitHub Actions in Node.js",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "test": "jest --coverage && standard",
     "build": "rimraf lib && tsc -p tsconfig.json",
