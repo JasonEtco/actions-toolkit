@@ -6,8 +6,7 @@
   "scripts": {
     "test": "jest --coverage && standard",
     "build": "rimraf lib && tsc -p tsconfig.json",
-    "prepare": "npm run build",
-    "doc": "typedoc --options .typedoc.json"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -30,8 +29,6 @@
     "standard": "^11.0.1",
     "tslint": "^5.11.0",
     "tslint-config-standard": "^8.0.1",
-    "typedoc": "^0.13.0",
-    "typedoc-plugin-markdown": "^1.1.18",
     "typescript": "^3.1.6"
   },
   "standard": {
