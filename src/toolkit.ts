@@ -7,6 +7,10 @@ import Context from './context'
 
 export default class Toolkit {
   public context: Context
+
+  /**
+   * Path to a clone of the repository
+   */
   public workspace: string | undefined
 
   constructor () {
@@ -16,8 +20,6 @@ export default class Toolkit {
 
   /**
    * Returns an authenticated Octokit client
-   *
-   * @returns {object}
    */
   createOctokit () {
     if (!process.env.GITHUB_TOKEN) {
@@ -38,10 +40,8 @@ export default class Toolkit {
    *
    * @param {string} filename - Filename
    * @param {string} [encoding='utf8'] - Encoding
-   *
-   * @returns {string}
    */
-  getFile (filename: string, encoding = 'utf8') : string {
+  getFile (filename: string, encoding = 'utf8') {
     if (!this.workspace) throw new Error('No workspace was found.')
     const pathToFile = path.join(this.workspace, filename)
     if (!fs.existsSync(pathToFile)) throw new Error(`File ${filename} could not be found in your project's workspace.`)
@@ -50,8 +50,6 @@ export default class Toolkit {
 
   /**
    * Get the package.json file in the project root
-   *
-   * @returns {object}
    */
   getPackageJSON () {
     if (!this.workspace) throw new Error('No workspace was found.')
@@ -66,10 +64,8 @@ export default class Toolkit {
    * @param {string} key - If this starts with a `.`, it will look for a file starting with `.`.
    * If it is a YAML file, it will return it as JSON. Otherwise, it will return the value of the property in
    * the `package.json` file of the project.
-   *
-   * @returns {object}
    */
-  config (key: string) {
+  config (key: string) : object {
     if (!this.workspace) throw new Error('No workspace was found.')
 
     if (key.startsWith('.') && key.endsWith('rc')) {
@@ -93,8 +89,6 @@ export default class Toolkit {
    * @param {string} command - Command to run
    * @param {string[]} args - Arguments
    * @param {string} [subdirectory] - Subdirectory to run the command in
-   *
-   * @returns {Promise<object>}
    */
   async runInWorkspace (command: string, args: string[], cwd = this.workspace, opts: object) {
     return execa(command, args, { cwd, ...opts })

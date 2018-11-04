@@ -37,6 +37,9 @@ const payload = tools.context.payload
 // Get the repo
 console.log(tools.context.repo())
 // => { owner: 'JasonEtco', repo: 'actions-toolkit' }
+
+// Get a path to the workspace
+const workspace = tools.workspace
 ```
 
 ## How it works
