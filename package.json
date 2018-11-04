@@ -1,0 +1,34 @@
+{
+  "name": "actions-toolkit",
+  "version": "0.0.1",
+  "description": "A toolkit for building GitHub Actions in Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage && standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JasonEtco/actions-toolkit.git"
+  },
+  "keywords": [],
+  "author": "Jason Etcovitch <jasonetco@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JasonEtco/actions-toolkit/issues"
+  },
+  "homepage": "https://github.com/JasonEtco/actions-toolkit#readme",
+  "devDependencies": {
+    "jest": "^23.5.0",
+    "standard": "^11.0.1"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  },
+  "dependencies": {
+    "@octokit/rest": "^15.15.1",
+    "execa": "^1.0.0",
+    "js-yaml": "^3.12.0"
+  }
+}
