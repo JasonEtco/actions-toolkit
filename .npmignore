@@ -4,3 +4,6 @@ codecov.yml
 README.md
 .gitignore
 coverage
+src
+tsconfig.json
+tslint.json
