@@ -1,12 +1,12 @@
 export default class Context {
   public payload: any
-  public sha: string
-  public ref: string
+  public sha: string | undefined
+  public ref: string | undefined
 
   constructor () {
-    this.payload = require(String(process.env.GITHUB_EVENT_PATH))
-    this.sha = String(process.env.GITHUB_SHA)
-    this.ref = String(process.env.GITHUB_REF)
+    this.payload = process.env.GITHUB_EVENT_PATH ? require(process.env.GITHUB_EVENT_PATH) : undefined
+    this.sha = process.env.GITHUB_SHA || undefined
+    this.ref = process.env.GITHUB_REF || undefined
   }
 
   /**
@@ -22,6 +22,10 @@ export default class Context {
    *
    */
   repo (object: object) {
+    if (!this.payload) {
+      throw new Error('No webhook payload found.')
+    }
+
     const repo = this.payload.repository
 
     if (!repo) {

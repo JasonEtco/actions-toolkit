@@ -5,19 +5,13 @@ import execa from 'execa'
 import yaml from 'js-yaml'
 import Context from './context'
 
-export interface Workspace {
-  path: string
-}
-
 export default class Toolkit {
   public context: Context
-  public workspace: Workspace
+  public workspace: string | undefined
 
   constructor () {
     this.context = new Context()
-    this.workspace = {
-      path: String(process.env.GITHUB_WORKSPACE)
-    }
+    this.workspace = process.env.GITHUB_WORKSPACE || undefined
   }
 
   /**
@@ -26,11 +20,14 @@ export default class Toolkit {
    * @returns {object}
    */
   createOctokit () {
+    if (!process.env.GITHUB_TOKEN) {
+      throw new Error('No `GITHUB_TOKEN` environment variable found, could not authenticate Octokit client.')
+    }
     const octokit = new Octokit()
 
     octokit.authenticate({
       type: 'token',
-      token: String(process.env.GITHUB_TOKEN)
+      token: process.env.GITHUB_TOKEN
     })
 
     return octokit
@@ -45,7 +42,8 @@ export default class Toolkit {
    * @returns {string}
    */
   getFile (filename: string, encoding = 'utf8') : string {
-    const pathToFile = path.join(this.workspace.path, filename)
+    if (!this.workspace) throw new Error('No workspace was found.')
+    const pathToFile = path.join(this.workspace, filename)
     if (!fs.existsSync(pathToFile)) throw new Error(`File ${filename} could not be found in your project's workspace.`)
     return fs.readFileSync(pathToFile, encoding)
   }
@@ -56,7 +54,8 @@ export default class Toolkit {
    * @returns {object}
    */
   getPackageJSON () {
-    const pathToPackage = path.join(this.workspace.path, 'package.json')
+    if (!this.workspace) throw new Error('No workspace was found.')
+    const pathToPackage = path.join(this.workspace, 'package.json')
     if (!fs.existsSync(pathToPackage)) throw new Error('package.json could not be found in your project\'s root.')
     return require(pathToPackage)
   }
@@ -71,9 +70,11 @@ export default class Toolkit {
    * @returns {object}
    */
   config (key: string) {
+    if (!this.workspace) throw new Error('No workspace was found.')
+
     if (key.startsWith('.') && key.endsWith('rc')) {
       // It's a file like .npmrc or .eslintrc!
-      const pathToRcFile = path.join(this.workspace.path, key)
+      const pathToRcFile = path.join(this.workspace, key)
       if (!fs.existsSync(pathToRcFile)) throw new Error(`File ${key} could not be found in your project's workspace.`)
       return require(pathToRcFile)
     } else if (key.endsWith('.yml') || key.endsWith('.yaml')) {
@@ -95,7 +96,7 @@ export default class Toolkit {
    *
    * @returns {Promise<object>}
    */
-  async runInWorkspace (command: string, args: string[], cwd = this.workspace.path, opts: object) {
+  async runInWorkspace (command: string, args: string[], cwd = this.workspace, opts: object) {
     return execa(command, args, { cwd, ...opts })
   }
 }
