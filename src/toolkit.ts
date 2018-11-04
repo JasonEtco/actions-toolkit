@@ -19,12 +19,13 @@ export default class Toolkit {
   }
 
   /**
-   * Returns an authenticated Octokit client
+   * Returns an authenticated Octokit client.
    */
   createOctokit () {
     if (!process.env.GITHUB_TOKEN) {
       throw new Error('No `GITHUB_TOKEN` environment variable found, could not authenticate Octokit client.')
     }
+
     const octokit = new Octokit()
 
     octokit.authenticate({
@@ -38,11 +39,12 @@ export default class Toolkit {
   /**
    * Gets a file in your project's workspace
    *
-   * @param {string} filename - Filename
-   * @param {string} [encoding='utf8'] - Encoding
+   * @param filename - Name of the file
+   * @param encoding - Encoding (usually utf8)
    */
   getFile (filename: string, encoding = 'utf8') {
     if (!this.workspace) throw new Error('No workspace was found.')
+
     const pathToFile = path.join(this.workspace, filename)
     if (!fs.existsSync(pathToFile)) throw new Error(`File ${filename} could not be found in your project's workspace.`)
     return fs.readFileSync(pathToFile, encoding)
@@ -50,9 +52,14 @@ export default class Toolkit {
 
   /**
    * Get the package.json file in the project root
+   * 
+   * ```js
+   * const pkg = toolkit.getPackageJSON()
+   * ```
    */
-  getPackageJSON () {
+  getPackageJSON () : object {
     if (!this.workspace) throw new Error('No workspace was found.')
+
     const pathToPackage = path.join(this.workspace, 'package.json')
     if (!fs.existsSync(pathToPackage)) throw new Error('package.json could not be found in your project\'s root.')
     return require(pathToPackage)
@@ -61,14 +68,27 @@ export default class Toolkit {
   /**
    * Get the configuration settings for this action in the project workspace.
    *
-   * @param {string} key - If this starts with a `.`, it will look for a file starting with `.`.
+   * @param key - If this is a string like `.myfilerc` it will look for that file.
    * If it is a YAML file, it will return it as JSON. Otherwise, it will return the value of the property in
    * the `package.json` file of the project.
+   * 
+   * @example This method can be used in three different ways:
+   *
+   * ```js
+   * // Get the .rc file
+   * const cfg = toolkit.config('.myactionrc')
+   *
+   * // Get the YAML file
+   * const cfg = toolkit.config('myaction.yml')
+   *
+   * // Get the property in package.json
+   * const cfg = toolkit.config('myaction')
+   * ```
    */
   config (key: string) : object {
     if (!this.workspace) throw new Error('No workspace was found.')
 
-    if (key.startsWith('.') && key.endsWith('rc')) {
+    if (/\..+rc/.test(key)) {
       // It's a file like .npmrc or .eslintrc!
       const pathToRcFile = path.join(this.workspace, key)
       if (!fs.existsSync(pathToRcFile)) throw new Error(`File ${key} could not be found in your project's workspace.`)
@@ -78,7 +98,7 @@ export default class Toolkit {
       return yaml.safeLoad(this.getFile(key))
     } else {
       // It's a regular object key in the package.json
-      const pkg = this.getPackageJSON()
+      const pkg = this.getPackageJSON() as any
       return pkg[key]
     }
   }
@@ -86,9 +106,10 @@ export default class Toolkit {
   /**
    * Run a CLI command in the workspace
    *
-   * @param {string} command - Command to run
-   * @param {string[]} args - Arguments
-   * @param {string} [subdirectory] - Subdirectory to run the command in
+   * @param command - Command to run
+   * @param args - Arguments
+   * @param cwd - Directory to run the command in
+   * @param opts - 
    */
   async runInWorkspace (command: string, args: string[], cwd = this.workspace, opts: object) {
     return execa(command, args, { cwd, ...opts })
