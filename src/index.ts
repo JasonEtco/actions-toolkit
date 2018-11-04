@@ -1,3 +1,5 @@
+import Toolkit from './toolkit'
+
 const requiredEnvVars = [
   'HOME',
   'GITHUB_WORKFLOW',
@@ -18,4 +20,5 @@ if (requiredButMissing.length > 0) {
   console.warn(`There are environment variables missing from this runtime, but would be present on GitHub.\n${requiredButMissing.map(key => `- ${key}`).join('\n')}`)
 }
 
-module.exports = require('./lib/toolkit')
+export default Toolkit
+module.exports = Toolkit

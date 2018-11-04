@@ -1,8 +1,12 @@
-class Context {
+export default class Context {
+  public payload: any
+  public sha: string
+  public ref: string
+
   constructor () {
-    this.payload = require(process.env.GITHUB_EVENT_PATH)
-    this.sha = process.env.GITHUB_SHA
-    this.ref = process.env.GITHUB_REF
+    this.payload = require(String(process.env.GITHUB_EVENT_PATH))
+    this.sha = String(process.env.GITHUB_SHA)
+    this.ref = String(process.env.GITHUB_REF)
   }
 
   /**
@@ -17,7 +21,7 @@ class Context {
    * @param object - Params to be merged with the repo params.
    *
    */
-  repo (object) {
+  repo (object: object) {
     const repo = this.payload.repository
 
     if (!repo) {
@@ -43,7 +47,7 @@ class Context {
    *
    * @param object - Params to be merged with the issue params.
    */
-  issue (object) {
+  issue (object: object) {
     const payload = this.payload
     return this.repo({
       number: (payload.issue || payload.pull_request || payload).number,
@@ -51,5 +55,3 @@ class Context {
     })
   }
 }
-
-module.exports = Context

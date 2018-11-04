@@ -1,16 +1,22 @@
-const GitHub = require('@octokit/rest')
-const fs = require('fs')
-const path = require('path')
-const execa = require('execa')
-const yaml = require('js-yaml')
-const Context = require('./context')
+import Octokit from '@octokit/rest'
+import fs from 'fs'
+import path from 'path'
+import execa from 'execa'
+import yaml from 'js-yaml'
+import Context from './context'
 
-module.exports = class Toolkit {
-  constructor (opts) {
-    this.opts = opts
+export interface Workspace {
+  path: string
+}
+
+export default class Toolkit {
+  public context: Context
+  public workspace: Workspace
+
+  constructor () {
     this.context = new Context()
     this.workspace = {
-      path: process.env.GITHUB_WORKSPACE
+      path: String(process.env.GITHUB_WORKSPACE)
     }
   }
 
@@ -20,10 +26,11 @@ module.exports = class Toolkit {
    * @returns {object}
    */
   createOctokit () {
-    const octokit = new GitHub()
+    const octokit = new Octokit()
+
     octokit.authenticate({
       type: 'token',
-      token: process.env.GITHUB_TOKEN
+      token: String(process.env.GITHUB_TOKEN)
     })
 
     return octokit
@@ -37,7 +44,7 @@ module.exports = class Toolkit {
    *
    * @returns {string}
    */
-  getFile (filename, encoding = 'utf8') {
+  getFile (filename: string, encoding = 'utf8') : string {
     const pathToFile = path.join(this.workspace.path, filename)
     if (!fs.existsSync(pathToFile)) throw new Error(`File ${filename} could not be found in your project's workspace.`)
     return fs.readFileSync(pathToFile, encoding)
@@ -49,7 +56,7 @@ module.exports = class Toolkit {
    * @returns {object}
    */
   getPackageJSON () {
-    const pathToPackage = path.join(this.path, 'package.json')
+    const pathToPackage = path.join(this.workspace.path, 'package.json')
     if (!fs.existsSync(pathToPackage)) throw new Error('package.json could not be found in your project\'s root.')
     return require(pathToPackage)
   }
@@ -63,8 +70,8 @@ module.exports = class Toolkit {
    *
    * @returns {object}
    */
-  config (key) {
-    if (key.startsWith('.') && key.endWith('rc')) {
+  config (key: string) {
+    if (key.startsWith('.') && key.endsWith('rc')) {
       // It's a file like .npmrc or .eslintrc!
       const pathToRcFile = path.join(this.workspace.path, key)
       if (!fs.existsSync(pathToRcFile)) throw new Error(`File ${key} could not be found in your project's workspace.`)
@@ -88,15 +95,7 @@ module.exports = class Toolkit {
    *
    * @returns {Promise<object>}
    */
-  async runInWorkspace (command, args, subdirectory) {
-    const cwd = path.join(this.path, subdirectory)
-    const result = await execa(command, args, { cwd, reject: false })
-
-    if (result.exitCode && result.exitCode !== 0) {
-      const error = result.stderr
-      throw new Error(error)
-    }
-
-    return result
+  async runInWorkspace (command: string, args: string[], cwd = this.workspace.path, opts: object) {
+    return execa(command, args, { cwd, ...opts })
   }
 }
