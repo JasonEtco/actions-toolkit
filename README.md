@@ -19,9 +19,14 @@ $ npm install actions-toolkit
 ```js
 const Toolkit = require('actions-toolkit')
 const tools = new Toolkit()
+
+const octokit = tools.createOctokit()
+const newIssue = await octokit.issues.create(tools.context.repo({
+  title: 'Hello Universe!'
+}))
 ```
 
-You can see the full [API docs here](./docs/API.md)!
+You can see the full [API docs here](./docs/classes/toolkit.md)!
 
 ## FAQ
 
