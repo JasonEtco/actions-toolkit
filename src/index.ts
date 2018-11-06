@@ -92,9 +92,7 @@ class Toolkit {
   public config (key: string): object {
     if (/\..+rc/.test(key)) {
       // It's a file like .npmrc or .eslintrc!
-      const pathToRcFile = path.join(this.workspace, key)
-      if (!fs.existsSync(pathToRcFile)) throw new Error(`File ${key} could not be found in your project's workspace.`)
-      return require(pathToRcFile)
+      return JSON.parse(this.getFile(key))
     } else if (key.endsWith('.yml') || key.endsWith('.yaml')) {
       // It's a YAML file! Gotta serialize it!
       return yaml.safeLoad(this.getFile(key))
@@ -111,10 +109,10 @@ class Toolkit {
    * @param command - Command to run
    * @param args - Arguments
    * @param cwd - Directory to run the command in
-   * @param opts
+   * @param [opts]
    */
-  public async runInWorkspace (command: string, args: string[], cwd = this.workspace, opts: object) {
-    return execa(command, args, { cwd, ...opts })
+  public async runInWorkspace (command: string, args: string[] | string, cwd = this.workspace, opts?: object) {
+    return execa(command, Array.isArray(args) ? args : [args], { cwd, ...opts })
   }
 
   /**

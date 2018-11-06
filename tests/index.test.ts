@@ -45,4 +45,29 @@ describe('Toolkit', () => {
       expect(actual).toThrowErrorMatchingSnapshot()
     })
   })
+
+  describe('#config', () => {
+    it('returns a property in the package.json', () => {
+      const actual = toolkit.config('action')
+      expect(actual).toEqual({ foo: true })
+    })
+
+    it('returns a parsed YAML file', () => {
+      const actual = toolkit.config('action.yml')
+      expect(actual).toEqual({ foo: true })
+    })
+
+    it('returns a .rc file as JSON', () => {
+      const actual = toolkit.config('.actionrc')
+      expect(actual).toEqual({ foo: true })
+    })
+  })
+
+  describe('#runInWorkspace', () => {
+    it('runs the command in the workspace', async () => {
+      const result = await toolkit.runInWorkspace('echo', 'hello')
+      expect(result).toMatchSnapshot()
+      expect(result.stdout).toBe('hello')
+    })
+  })
 })
