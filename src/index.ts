@@ -9,7 +9,7 @@ class Toolkit {
   public context: Context
 
   /**
-   * @private
+   * A warning string that is memoized if there are missing environment variables
    */
   public warning: string | undefined
 
