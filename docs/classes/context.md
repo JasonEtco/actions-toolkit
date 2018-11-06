@@ -37,7 +37,7 @@
 
 ⊕ **new Context**(): [Context](context.md)
 
-*Defined in [context.ts:16](https://github.com/JasonEtco/actions-toolkit/blob/3dc7f95/src/context.ts#L16)*
+*Defined in [context.ts:61](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L61)*
 
 **Returns:** [Context](context.md)
 
@@ -51,7 +51,7 @@ ___
 
 **● action**: *`string`*
 
-*Defined in [context.ts:15](https://github.com/JasonEtco/actions-toolkit/blob/3dc7f95/src/context.ts#L15)*
+*Defined in [context.ts:60](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L60)*
 
 ___
 <a id="actor"></a>
@@ -60,7 +60,7 @@ ___
 
 **● actor**: *`string`*
 
-*Defined in [context.ts:16](https://github.com/JasonEtco/actions-toolkit/blob/3dc7f95/src/context.ts#L16)*
+*Defined in [context.ts:61](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L61)*
 
 ___
 <a id="event"></a>
@@ -69,7 +69,7 @@ ___
 
 **● event**: *`string`*
 
-*Defined in [context.ts:11](https://github.com/JasonEtco/actions-toolkit/blob/3dc7f95/src/context.ts#L11)*
+*Defined in [context.ts:56](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L56)*
 
 Name of the event that triggered the workflow
 
@@ -78,9 +78,9 @@ ___
 
 ###  payload
 
-**● payload**: *`WebhookPayloadWithRepository`*
+**● payload**: *[WebhookPayloadWithRepository](../interfaces/webhookpayloadwithrepository.md)*
 
-*Defined in [context.ts:7](https://github.com/JasonEtco/actions-toolkit/blob/3dc7f95/src/context.ts#L7)*
+*Defined in [context.ts:52](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L52)*
 
 Webhook payload object that triggered the workflow
 
@@ -91,7 +91,7 @@ ___
 
 **● ref**: *`string`*
 
-*Defined in [context.ts:13](https://github.com/JasonEtco/actions-toolkit/blob/3dc7f95/src/context.ts#L13)*
+*Defined in [context.ts:58](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L58)*
 
 ___
 <a id="sha"></a>
@@ -100,7 +100,7 @@ ___
 
 **● sha**: *`string`*
 
-*Defined in [context.ts:12](https://github.com/JasonEtco/actions-toolkit/blob/3dc7f95/src/context.ts#L12)*
+*Defined in [context.ts:57](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L57)*
 
 ___
 <a id="workflow"></a>
@@ -109,7 +109,7 @@ ___
 
 **● workflow**: *`string`*
 
-*Defined in [context.ts:14](https://github.com/JasonEtco/actions-toolkit/blob/3dc7f95/src/context.ts#L14)*
+*Defined in [context.ts:59](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L59)*
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 ▸ **issue**<`T`>(object?: *[T]()*):  `object` & `object` & `T`
 
-*Defined in [context.ts:65](https://github.com/JasonEtco/actions-toolkit/blob/3dc7f95/src/context.ts#L65)*
+*Defined in [context.ts:110](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L110)*
 
 Return the `owner`, `repo`, and `number` params for making API requests against an issue or pull request. The object passed in will be merged with the repo params.
 
@@ -148,7 +148,7 @@ ___
 
 ▸ **repo**<`T`>(object?: *[T]()*):  `object` & `T`
 
-*Defined in [context.ts:40](https://github.com/JasonEtco/actions-toolkit/blob/3dc7f95/src/context.ts#L40)*
+*Defined in [context.ts:85](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L85)*
 
 Return the `owner` and `repo` params for making API requests against a repository.
 
