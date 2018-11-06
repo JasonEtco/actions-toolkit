@@ -19,4 +19,16 @@ describe('Toolkit', () => {
       expect(() => toolkit.createOctokit()).toThrowErrorMatchingSnapshot()
     })
   })
+
+  describe('#getFile', () => {
+    it('gets the contents of a file', () => {
+      const actual = toolkit.getFile('README.md')
+      expect(actual).toMatchSnapshot()
+    })
+
+    it('throws if the file could not be found', () => {
+      const actual = () => toolkit.getFile('DONTREADME.md')
+      expect(actual).toThrowErrorMatchingSnapshot()
+    })
+  })
 })
