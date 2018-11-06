@@ -5,7 +5,7 @@ import yaml from 'js-yaml'
 import path from 'path'
 import Context from './context'
 
-class Toolkit {
+export class Toolkit {
   public context: Context
 
   /**
