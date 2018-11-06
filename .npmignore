@@ -7,3 +7,4 @@ coverage
 src
 tsconfig.json
 tslint.json
+docs
