@@ -86,7 +86,6 @@ describe('Toolkit', () => {
       delete process.env.HOME
       // Toolkit, but number two. Ergo, twolkit. Open an issue if this isn't clear.
       const twolkit = new Toolkit()
-
       expect(twolkit.warning).toMatchSnapshot()
     })
   })
