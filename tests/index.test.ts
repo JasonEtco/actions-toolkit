@@ -27,6 +27,11 @@ describe('Toolkit', () => {
       expect(actual).toMatchSnapshot()
     })
 
+    it('gets the contents of a file with custom encoding', () => {
+      const actual = toolkit.getFile('README.md', 'base64')
+      expect(actual).toMatchSnapshot()
+    })
+
     it('throws if the file could not be found', () => {
       const actual = () => toolkit.getFile('DONTREADME.md')
       expect(actual).toThrowErrorMatchingSnapshot()
