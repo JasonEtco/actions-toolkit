@@ -1,3 +1,4 @@
+import path from 'path'
 import Toolkit from '../src'
 
 describe('Toolkit', () => {
@@ -28,6 +29,19 @@ describe('Toolkit', () => {
 
     it('throws if the file could not be found', () => {
       const actual = () => toolkit.getFile('DONTREADME.md')
+      expect(actual).toThrowErrorMatchingSnapshot()
+    })
+  })
+
+  describe('#getPackageJSON', () => {
+    it('returns the package.json file as a JSON object', () => {
+      const actual = toolkit.getPackageJSON()
+      expect(actual).toMatchSnapshot()
+    })
+
+    it('throws if the package.json file could not be found', () => {
+      toolkit.workspace = path.join(__dirname, 'fixtures', 'workspaces', 'no-package-json')
+      const actual = () => toolkit.getPackageJSON()
       expect(actual).toThrowErrorMatchingSnapshot()
     })
   })

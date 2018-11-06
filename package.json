@@ -5,10 +5,9 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "test": "jest --coverage && standard",
     "build": "rimraf lib && tsc -p tsconfig.json",
     "lint": "tslint --project tests",
-    "test:ts": "tsc --noEmit -p tests && jest --coverage && npm run lint",
+    "test": "tsc --noEmit -p tests && jest --coverage && npm run lint",
     "prepare": "npm run build"
   },
   "repository": {
