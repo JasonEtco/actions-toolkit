@@ -4,6 +4,7 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import path from 'path'
 import Context from './context'
+import { Options as ExecaOptions } from 'execa'
 
 class Toolkit {
   public context: Context
@@ -116,8 +117,9 @@ class Toolkit {
    * @param cwd - Directory to run the command in
    * @param [opts]
    */
-  public async runInWorkspace (command: string, args: string[] | string, opts?: object) {
-    return execa(command, Array.isArray(args) ? args : [args], { cwd: this.workspace, ...opts })
+  public async runInWorkspace (command: string, args?: string[] | string, opts?: ExecaOptions) {
+    if (typeof args === 'string') args = [args]
+    return execa(command, args, { cwd: this.workspace, ...opts })
   }
 
   /**

@@ -74,6 +74,11 @@ describe('Toolkit', () => {
       expect(result).toMatchSnapshot()
       expect(result.stdout).toBe('hello')
     })
+
+    it('runs the command in the workspace with some options', async () => {
+      const result = await toolkit.runInWorkspace('throw', undefined, { reject: false })
+      expect(result).toMatchSnapshot()
+    })
   })
 
   describe('#warnForMissingEnvVars', () => {
