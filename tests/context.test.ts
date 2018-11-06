@@ -71,8 +71,8 @@ describe('Context', () => {
 
     it('works with pull_request payloads', () => {
       context.payload = {
-        repository: { owner: { login: 'JasonEtco' }, name: 'test' },
-        pull_request: { number: 2 }
+        pull_request: { number: 2 },
+        repository: { owner: { login: 'JasonEtco' }, name: 'test' }
       }
       expect(context.issue()).toEqual({
         number: 2, owner: 'JasonEtco', repo: 'test'

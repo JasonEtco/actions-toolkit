@@ -9,6 +9,11 @@ class Toolkit {
   public context: Context
 
   /**
+   * @private
+   */
+  public warning: string | undefined
+
+  /**
    * Path to a clone of the repository
    */
   public workspace: string
@@ -111,16 +116,14 @@ class Toolkit {
    * @param cwd - Directory to run the command in
    * @param [opts]
    */
-  public async runInWorkspace (command: string, args: string[] | string, cwd = this.workspace, opts?: object) {
-    return execa(command, Array.isArray(args) ? args : [args], { cwd, ...opts })
+  public async runInWorkspace (command: string, args: string[] | string, opts?: object) {
+    return execa(command, Array.isArray(args) ? args : [args], { cwd: this.workspace, ...opts })
   }
 
   /**
    * Log warnings to the console for missing environment variables
    */
   private warnForMissingEnvVars () {
-    if (process.env.NODE_ENV === 'test') return
-
     const requiredEnvVars = [
       'HOME',
       'GITHUB_WORKFLOW',
@@ -135,11 +138,15 @@ class Toolkit {
       'GITHUB_TOKEN'
     ]
 
-    const requiredButMissing = requiredEnvVars.filter(key => process.env.hasOwnProperty(key))
+    const requiredButMissing = requiredEnvVars.filter(key => !process.env.hasOwnProperty(key))
     if (requiredButMissing.length > 0) {
       // This isn't being run inside of a GitHub Action environment!
+      const list = requiredButMissing.map(key => `- ${key}`).join('\n')
+      const warning = `There are environment variables missing from this runtime, but would be present on GitHub.\n${list}`
+
       // tslint:disable-next-line:no-console
-      console.log(`There are environment variables missing from this runtime, but would be present on GitHub.\n${requiredButMissing.map(key => `- ${key}`).join('\n')}`)
+      console.warn(warning)
+      this.warning = warning
     }
   }
 }

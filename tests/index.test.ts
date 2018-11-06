@@ -70,4 +70,14 @@ describe('Toolkit', () => {
       expect(result.stdout).toBe('hello')
     })
   })
+
+  describe('#warnForMissingEnvVars', () => {
+    it('logs the expected string', () => {
+      delete process.env.HOME
+      // Toolkit, but number two. Ergo, twolkit. Open an issue if this isn't clear.
+      const twolkit = new Toolkit()
+
+      expect(twolkit.warning).toMatchSnapshot()
+    })
+  })
 })
