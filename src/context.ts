@@ -1,10 +1,12 @@
 export default class Context {
   public payload: any
+  public event: string | undefined
   public sha: string | undefined
   public ref: string | undefined
 
   constructor () {
     this.payload = process.env.GITHUB_EVENT_PATH ? require(process.env.GITHUB_EVENT_PATH) : undefined
+    this.event = process.env.GITHUB_EVENT_NAME || undefined
     this.sha = process.env.GITHUB_SHA || undefined
     this.ref = process.env.GITHUB_REF || undefined
   }

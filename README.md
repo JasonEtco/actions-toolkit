@@ -33,6 +33,8 @@ const myActionsConfigs = tools.config('.my-actionrc')
 
 // Get the webhook payload that triggered the action
 const payload = tools.context.payload
+// Get the webhook event name that triggered the action
+const event = tools.context.event
 
 // Get the repo
 console.log(tools.context.repo())
