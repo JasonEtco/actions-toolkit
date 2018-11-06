@@ -26,9 +26,9 @@ You can see the full [API docs here](./docs/API.md)!
 ## FAQ
 
 **Can you get me into the GitHub Actions beta?**
-I'm sorry, but I can't :sob:
+
+I'm sorry, but I cannot.
 
 **Aren't these just wrappers around existing functions?**
-Yep! I just didn't want to rewrite them for my next Action, so here we are.
 
-**
+Yep! I just didn't want to rewrite them for my next Action, so here we are.
