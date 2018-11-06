@@ -1,10 +1,9 @@
 import Octokit from '@octokit/rest'
-import execa from 'execa'
+import execa, { Options as ExecaOptions } from 'execa'
 import fs from 'fs'
 import yaml from 'js-yaml'
 import path from 'path'
 import Context from './context'
-import { Options as ExecaOptions } from 'execa'
 
 class Toolkit {
   public context: Context

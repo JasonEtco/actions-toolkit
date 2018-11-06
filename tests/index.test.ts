@@ -83,13 +83,17 @@ describe('Toolkit', () => {
 
   describe('#warnForMissingEnvVars', () => {
     it('logs the expected string', () => {
+      // tslint:disable:no-console
       const before = console.warn
       console.warn = f => f
+
       delete process.env.HOME
       // Toolkit, but number two. Ergo, twolkit. Open an issue if this isn't clear.
       const twolkit = new Toolkit()
       expect(twolkit.warning).toMatchSnapshot()
+
       console.warn = before
+      // tslint:enable:no-console
     })
   })
 })
