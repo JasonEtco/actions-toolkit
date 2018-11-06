@@ -7,7 +7,25 @@ describe('Context', () => {
     context = new Context()
   })
 
-  describe('repo', () => {
+  describe('.payload', () => {
+    it('returns the payload object', () => {
+      expect(context.payload).toMatchSnapshot()
+    })
+
+    it('returns an empty object if the GITHUB_EVENT_PATH environment variable is falsey', () => {
+      // Have to store the env var to pass later tests
+      const before = process.env.GITHUB_EVENT_PATH
+      delete process.env.GITHUB_EVENT_PATH
+
+      context = new Context()
+      expect(context.payload).toEqual({})
+
+      // Reset it
+      process.env.GITHUB_EVENT_PATH = before
+    })
+  })
+
+  describe('#repo', () => {
     it('returns attributes from repository payload', () => {
       expect(context.repo()).toEqual({ owner: 'JasonEtco', repo: 'test' })
     })
@@ -34,7 +52,7 @@ describe('Context', () => {
     })
   })
 
-  describe('issue', () => {
+  describe('#issue', () => {
     it('returns attributes from the repository payload', () => {
       expect(context.issue()).toEqual({ owner: 'JasonEtco', repo: 'test', number: 1 })
     })

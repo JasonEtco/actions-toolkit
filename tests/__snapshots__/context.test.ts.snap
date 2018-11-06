@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Context .payload returns the payload object 1`] = `
+Object {
+  "issue": Object {
+    "number": 1,
+  },
+  "repository": Object {
+    "name": "test",
+    "owner": Object {
+      "login": "JasonEtco",
+    },
+  },
+}
+`;
