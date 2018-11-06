@@ -1,8 +1,8 @@
 {
   "mode": "file",
   "out": "docs",
-  "exclude": "tests",
   "theme": "markdown",
+  "exclude": "tests",
   "excludePrivate": true,
   "excludeNotExported": true,
   "excludeExternals": true,
