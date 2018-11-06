@@ -37,7 +37,7 @@ export default class Context {
    * @param object - Params to be merged with the repo params.
    *
    */
-  repo (object: object) {
+  public repo (object: object) {
     if (!this.payload) {
       throw new Error('No webhook payload found.')
     }
@@ -67,7 +67,7 @@ export default class Context {
    *
    * @param object - Params to be merged with the issue params.
    */
-  issue (object: object) {
+  public issue (object: object) {
     const payload = this.payload
     return this.repo({
       number: (payload.issue || payload.pull_request || payload).number,
