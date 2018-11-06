@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Toolkit #createOctokit throws if there is no GITHUB_TOKEN environment variable 1`] = `"No \`GITHUB_TOKEN\` environment variable found, could not authenticate Octokit client."`;

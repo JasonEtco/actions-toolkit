@@ -121,6 +121,8 @@ class Toolkit {
    * Log warnings to the console for missing environment variables
    */
   private warnForMissingEnvVars () {
+    if (process.env.NODE_ENV === 'test') return
+
     const requiredEnvVars = [
       'HOME',
       'GITHUB_WORKFLOW',
