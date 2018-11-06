@@ -59,7 +59,7 @@ export class Toolkit {
 
   /**
    * Gets the contents file in your project's workspace
-   * 
+   *
    * ```js
    * const myFile = tools.getFile('README.md')
    * ```
