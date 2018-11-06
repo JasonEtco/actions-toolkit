@@ -1,14 +1,28 @@
+import { WebhookPayloadWithRepository } from './webhooks'
+
 export default class Context {
-  public payload: any
-  public event: string | undefined
-  public sha: string | undefined
-  public ref: string | undefined
+  /**
+   * Webhook payload object that triggered the workflow
+   */
+  public payload: WebhookPayloadWithRepository
+  /**
+   * Name of the event that triggered the workflow
+   */
+  public event: string
+  public sha: string
+  public ref: string
+  public workflow: string
+  public action: string
+  public actor: string
 
   constructor () {
-    this.payload = process.env.GITHUB_EVENT_PATH ? require(process.env.GITHUB_EVENT_PATH) : undefined
-    this.event = process.env.GITHUB_EVENT_NAME || undefined
-    this.sha = process.env.GITHUB_SHA || undefined
-    this.ref = process.env.GITHUB_REF || undefined
+    this.payload = process.env.GITHUB_EVENT_PATH ? require(process.env.GITHUB_EVENT_PATH) : {}
+    this.event = process.env.GITHUB_EVENT_NAME as string
+    this.sha = process.env.GITHUB_SHA as string
+    this.ref = process.env.GITHUB_REF as string
+    this.workflow = process.env.GITHUB_WORKFLOW as string
+    this.action = process.env.GITHUB_ACTION as string
+    this.actor = process.env.GITHUB_ACTOR as string
   }
 
   /**

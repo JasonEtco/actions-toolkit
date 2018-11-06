@@ -26,9 +26,9 @@ const readme = tools.getFile('README.md')
 
 // Returns `{ "my-action": {} }` from the repo's `package.json`
 const myActionsConfigs = tools.config('my-action')
-// Or returns a YAML file
+// Or returns a YAML file, parsed as JSON
 const myActionsConfigs = tools.config('my-action.yml')
-// Or returns a .my-actionrc file
+// Or returns a .my-actionrc file, parsed as JSON
 const myActionsConfigs = tools.config('.my-actionrc')
 
 // Get the webhook payload that triggered the action

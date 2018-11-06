@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/JasonEtco/actions-toolkit#readme",
   "devDependencies": {
+    "@octokit/webhooks": "^5.0.2",
     "@types/dotenv": "^4.0.3",
     "@types/execa": "^0.9.0",
     "@types/jest": "^23.3.9",
