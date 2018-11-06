@@ -4,7 +4,7 @@ Object.assign(process.env, {
   GITHUB_ACTION: 'my-action',
   GITHUB_ACTOR: 'JasonEtco',
   GITHUB_EVENT_NAME: 'push',
-  GITHUB_EVENT_PATH: path.join(__dirname, 'fixtures', 'push.json'),
+  GITHUB_EVENT_PATH: path.join(__dirname, 'fixtures', 'issues.opened.json'),
   GITHUB_REF: 'master',
   GITHUB_REPOSITORY: 'JasonEtco/actydoo',
   GITHUB_SHA: '123abc',

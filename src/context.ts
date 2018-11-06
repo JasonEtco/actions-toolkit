@@ -37,22 +37,17 @@ export default class Context {
    * @param object - Params to be merged with the repo params.
    *
    */
-  public repo (object: object) {
-    if (!this.payload) {
-      throw new Error('No webhook payload found.')
-    }
-
+  public repo<T> (object?: T) {
     const repo = this.payload.repository
 
     if (!repo) {
-      throw new Error('toolkit.context.repo() is not supported for this webhook event.')
+      throw new Error('context.repo() is not supported for this webhook event.')
     }
 
-    return {
-      owner: repo.owner.login || repo.owner.name,
-      repo: repo.name,
-      ...object
-    }
+    return Object.assign({
+      owner: repo.owner.login,
+      repo: repo.name
+    }, object)
   }
 
   /**
@@ -67,11 +62,10 @@ export default class Context {
    *
    * @param object - Params to be merged with the issue params.
    */
-  public issue (object: object) {
+  public issue<T> (object?: T) {
     const payload = this.payload
-    return this.repo({
-      number: (payload.issue || payload.pull_request || payload).number,
-      ...object
-    })
+    return Object.assign({
+      number: (payload.issue || payload.pull_request || payload).number
+    }, this.repo(object))
   }
 }
