@@ -8,7 +8,7 @@
     "test": "jest --coverage && standard",
     "build": "rimraf lib && tsc -p tsconfig.json",
     "lint": "tslint --project tests",
-    "test:ts": "tsc --noEmit -p test && jest --coverage && npm run lint",
+    "test:ts": "tsc --noEmit -p tests && jest --coverage && npm run lint",
     "prepare": "npm run build"
   },
   "repository": {
@@ -46,5 +46,29 @@
     "@octokit/rest": "^15.15.1",
     "execa": "^1.0.0",
     "js-yaml": "^3.12.0"
+  },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/tests/setup.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/lib/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
+    "transform": {
+      ".+\\.tsx?$": "ts-jest"
+    },
+    "testMatch": [
+      "<rootDir>/tests/**/*.test.(ts|js)"
+    ],
+    "globals": {
+      "ts-jest": {
+        "babelConfig": false
+      }
+    }
   }
 }

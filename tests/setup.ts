@@ -1,4 +1,4 @@
-const path = require('path')
+import path from 'path';
 
 Object.assign(process.env, {
   HOME: '?',
