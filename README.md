@@ -2,6 +2,12 @@
 <p align="center">A toolkit for building GitHub Actions in Node.js<p>
 <p align="center"><a href="https://npmjs.com/package/actions-toolkit"><img src="https://badgen.net/npm/v/actions-toolkit" alt="NPM"></a> <a href="https://travis-ci.org/JasonEtco/actions-toolkit"><img src="https://badgen.now.sh/travis/JasonEtco/actions-toolkit" alt="Build Status"></a> <a href="https://codecov.io/gh/JasonEtco/actions-toolkit/"><img src="https://badgen.now.sh/codecov/c/github/JasonEtco/actions-toolkit" alt="Codecov"></a></p>
 
+## Motivation
+
+After building a GitHub Action in Node.js, it was clear to me that I was writing code that other actions will want to use. Reading files from the repository, making requests to the GitHub API, or running arbitrary executables on the project, etc.
+
+So, I thought it'd be useful to build those out into library to help you build actions in Node.js :tada:
+
 ## Usage
 
 ### Installation
@@ -15,73 +21,14 @@ const Toolkit = require('actions-toolkit')
 const tools = new Toolkit()
 ```
 
-## How it works
+You can see the full [API docs here](./docs/API.md)!
 
-### API
+## FAQ
 
-**`tools#createOctokit()`**
+**Can you get me into the GitHub Actions beta?**
+I'm sorry, but I can't :sob:
 
-Returns an Octokit SDK client authenticated for this repository. See https://octokit.github.io/rest.js for the API.
+**Aren't these just wrappers around existing functions?**
+Yep! I just didn't want to rewrite them for my next Action, so here we are.
 
-```js
-const octokit = tools.createOctokit()
-const newIssue = await octokit.issues.create(context.repo({
-  title: 'New issue!',
-  body: 'Hello Universe!'
-}))
-```
-
-**`tools#getPackageJSON()`**
-
-Returns a JSON object of the repo's `package.json` file.
-
-```js
-const pkg = tools.getPackageJSON()
-```
-
-**`tools#getFile(filename: string)`**
-
-Returns the contents of the given file in your repository.
-
-```js
-const readme = tools.getFile('README.md')
-```
-
-**`tools.config(filename)`**
-Returns a configuration object that repositories can create to customize the action.
-
-```js
-// Returns the `my-action` property from the repo's `package.json`
-const myActionsConfigs = tools.config('my-action')
-// Or returns a YAML file, parsed as JSON
-const myActionsConfigs = tools.config('my-action.yml')
-// Or returns a .my-actionrc file, parsed as JSON
-const myActionsConfigs = tools.config('.my-actionrc')
-```
-
-**`tools.context#repo([object])`**
-
-```js
-// Get the repo
-console.log(tools.context.repo({ foo: true }))
-// => { owner: 'JasonEtco', repo: 'actions-toolkit', foo: true }
-
-// Get the issue (if this action was triggered by an issue or PR)
-console.log(tools.context.issue({ foo: true }))
-// => { owner: 'JasonEtco', repo: 'actions-toolkit', number: 2, foo: true }
-```
-
-### Properties
-
-```js
-// Get the webhook payload that triggered the action
-const payload = tools.context.payload
-// Get the webhook event name that triggered the action
-const event = tools.context.event
-
-// Get a path to the workspace
-const workspace = tools.workspace
-
-// Get your GitHub API token
-const token = tools.token
-```
+**

@@ -32,7 +32,15 @@ class Toolkit {
   }
 
   /**
-   * Returns an authenticated Octokit client.
+   * Returns an Octokit SDK client authenticated for this repository. See https://octokit.github.io/rest.js for the API.
+   *
+   * ```js
+   * const octokit = tools.createOctokit()
+   * const newIssue = await octokit.issues.create(context.repo({
+   *   title: 'New issue!',
+   *   body: 'Hello Universe!'
+   * }))
+   * ```
    */
   public createOctokit () {
     if (!this.token) {
@@ -50,7 +58,11 @@ class Toolkit {
   }
 
   /**
-   * Gets a file in your project's workspace
+   * Gets the contents file in your project's workspace
+   * 
+   * ```js
+   * const myFile = tools.getFile('README.md')
+   * ```
    *
    * @param filename - Name of the file
    * @param encoding - Encoding (usually utf8)
@@ -78,8 +90,8 @@ class Toolkit {
    * Get the configuration settings for this action in the project workspace.
    *
    * @param key - If this is a string like `.myfilerc` it will look for that file.
-   * If it is a YAML file, it will return it as a JSON object. Otherwise, it will return the value of the property in
-   * the `package.json` file of the project.
+   * If it's a YAML file, it will parse that file as a JSON object. Otherwise, it will
+   * return the value of the property in the `package.json` file of the project.
    *
    * @example This method can be used in three different ways:
    *
@@ -109,12 +121,13 @@ class Toolkit {
   }
 
   /**
-   * Run a CLI command in the workspace
+   * Run a CLI command in the workspace. This runs [execa](https://github.com/sindresorhus/execa)
+   * under the hood so check there for the full options.
    *
    * @param command - Command to run
-   * @param args - Arguments
+   * @param args - Argument (this can be a string or multiple arguments in an array)
    * @param cwd - Directory to run the command in
-   * @param [opts]
+   * @param [opts] - Options to pass to the execa function
    */
   public async runInWorkspace (command: string, args?: string[] | string, opts?: ExecaOptions) {
     if (typeof args === 'string') args = [args]
