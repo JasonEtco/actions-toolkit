@@ -37,7 +37,7 @@
 
 ⊕ **new Toolkit**(): [Toolkit](toolkit.md)
 
-*Defined in [index.ts:23](https://github.com/JasonEtco/actions-toolkit/blob/d7a7907/src/index.ts#L23)*
+*Defined in [index.ts:23](https://github.com/JasonEtco/actions-toolkit/blob/ca68c60/src/index.ts#L23)*
 
 **Returns:** [Toolkit](toolkit.md)
 
@@ -51,7 +51,7 @@ ___
 
 **● context**: *[Context](context.md)*
 
-*Defined in [index.ts:9](https://github.com/JasonEtco/actions-toolkit/blob/d7a7907/src/index.ts#L9)*
+*Defined in [index.ts:9](https://github.com/JasonEtco/actions-toolkit/blob/ca68c60/src/index.ts#L9)*
 
 ___
 <a id="token"></a>
@@ -60,7 +60,7 @@ ___
 
 **● token**: *`string`*
 
-*Defined in [index.ts:23](https://github.com/JasonEtco/actions-toolkit/blob/d7a7907/src/index.ts#L23)*
+*Defined in [index.ts:23](https://github.com/JasonEtco/actions-toolkit/blob/ca68c60/src/index.ts#L23)*
 
 GitHub API token
 
@@ -72,7 +72,7 @@ ___
 **● warning**: * `string` &#124; `undefined`
 *
 
-*Defined in [index.ts:14](https://github.com/JasonEtco/actions-toolkit/blob/d7a7907/src/index.ts#L14)*
+*Defined in [index.ts:14](https://github.com/JasonEtco/actions-toolkit/blob/ca68c60/src/index.ts#L14)*
 
 A warning string that is memoized if there are missing environment variables
 
@@ -83,7 +83,7 @@ ___
 
 **● workspace**: *`string`*
 
-*Defined in [index.ts:19](https://github.com/JasonEtco/actions-toolkit/blob/d7a7907/src/index.ts#L19)*
+*Defined in [index.ts:19](https://github.com/JasonEtco/actions-toolkit/blob/ca68c60/src/index.ts#L19)*
 
 Path to a clone of the repository
 
@@ -97,7 +97,7 @@ ___
 
 ▸ **config**(key: *`string`*): `object`
 
-*Defined in [index.ts:109](https://github.com/JasonEtco/actions-toolkit/blob/d7a7907/src/index.ts#L109)*
+*Defined in [index.ts:109](https://github.com/JasonEtco/actions-toolkit/blob/ca68c60/src/index.ts#L109)*
 
 Get the configuration settings for this action in the project workspace.
 *__example__*: This method can be used in three different ways:
@@ -128,7 +128,7 @@ ___
 
 ▸ **createOctokit**(): `Github`
 
-*Defined in [index.ts:45](https://github.com/JasonEtco/actions-toolkit/blob/d7a7907/src/index.ts#L45)*
+*Defined in [index.ts:45](https://github.com/JasonEtco/actions-toolkit/blob/ca68c60/src/index.ts#L45)*
 
 Returns an Octokit SDK client authenticated for this repository. See [https://octokit.github.io/rest.js](https://octokit.github.io/rest.js) for the API.
 
@@ -149,7 +149,7 @@ ___
 
 ▸ **getFile**(filename: *`string`*, encoding?: *`string`*): `string`
 
-*Defined in [index.ts:70](https://github.com/JasonEtco/actions-toolkit/blob/d7a7907/src/index.ts#L70)*
+*Defined in [index.ts:70](https://github.com/JasonEtco/actions-toolkit/blob/ca68c60/src/index.ts#L70)*
 
 Gets the contents file in your project's workspace
 
@@ -173,7 +173,7 @@ ___
 
 ▸ **getPackageJSON**(): `object`
 
-*Defined in [index.ts:83](https://github.com/JasonEtco/actions-toolkit/blob/d7a7907/src/index.ts#L83)*
+*Defined in [index.ts:83](https://github.com/JasonEtco/actions-toolkit/blob/ca68c60/src/index.ts#L83)*
 
 Get the package.json file in the project root
 
@@ -190,7 +190,7 @@ ___
 
 ▸ **runInWorkspace**(command: *`string`*, args?: * `string`[] &#124; `string`*, opts?: *`ExecaOptions`*): `Promise`<`ExecaReturns`>
 
-*Defined in [index.ts:132](https://github.com/JasonEtco/actions-toolkit/blob/d7a7907/src/index.ts#L132)*
+*Defined in [index.ts:132](https://github.com/JasonEtco/actions-toolkit/blob/ca68c60/src/index.ts#L132)*
 
 Run a CLI command in the workspace. This runs [execa](https://github.com/sindresorhus/execa) under the hood so check there for the full options.
 
