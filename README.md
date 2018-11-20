@@ -28,6 +28,11 @@ const newIssue = await octokit.issues.create(tools.context.repo({
 
 You can see the full [API docs here](./docs/classes/toolkit.md)!
 
+
+## Actions using actions-toolkit
+
+- [create-an-issue](https://github.com/JasonEtco/create-an-issue)
+
 ## FAQ
 
 **Can you get me into the GitHub Actions beta?**
