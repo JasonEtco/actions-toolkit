@@ -1,13 +1,15 @@
 <h3 align="center">GitHub Actions Toolkit</h3>
 <p align="center">A toolkit for building GitHub Actions in Node.js<p>
-<p align="center"><a href="https://npmjs.com/package/actions-toolkit"><img src="https://badgen.net/npm/v/actions-toolkit" alt="NPM"></a> <a href="https://travis-ci.com/JasonEtco/actions-toolkit"><img src="https://badgen.now.sh/travis/JasonEtco/actions-toolkit" alt="Build Status"></a> <a href="https://codecov.io/gh/JasonEtco/actions-toolkit/"><img src="https://badgen.now.sh/codecov/c/github/JasonEtco/actions-toolkit" alt="Codecov"></a></p>
 
 <p align="center">
   <a href="#usage">Usage</a> •
   <a href="#api">API</a> •
-  <a href="#actions-using-actions-toolkit">Actions using `actions-toolkit`</a> •
+  <a href="#actions-using-actions-toolkit">Actions using actions-toolkit</a> •
   <a href="#faq">FAQ</a>
 </p>
+
+<p align="center"><a href="https://npmjs.com/package/actions-toolkit"><img src="https://badgen.net/npm/v/actions-toolkit" alt="NPM"></a> <a href="https://travis-ci.com/JasonEtco/actions-toolkit"><img src="https://badgen.now.sh/travis/JasonEtco/actions-toolkit" alt="Build Status"></a> <a href="https://codecov.io/gh/JasonEtco/actions-toolkit/"><img src="https://badgen.now.sh/codecov/c/github/JasonEtco/actions-toolkit" alt="Codecov"></a></p>
+
 
 
 ## Motivation
