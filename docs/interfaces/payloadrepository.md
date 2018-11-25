@@ -29,7 +29,7 @@
 **● full_name**: * `undefined` &#124; `string`
 *
 
-*Defined in [context.ts:12](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L12)*
+*Defined in [context.ts:12](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L12)*
 
 ___
 <a id="html_url"></a>
@@ -39,7 +39,7 @@ ___
 **● html_url**: * `undefined` &#124; `string`
 *
 
-*Defined in [context.ts:19](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L19)*
+*Defined in [context.ts:19](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L19)*
 
 ___
 <a id="name"></a>
@@ -48,7 +48,7 @@ ___
 
 **● name**: *`string`*
 
-*Defined in [context.ts:13](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L13)*
+*Defined in [context.ts:13](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L13)*
 
 ___
 <a id="owner"></a>
@@ -57,7 +57,7 @@ ___
 
 **● owner**: *`object`*
 
-*Defined in [context.ts:14](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L14)*
+*Defined in [context.ts:14](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L14)*
 
 #### Type declaration
 
