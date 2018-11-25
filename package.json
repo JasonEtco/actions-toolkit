@@ -9,8 +9,7 @@
     "lint": "tslint --project tests",
     "test": "tsc --noEmit -p tests && jest --coverage && npm run lint",
     "test:update": "tsc --noEmit -p tests && jest --coverage -u && npm run lint",
-    "prepare": "npm test && npm run build",
-    "doc": "typedoc --options .typedoc.json"
+    "prepare": "npm test && npm run build"
   },
   "repository": {
     "type": "git",
@@ -37,8 +36,6 @@
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
     "tslint-config-standard": "^8.0.1",
-    "typedoc": "^0.13.0",
-    "typedoc-plugin-markdown": "^1.1.18",
     "typescript": "^3.1.6"
   },
   "standard": {
