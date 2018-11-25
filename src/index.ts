@@ -172,6 +172,3 @@ export class Toolkit {
     }
   }
 }
-
-export default Toolkit
-module.exports = Toolkit
