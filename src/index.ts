@@ -4,6 +4,7 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import path from 'path'
 import Context from './context'
+import minimist, { ParsedArgs } from 'minimist'
 
 export class Toolkit {
   public context: Context
@@ -22,6 +23,11 @@ export class Toolkit {
    */
   public token: string
 
+  /**
+   * An object of the parsed arguments passed to your action
+   */
+  public arguments: ParsedArgs
+
   constructor () {
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
@@ -29,6 +35,7 @@ export class Toolkit {
     this.context = new Context()
     this.workspace = process.env.GITHUB_WORKSPACE as string
     this.token = process.env.GITHUB_TOKEN as string
+    this.arguments = minimist(process.argv.slice(2))
   }
 
   /**
