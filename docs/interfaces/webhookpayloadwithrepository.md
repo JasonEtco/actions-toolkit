@@ -31,7 +31,7 @@
 **● action**: * `undefined` &#124; `string`
 *
 
-*Defined in [context.ts:41](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L41)*
+*Defined in [context.ts:41](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L41)*
 
 ___
 <a id="installation"></a>
@@ -41,7 +41,7 @@ ___
 **● installation**: * `undefined` &#124; `object`
 *
 
-*Defined in [context.ts:42](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L42)*
+*Defined in [context.ts:42](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L42)*
 
 ___
 <a id="issue"></a>
@@ -51,7 +51,7 @@ ___
 **● issue**: * `undefined` &#124; `object`
 *
 
-*Defined in [context.ts:25](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L25)*
+*Defined in [context.ts:25](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L25)*
 
 ___
 <a id="pull_request"></a>
@@ -61,7 +61,7 @@ ___
 **● pull_request**: * `undefined` &#124; `object`
 *
 
-*Defined in [context.ts:31](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L31)*
+*Defined in [context.ts:31](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L31)*
 
 ___
 <a id="repository"></a>
@@ -70,7 +70,7 @@ ___
 
 **● repository**: *[PayloadRepository](payloadrepository.md)*
 
-*Defined in [context.ts:24](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L24)*
+*Defined in [context.ts:24](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L24)*
 
 ___
 <a id="sender"></a>
@@ -80,7 +80,7 @@ ___
 **● sender**: * `undefined` &#124; `object`
 *
 
-*Defined in [context.ts:37](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L37)*
+*Defined in [context.ts:37](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L37)*
 
 ___
 

@@ -1,6 +1,6 @@
 {
   "name": "actions-toolkit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A toolkit for building GitHub Actions in Node.js",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -29,6 +29,7 @@
     "@types/execa": "^0.9.0",
     "@types/jest": "^23.3.9",
     "@types/js-yaml": "^3.11.2",
+    "@types/minimist": "^1.2.0",
     "@types/node": "^10.12.2",
     "jest": "^23.5.0",
     "standard": "^11.0.1",
@@ -48,7 +49,8 @@
   "dependencies": {
     "@octokit/rest": "^15.15.1",
     "execa": "^1.0.0",
-    "js-yaml": "^3.12.0"
+    "js-yaml": "^3.12.0",
+    "minimist": "^1.2.0"
   },
   "jest": {
     "setupFiles": [

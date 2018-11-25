@@ -2,6 +2,7 @@ import Octokit from '@octokit/rest'
 import execa, { Options as ExecaOptions } from 'execa'
 import fs from 'fs'
 import yaml from 'js-yaml'
+import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
 import Context from './context'
 
@@ -17,10 +18,16 @@ export class Toolkit {
    * Path to a clone of the repository
    */
   public workspace: string
+
   /**
    * GitHub API token
    */
   public token: string
+
+  /**
+   * An object of the parsed arguments passed to your action
+   */
+  public arguments: ParsedArgs
 
   constructor () {
     // Print a console warning for missing environment variables
@@ -29,6 +36,7 @@ export class Toolkit {
     this.context = new Context()
     this.workspace = process.env.GITHUB_WORKSPACE as string
     this.token = process.env.GITHUB_TOKEN as string
+    this.arguments = minimist(process.argv.slice(2))
   }
 
   /**

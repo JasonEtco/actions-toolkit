@@ -28,7 +28,7 @@
 **● host**: * `undefined` &#124; `string`
 *
 
-*Defined in [context.ts:6](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L6)*
+*Defined in [context.ts:6](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L6)*
 
 ___
 <a id="id"></a>
@@ -37,7 +37,7 @@ ___
 
 **● id**: *`string`*
 
-*Defined in [context.ts:2](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L2)*
+*Defined in [context.ts:2](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L2)*
 
 ___
 <a id="name"></a>
@@ -46,7 +46,7 @@ ___
 
 **● name**: *`string`*
 
-*Defined in [context.ts:3](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L3)*
+*Defined in [context.ts:3](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L3)*
 
 ___
 <a id="payload"></a>
@@ -55,7 +55,7 @@ ___
 
 **● payload**: *[WebhookPayloadWithRepository](webhookpayloadwithrepository.md)*
 
-*Defined in [context.ts:4](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L4)*
+*Defined in [context.ts:4](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L4)*
 
 ___
 <a id="protocol"></a>
@@ -65,7 +65,7 @@ ___
 **● protocol**: * "http" &#124; "https"
 *
 
-*Defined in [context.ts:5](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L5)*
+*Defined in [context.ts:5](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L5)*
 
 ___
 <a id="url"></a>
@@ -75,7 +75,7 @@ ___
 **● url**: * `undefined` &#124; `string`
 *
 
-*Defined in [context.ts:7](https://github.com/JasonEtco/actions-toolkit/blob/25e3be0/src/context.ts#L7)*
+*Defined in [context.ts:7](https://github.com/JasonEtco/actions-toolkit/blob/6692a29/src/context.ts#L7)*
 
 ___
 
