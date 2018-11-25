@@ -18,6 +18,7 @@ export class Toolkit {
    * Path to a clone of the repository
    */
   public workspace: string
+
   /**
    * GitHub API token
    */
