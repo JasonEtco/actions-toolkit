@@ -1,7 +1,7 @@
 <h3 align="center">GitHub Actions Toolkit</h3>
-<p align="center">A toolkit for building GitHub Actions in Node.js<p>
 
 <p align="center">
+  A toolkit for building GitHub Actions in Node.js<br>
   <a href="#usage">Usage</a> •
   <a href="#api">API</a> •
   <a href="#actions-using-actions-toolkit">Actions using actions-toolkit</a> •
