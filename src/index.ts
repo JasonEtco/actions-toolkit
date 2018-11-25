@@ -2,9 +2,9 @@ import Octokit from '@octokit/rest'
 import execa, { Options as ExecaOptions } from 'execa'
 import fs from 'fs'
 import yaml from 'js-yaml'
+import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
 import Context from './context'
-import minimist, { ParsedArgs } from 'minimist'
 
 export class Toolkit {
   public context: Context
