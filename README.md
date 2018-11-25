@@ -28,7 +28,7 @@ const newIssue = await octokit.issues.create(tools.context.repo({
 
 ## API
 
-### `tools.createOctokit()`
+### tools.createOctokit()
 
 Returns an [Octokit SDK](https://octokit.github.io/rest.js) client authenticated for this repository. See [https://octokit.github.io/rest.js](https://octokit.github.io/rest.js) for the API.
 
@@ -42,7 +42,7 @@ const newIssue = await octokit.issues.create(context.repo({
 
 <br>
 
-### `tools.config(filename)`
+### tools.config(filename)
 
 Get the configuration settings for this action in the project workspace. This method can be used in three different ways:
 
@@ -61,7 +61,7 @@ If the filename looks like \`.myfilerc\` it will look for that file. If it's a Y
 
 <br>
 
-### `tools.getPackageJSON()`
+### tools.getPackageJSON()
 
 Get the package.json file in the project root and returns it as an object.
 
@@ -71,7 +71,7 @@ const pkg = toolkit.getPackageJSON()
 
 <br>
 
-### `tools.runInWorkspace(command, [args], [ExecaOptions])`
+### tools.runInWorkspace(command, [args], [ExecaOptions])
 
 Run a CLI command in the workspace. This uses [execa](https://github.com/sindresorhus/execa) under the hood so check there for the [full options](https://github.com/sindresorhus/execa#options). For convenience, `args` can be a `string` or an array of `string`s.
 
@@ -89,47 +89,47 @@ console.log(tools.arguments)
 
 <br>
 
-### `tools.token`
+### tools.token
 
 The GitHub API token being used to authenticate requests.
 
-### `tools.workspace`
+### tools.workspace
 
 <br>
 
 A path to a clone of the repository.
 
-### `tools.context`
+### tools.context
 
-#### `tools.context.action`
+#### tools.context.action
 
 The name of the action
 
-#### `tools.context.actor`
+#### tools.context.actor
 
 The actor that triggered the workflow (usually a user's login)
 
-#### `tools.context.event`
+#### tools.context.event
 
 The name of the event that triggered the workflow
 
-#### `tools.context.payload`
+#### tools.context.payload
 
 A JSON object of the webhook payload object that triggered the workflow
 
-#### `tools.context.ref`
+#### tools.context.ref
 
 The Git `ref` at which the action was triggered
 
-#### `tools.context.sha`
+#### tools.context.sha
 
 The Git `sha` at which the action was triggered
 
-#### `tools.context.workflow`
+#### tools.context.workflow
 
 The name of the workflow that was triggered.
 
-#### `tools.context.issue([object])`
+#### tools.context.issue([object])
 
 Return the `owner`, `repo`, and `number` params for making API requests against an issue or pull request. The object passed in will be merged with the repo params.
 
@@ -138,7 +138,7 @@ const params = context.issue({body: 'Hello World!'})
 // Returns: {owner: 'username', repo: 'reponame', number: 123, body: 'Hello World!'}
 ```
 
-#### `tools.context.repo([object])`
+#### tools.context.repo([object])
 
 Return the `owner` and `repo` params for making API requests against a repository.
 
