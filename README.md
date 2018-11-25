@@ -40,6 +40,8 @@ const newIssue = await octokit.issues.create(context.repo({
 }))
 ```
 
+<br>
+
 ### `tools.config(filename)`
 
 Get the configuration settings for this action in the project workspace. This method can be used in three different ways:
@@ -57,6 +59,8 @@ const cfg = toolkit.config('myaction')
 
 If the filename looks like \`.myfilerc\` it will look for that file. If it's a YAML file, it will parse that file as a JSON object. Otherwise, it will return the value of the property in the \`package.json\` file of the project.
 
+<br>
+
 ### `tools.getPackageJSON()`
 
 Get the package.json file in the project root and returns it as an object.
@@ -65,9 +69,13 @@ Get the package.json file in the project root and returns it as an object.
 const pkg = toolkit.getPackageJSON()
 ```
 
+<br>
+
 ### `tools.runInWorkspace(command, [args], [ExecaOptions])`
 
 Run a CLI command in the workspace. This uses [execa](https://github.com/sindresorhus/execa) under the hood so check there for the [full options](https://github.com/sindresorhus/execa#options). For convenience, `args` can be a `string` or an array of `string`s.
+
+<br>
 
 ###  `tools.arguments`
 
@@ -79,11 +87,15 @@ console.log(tools.arguments)
 // => { _: ['file.js'], pizza: 'pepperoni' }
 ```
 
+<br>
+
 ### `tools.token`
 
 The GitHub API token being used to authenticate requests.
 
 ### `tools.workspace`
+
+<br>
 
 A path to a clone of the repository.
 
