@@ -89,35 +89,35 @@ A path to a clone of the repository.
 
 ### `tools.context`
 
-**`tools.context.action`**
+#### `tools.context.action`
 
 The name of the action
 
-**`tools.context.actor`**
+#### `tools.context.actor`
 
 The actor that triggered the workflow (usually a user's login)
 
-**`tools.context.event`**
+#### `tools.context.event`
 
 The name of the event that triggered the workflow
 
-**`tools.context.payload`**
+#### `tools.context.payload`
 
 A JSON object of the webhook payload object that triggered the workflow
 
-**`tools.context.ref`**
+#### `tools.context.ref`
 
 The Git `ref` at which the action was triggered
 
-**`tools.context.sha`**
+#### `tools.context.sha`
 
 The Git `sha` at which the action was triggered
 
-**`tools.context.workflow`**
+#### `tools.context.workflow`
 
 The name of the workflow that was triggered.
 
-**`tools.context.issue([object])`**
+#### `tools.context.issue([object])`
 
 Return the `owner`, `repo`, and `number` params for making API requests against an issue or pull request. The object passed in will be merged with the repo params.
 
@@ -126,7 +126,7 @@ const params = context.issue({body: 'Hello World!'})
 // Returns: {owner: 'username', repo: 'reponame', number: 123, body: 'Hello World!'}
 ```
 
-**`tools.context.repo([object])`**
+#### `tools.context.repo([object])`
 
 Return the `owner` and `repo` params for making API requests against a repository.
 
