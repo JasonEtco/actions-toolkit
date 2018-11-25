@@ -17,7 +17,7 @@ $ npm install actions-toolkit
 ```
 
 ```js
-const { Toolkit } = require('actions-toolkit')
+const Toolkit = require('actions-toolkit')
 const tools = new Toolkit()
 
 const octokit = tools.createOctokit()
