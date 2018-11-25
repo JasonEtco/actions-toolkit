@@ -28,7 +28,7 @@ const newIssue = await octokit.issues.create(tools.context.repo({
 
 ## API
 
-#### `tools.createOctokit()`
+### `tools.createOctokit()`
 
 Returns an [Octokit SDK](https://octokit.github.io/rest.js) client authenticated for this repository. See [https://octokit.github.io/rest.js](https://octokit.github.io/rest.js) for the API.
 
@@ -40,7 +40,7 @@ const newIssue = await octokit.issues.create(context.repo({
 }))
 ```
 
-#### `tools.config(filename)`
+### `tools.config(filename)`
 
 Get the configuration settings for this action in the project workspace. This method can be used in three different ways:
 
@@ -57,7 +57,7 @@ const cfg = toolkit.config('myaction')
 
 If the filename looks like \`.myfilerc\` it will look for that file. If it's a YAML file, it will parse that file as a JSON object. Otherwise, it will return the value of the property in the \`package.json\` file of the project.
 
-#### `tools.getPackageJSON()`
+### `tools.getPackageJSON()`
 
 Get the package.json file in the project root and returns it as an object.
 
@@ -65,11 +65,11 @@ Get the package.json file in the project root and returns it as an object.
 const pkg = toolkit.getPackageJSON()
 ```
 
-#### `tools.runInWorkspace(command, [args], [ExecaOptions])`
+### `tools.runInWorkspace(command, [args], [ExecaOptions])`
 
 Run a CLI command in the workspace. This uses [execa](https://github.com/sindresorhus/execa) under the hood so check there for the [full options](https://github.com/sindresorhus/execa#options). For convenience, `args` can be a `string` or an array of `string`s.
 
-####  `tools.arguments`
+###  `tools.arguments`
 
 An object of the parsed arguments passed to your action. This uses [`minimist`]() under the hood.
 
@@ -79,15 +79,15 @@ console.log(tools.arguments)
 // => { _: ['file.js'], pizza: 'pepperoni' }
 ```
 
-#### `tools.token`
+### `tools.token`
 
 The GitHub API token being used to authenticate requests.
 
-#### `tools.workspace`
+### `tools.workspace`
 
 A path to a clone of the repository.
 
-#### `tools.context`
+### `tools.context`
 
 **`tools.context.action`**
 
