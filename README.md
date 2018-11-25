@@ -93,11 +93,13 @@ console.log(tools.arguments)
 
 The GitHub API token being used to authenticate requests.
 
-### tools.workspace
-
 <br>
 
+### tools.workspace
+
 A path to a clone of the repository.
+
+<br>
 
 ### tools.context
 
