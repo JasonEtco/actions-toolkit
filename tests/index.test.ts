@@ -1,5 +1,5 @@
 import path from 'path'
-import Toolkit from '../src'
+import { Toolkit } from '../src'
 
 describe('Toolkit', () => {
   let toolkit: Toolkit
