@@ -53,13 +53,13 @@ Get the configuration settings for this action in the project workspace. This me
 
 ```js
 // Get the .rc file, parsed as JSON
-const cfg = toolkit.config('.myactionrc')
+const cfg = tools.config('.myactionrc')
 
 // Get the YAML file, parsed as JSON
-const cfg = toolkit.config('myaction.yml')
+const cfg = tools.config('myaction.yml')
 
 // Get the property in package.json
-const cfg = toolkit.config('myaction')
+const cfg = tools.config('myaction')
 ```
 
 If the filename looks like `.myfilerc` it will look for that file. If it's a YAML file, it will parse that file as a JSON object. Otherwise, it will return the value of the property in the `package.json` file of the project.
@@ -71,7 +71,7 @@ If the filename looks like `.myfilerc` it will look for that file. If it's a YAM
 Get the package.json file in the project root and returns it as an object.
 
 ```js
-const pkg = toolkit.getPackageJSON()
+const pkg = tools.getPackageJSON()
 ```
 
 <br>
