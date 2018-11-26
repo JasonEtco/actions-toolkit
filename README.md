@@ -62,7 +62,7 @@ const cfg = toolkit.config('myaction.yml')
 const cfg = toolkit.config('myaction')
 ```
 
-If the filename looks like \`.myfilerc\` it will look for that file. If it's a YAML file, it will parse that file as a JSON object. Otherwise, it will return the value of the property in the \`package.json\` file of the project.
+If the filename looks like `.myfilerc` it will look for that file. If it's a YAML file, it will parse that file as a JSON object. Otherwise, it will return the value of the property in the `package.json` file of the project.
 
 <br>
 
