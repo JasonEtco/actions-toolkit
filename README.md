@@ -66,6 +66,29 @@ If the filename looks like `.myfilerc` it will look for that file. If it's a YAM
 
 <br>
 
+### tools.log.info(...arguments)
+
+This is an instance of [WinstonJS](https://github.com/winstonjs/winston), a handy logging utility that will make it easier to identify different levels of logs in your application. If necessary, you can pass a custom logger that matches Winston's logger type to `new Toolkit(logger)`.
+
+```js
+try {
+  somethingBad()
+} catch (err) {
+  tools.log.error(err)
+}
+```
+
+#### Available log levels
+
+* `error`
+* `warn`
+* `info`
+* `verbose`
+* `debug`
+* `silly`
+
+<br>
+
 ### tools.getPackageJSON()
 
 Get the package.json file in the project root and returns it as an object.
