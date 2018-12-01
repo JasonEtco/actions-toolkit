@@ -92,6 +92,9 @@ describe('Toolkit', () => {
       const twolkit = new Toolkit(logger)
 
       expect(twolkit.logger.warn).toHaveBeenCalled()
+      expect(twolkit.logger.warn).toHaveBeenCalledWith(
+        'There are environment variables missing from this runtime, but would be present on GitHub.\n- HOME'
+      )
     })
   })
 })
