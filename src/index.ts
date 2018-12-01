@@ -12,11 +12,6 @@ export class Toolkit {
   public context: Context
 
   /**
-   * A warning string that is memoized if there are missing environment variables
-   */
-  public warning: string | undefined
-
-  /**
    * Path to a clone of the repository
    */
   public workspace: string
@@ -174,9 +169,7 @@ export class Toolkit {
       // This isn't being run inside of a GitHub Action environment!
       const list = requiredButMissing.map(key => `- ${key}`).join('\n')
       const warning = `There are environment variables missing from this runtime, but would be present on GitHub.\n${list}`
-
       this.logger.warn(warning)
-      this.warning = warning
     }
   }
 }
