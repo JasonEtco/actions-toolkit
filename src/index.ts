@@ -37,10 +37,10 @@ export class Toolkit {
   public logger: Logger
 
   constructor (logger?: Logger) {
+    this.logger = logger || actionLogger
+
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
-
-    this.logger = logger || actionLogger
 
     this.context = new Context()
     this.workspace = process.env.GITHUB_WORKSPACE as string

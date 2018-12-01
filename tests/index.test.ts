@@ -1,4 +1,5 @@
 import path from 'path'
+import winston from 'winston'
 import { Toolkit } from '../src'
 
 describe('Toolkit', () => {
@@ -83,17 +84,14 @@ describe('Toolkit', () => {
 
   describe('#warnForMissingEnvVars', () => {
     it('logs the expected string', () => {
-      // tslint:disable:no-console
-      const before = console.warn
-      console.warn = f => f
-
       delete process.env.HOME
-      // Toolkit, but number two. Ergo, twolkit. Open an issue if this isn't clear.
-      const twolkit = new Toolkit()
-      expect(twolkit.warning).toMatchSnapshot()
+      const logger = winston.createLogger()
+      logger.warn = jest.fn()
 
-      console.warn = before
-      // tslint:enable:no-console
+      // Toolkit, but number two. Ergo, twolkit. Open an issue if this isn't clear.
+      const twolkit = new Toolkit(logger)
+
+      expect(twolkit.logger.warn).toHaveBeenCalled()
     })
   })
 })
