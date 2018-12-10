@@ -24,19 +24,18 @@
   "homepage": "https://github.com/JasonEtco/actions-toolkit#readme",
   "devDependencies": {
     "@octokit/webhooks": "^5.0.2",
-    "@types/dotenv": "^4.0.3",
+    "@types/dotenv": "^6.1.0",
     "@types/execa": "^0.9.0",
-    "@types/jest": "^23.3.9",
+    "@types/jest": "^23.3.10",
     "@types/js-yaml": "^3.11.2",
     "@types/minimist": "^1.2.0",
-    "@types/node": "^10.12.2",
+    "@types/node": "^10.12.12",
     "jest": "^23.5.0",
-    "standard": "^11.0.1",
-    "ts-jest": "^23.10.4",
+    "standard": "^12.0.1",
+    "ts-jest": "^23.10.5",
     "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.1.6"
+    "typescript": "^3.2.2"
   },
   "standard": {
     "env": [
