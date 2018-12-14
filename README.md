@@ -158,7 +158,7 @@ const params = context.repo({path: '.github/config.yml'})
 
 - [create-an-issue](https://github.com/JasonEtco/create-an-issue)
 - [deploy-lambda-action](https://github.com/lannonbr/deploy-lambda-action)
-- [repo-push-check-action](https://github.com/lannonbr/repo-push-check-action)
+- [repo-permission-check-action](https://github.com/lannonbr/repo-permission-check-action)
 
 ## FAQ
 
