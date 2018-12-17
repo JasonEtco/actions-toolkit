@@ -76,6 +76,16 @@ const pkg = tools.getPackageJSON()
 
 <br>
 
+### tools.getFile(path, [encoding = 'utf8'])
+
+Get the contents of a file in the repository.
+
+```js
+const contents = tools.getFile('example.md')
+```
+
+<br>
+
 ### tools.runInWorkspace(command, [args], [ExecaOptions])
 
 Run a CLI command in the workspace. This uses [execa](https://github.com/sindresorhus/execa) under the hood so check there for the [full options](https://github.com/sindresorhus/execa#options). For convenience, `args` can be a `string` or an array of `string`s.
