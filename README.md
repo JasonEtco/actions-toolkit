@@ -74,6 +74,14 @@ Get the package.json file in the project root and returns it as an object.
 const pkg = tools.getPackageJSON()
 ```
 
+### tools.getFile(path, [encoding = 'utf8'])
+
+Get the contents of a file in the repository.
+
+```js
+const contents = tools.getFile('example.md')
+```
+
 <br>
 
 ### tools.runInWorkspace(command, [args], [ExecaOptions])
