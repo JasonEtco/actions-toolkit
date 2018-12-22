@@ -96,10 +96,19 @@ Run a CLI command in the workspace. This uses [execa](https://github.com/sindres
 
 An object of the parsed arguments passed to your action. This uses [`minimist`]() under the hood.
 
+When Inputting arguments into your `main.workflow` file in an action as shown in the [Actions Docs](https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#action-blocks), you can enter it as an array of strings or a single string.
+
+```
+args = ["container:release", "--app", "web"]
+// or
+args = "container:release --app web"
+```
+
+This will be parsed to a JS object as follows:
+
 ```js
-// node file.js --pizza pepperoni
 console.log(tools.arguments)
-// => { _: ['file.js'], pizza: 'pepperoni' }
+// => { _: ['container:release'], app: 'web' }
 ```
 
 <br>
