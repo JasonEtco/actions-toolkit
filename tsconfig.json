@@ -23,5 +23,9 @@
   "include": [
     "src/**/*"
   ],
-  "compileOnSave": false
+  "compileOnSave": false,
+  "typeRoots": [
+    "./src/@types",
+    "./node_modules/@types/"
+  ]
 }

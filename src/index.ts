@@ -4,6 +4,7 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
+import yurnalist, { Yurnalist } from 'yurnalist'
 import Context from './context'
 
 export class Toolkit {
@@ -29,7 +30,14 @@ export class Toolkit {
    */
   public arguments: ParsedArgs
 
+  /**
+   * A logger/reporter - an instance of Yurnalist
+   */
+  public log: Yurnalist
+
   constructor () {
+    this.log = yurnalist
+
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
 
@@ -166,8 +174,7 @@ export class Toolkit {
       const list = requiredButMissing.map(key => `- ${key}`).join('\n')
       const warning = `There are environment variables missing from this runtime, but would be present on GitHub.\n${list}`
 
-      // tslint:disable-next-line:no-console
-      console.warn(warning)
+      this.log.warn(warning)
       this.warning = warning
     }
   }
