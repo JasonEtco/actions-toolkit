@@ -116,6 +116,10 @@ const contents = tools.getFile('example.md')
 
 Run a CLI command in the workspace. This uses [execa](https://github.com/sindresorhus/execa) under the hood so check there for the [full options](https://github.com/sindresorhus/execa#options). For convenience, `args` can be a `string` or an array of `string`s.
 
+```js
+const result = await tools.runInWorkspace('npm', ['audit'])
+```
+
 <br>
 
 ### tools.arguments
