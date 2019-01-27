@@ -51,6 +51,12 @@ const newIssue = await tools.github.issues.create(tools.context.repo({
 }))
 ```
 
+You can also make GraphQL requests:
+
+```js
+const result = await tools.github.graphql(query, variables)
+```
+
 <br>
 
 ### tools.config(filename)
