@@ -33,13 +33,19 @@ const tools = new Toolkit()
 
 ## API
 
-### tools.createOctokit()
+* [Authenticated GitHub API client](#toolsgithub)
+* [Parsing arguments](#toolsarguments)
+* [Reading files](#toolsgetfilepath-encoding--utf8)
+* [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
+* [In-repo configuration](#toolsconfigfilename)
+* [Inspect the webhook event payload](#toolscontext)
+
+### tools.github
 
 Returns an [Octokit SDK](https://octokit.github.io/rest.js) client authenticated for this repository. See [https://octokit.github.io/rest.js](https://octokit.github.io/rest.js) for the API.
 
 ```js
-const octokit = tools.createOctokit()
-const newIssue = await octokit.issues.create(tools.context.repo({
+const newIssue = await tools.github.issues.create(tools.context.repo({
   title: 'New issue!',
   body: 'Hello Universe!'
 }))

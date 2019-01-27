@@ -1,3 +1,4 @@
+import nock from 'nock'
 import path from 'path'
 import { Toolkit } from '../src'
 
@@ -8,16 +9,19 @@ describe('Toolkit', () => {
     toolkit = new Toolkit()
   })
 
-  describe('#createOctokit', () => {
-    it('returns an Octokit client', () => {
-      const actual = toolkit.createOctokit()
-      expect(actual).not.toBe(null)
-      expect(actual).toBeInstanceOf(Object)
+  describe('#github', () => {
+    it('returns a GitHub client', () => {
+      expect(toolkit.github).toBeInstanceOf(Object)
     })
 
-    it('throws if there is no GITHUB_TOKEN environment variable', () => {
-      toolkit.token = ''
-      expect(() => toolkit.createOctokit()).toThrowErrorMatchingSnapshot()
+    it('returns a GraphQL function on `.graphql`', async () => {
+      expect(toolkit.github.graphql).toBeInstanceOf(Function)
+
+      const scoped = nock('https://api.github.com')
+        .post('/graphql').reply(200, { data: { errors: [] } })
+
+      await toolkit.github.graphql('query { }')
+      expect(scoped.isDone()).toBe(true)
     })
   })
 
