@@ -31,7 +31,7 @@ const { Toolkit } = require('actions-toolkit')
 const tools = new Toolkit()
 ```
 
-## Bootstrap a new action
+### Bootstrap a new action
 
 ```
 $ npx actions-toolkit my-cool-action
