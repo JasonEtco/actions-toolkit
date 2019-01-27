@@ -34,11 +34,12 @@ const tools = new Toolkit()
 ## Bootstrap a new action
 
 ```
-npx actions-toolkit my-cool-action
+$ npx actions-toolkit my-cool-action
 ```
 
+This will create a new folder `my-cool-action` with the following files:
+
 ```
-.
 ├── Dockerfile
 ├── entrypoint.js
 └── package.json
