@@ -1,3 +1,4 @@
+import nock from 'nock'
 import path from 'path'
 import { Toolkit } from '../src'
 
@@ -8,9 +9,19 @@ describe('Toolkit', () => {
     toolkit = new Toolkit()
   })
 
-  describe('#github', () => {
+  describe.only('#github', () => {
     it('returns a GitHub client', () => {
       expect(toolkit.github).toBeInstanceOf(Object)
+    })
+
+    it('returns a GraphQL function on `.graphql`', async () => {
+      expect(toolkit.github.graphql).toBeInstanceOf(Function)
+
+      const scoped = nock('https://api.github.com')
+        .post('/graphql').reply(200, { data: { errors: [] } })
+
+      await toolkit.github.graphql('query { }')
+      expect(scoped.isDone()).toBe(true)
     })
   })
 
