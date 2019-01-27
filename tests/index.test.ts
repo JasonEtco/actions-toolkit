@@ -9,7 +9,7 @@ describe('Toolkit', () => {
     toolkit = new Toolkit()
   })
 
-  describe.only('#github', () => {
+  describe('#github', () => {
     it('returns a GitHub client', () => {
       expect(toolkit.github).toBeInstanceOf(Object)
     })
