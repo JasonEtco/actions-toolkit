@@ -21,5 +21,7 @@ declare module '@octokit/graphql' {
     }
   }
 
-  export function defaults (options: any): (query: string, variables?: any) => Promise<GraphQlQueryResponse>
+  export interface Variables { [key: string]: any }
+
+  export function defaults (options: any): (query: string, variables?: Variables) => Promise<GraphQlQueryResponse>
 }
