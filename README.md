@@ -33,6 +33,11 @@ const tools = new Toolkit()
 
 ## API
 
+* [Authenticated GitHub API client](#toolsgithub)
+* [Parsing arguments](#toolsarguments)
+* [Reading files](#toolsgetfilepath-encoding--utf8)
+* [In-repo configuration](#toolsconfigfilename)
+
 ### tools.github
 
 Returns an [Octokit SDK](https://octokit.github.io/rest.js) client authenticated for this repository. See [https://octokit.github.io/rest.js](https://octokit.github.io/rest.js) for the API.
