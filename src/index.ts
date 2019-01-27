@@ -1,10 +1,10 @@
-import Octokit from '@octokit/rest'
 import execa, { Options as ExecaOptions } from 'execa'
 import fs from 'fs'
 import yaml from 'js-yaml'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
 import Context from './context'
+import { GitHub } from './github'
 
 export class Toolkit {
   public context: Context
@@ -29,6 +29,18 @@ export class Toolkit {
    */
   public arguments: ParsedArgs
 
+  /**
+   * An Octokit SDK client authenticated for this repository. See https://octokit.github.io/rest.js for the API.
+   *
+   * ```js
+   * const newIssue = await tools.github.issues.create(context.repo({
+   *   title: 'New issue!',
+   *   body: 'Hello Universe!'
+   * }))
+   * ```
+   */
+  public github: GitHub
+
   constructor () {
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
@@ -36,33 +48,8 @@ export class Toolkit {
     this.context = new Context()
     this.workspace = process.env.GITHUB_WORKSPACE as string
     this.token = process.env.GITHUB_TOKEN as string
+    this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
-  }
-
-  /**
-   * Returns an Octokit SDK client authenticated for this repository. See https://octokit.github.io/rest.js for the API.
-   *
-   * ```js
-   * const octokit = tools.createOctokit()
-   * const newIssue = await octokit.issues.create(context.repo({
-   *   title: 'New issue!',
-   *   body: 'Hello Universe!'
-   * }))
-   * ```
-   */
-  public createOctokit () {
-    if (!this.token) {
-      throw new Error('No `GITHUB_TOKEN` environment variable found, could not authenticate Octokit client.')
-    }
-
-    const octokit = new Octokit()
-
-    octokit.authenticate({
-      token: this.token,
-      type: 'token'
-    })
-
-    return octokit
   }
 
   /**
