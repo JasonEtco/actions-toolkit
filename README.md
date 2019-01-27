@@ -31,6 +31,19 @@ const { Toolkit } = require('actions-toolkit')
 const tools = new Toolkit()
 ```
 
+## Bootstrap a new action
+
+```
+npx actions-toolkit my-cool-action
+```
+
+```
+.
+├── Dockerfile
+├── entrypoint.js
+└── package.json
+```
+
 ## API
 
 * [Authenticated GitHub API client](#toolsgithub)
