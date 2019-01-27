@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Toolkit #createOctokit throws if there is no GITHUB_TOKEN environment variable 1`] = `"No \`GITHUB_TOKEN\` environment variable found, could not authenticate Octokit client."`;
-
 exports[`Toolkit #getFile gets the contents of a file 1`] = `"I'm writing this on a plane ✈️"`;
 
 exports[`Toolkit #getFile gets the contents of a file with custom encoding 1`] = `"SSdtIHdyaXRpbmcgdGhpcyBvbiBhIHBsYW5lIOKciO+4jw=="`;
