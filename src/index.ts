@@ -55,14 +55,7 @@ export class Toolkit {
       throw new Error('No `GITHUB_TOKEN` environment variable found, could not authenticate Octokit client.')
     }
 
-    const octokit = new Octokit()
-
-    octokit.authenticate({
-      token: this.token,
-      type: 'token'
-    })
-
-    return octokit
+    return new Octokit({ auth: `token ${this.token}` })
   }
 
   /**
