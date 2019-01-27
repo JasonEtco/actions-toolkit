@@ -15,7 +15,12 @@
     "type": "git",
     "url": "git+https://github.com/JasonEtco/actions-toolkit.git"
   },
-  "keywords": [],
+  "keywords": [
+    "github",
+    "github actions",
+    "typescript",
+    "github api"
+  ],
   "author": "Jason Etcovitch <jasonetco@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -23,7 +28,6 @@
   },
   "homepage": "https://github.com/JasonEtco/actions-toolkit#readme",
   "devDependencies": {
-    "@octokit/webhooks": "^5.0.2",
     "@types/dotenv": "^6.1.0",
     "@types/execa": "^0.9.0",
     "@types/jest": "^23.3.10",
