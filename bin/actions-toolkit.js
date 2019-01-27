@@ -21,7 +21,7 @@ try {
   process.exit(1)
 }
 
-const version = require('../package.json').version
+const { version } = require('../package.json')
 const packageJson = {
   name,
   private: true,
