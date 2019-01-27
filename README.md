@@ -36,7 +36,9 @@ const tools = new Toolkit()
 * [Authenticated GitHub API client](#toolsgithub)
 * [Parsing arguments](#toolsarguments)
 * [Reading files](#toolsgetfilepath-encoding--utf8)
+* [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
 * [In-repo configuration](#toolsconfigfilename)
+* [Inspect the webhook event payload](#toolscontext)
 
 ### tools.github
 
