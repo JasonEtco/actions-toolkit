@@ -44,6 +44,7 @@
     ]
   },
   "dependencies": {
+    "@octokit/graphql": "^2.0.1",
     "@octokit/rest": "^16.13.3",
     "execa": "^1.0.0",
     "js-yaml": "^3.12.0",
