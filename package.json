@@ -5,7 +5,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "bin": {
-    "actions-toolkit": "./bin/actions-toolkit"
+    "actions-toolkit": "./bin/actions-toolkit.js"
   },
   "scripts": {
     "build": "rimraf lib && tsc -p tsconfig.json",
