@@ -31,6 +31,20 @@ const { Toolkit } = require('actions-toolkit')
 const tools = new Toolkit()
 ```
 
+### Bootstrap a new action
+
+```
+$ npx actions-toolkit my-cool-action
+```
+
+This will create a new folder `my-cool-action` with the following files:
+
+```
+├── Dockerfile
+├── entrypoint.js
+└── package.json
+```
+
 ## API
 
 * [Authenticated GitHub API client](#toolsgithub)
@@ -101,6 +115,10 @@ const contents = tools.getFile('example.md')
 ### tools.runInWorkspace(command, [args], [ExecaOptions])
 
 Run a CLI command in the workspace. This uses [execa](https://github.com/sindresorhus/execa) under the hood so check there for the [full options](https://github.com/sindresorhus/execa#options). For convenience, `args` can be a `string` or an array of `string`s.
+
+```js
+const result = await tools.runInWorkspace('npm', ['audit'])
+```
 
 <br>
 
