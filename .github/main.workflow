@@ -10,13 +10,12 @@ action "validate release" {
 }
 
 action "npm ci" {
-  needs = ["find tag"]
   uses = "actions/npm@master"
   args = "ci"
 }
 
 action "npm publish" {
-  needs = ["npm ci"]
+  needs = ["validate release", "npm ci"]
   uses = "actions/npm@master"
   args = "publish"
 }
