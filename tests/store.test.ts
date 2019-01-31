@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import Store from '../src/Store'
+import Store from '../src/store'
 
 describe('Store', () => {
   const file = path.join(__dirname, 'tmp', 'map.txt')
