@@ -5,7 +5,7 @@ import Store from '../src/Store'
 describe('Store', () => {
   const file = path.join(__dirname, 'tmp', 'map.txt')
 
-  describe('#load', () => {
+  describe('#constructor', () => {
     it('loads a new map from a file', async () => {
       const store = new Store(path.join(__dirname, 'fixtures', 'map.txt'))
       expect(store).toBeInstanceOf(Store)

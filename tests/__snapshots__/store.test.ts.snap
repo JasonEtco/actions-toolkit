@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Store #load does not load a new map from a file if the file does not exist 1`] = `Map {}`;
+exports[`Store #constructor does not load a new map from a file if the file does not exist 1`] = `Map {}`;
 
-exports[`Store #load loads a new map from a file 1`] = `
+exports[`Store #constructor loads a new map from a file 1`] = `
 Map {
   "foo" => true,
   "bar" => false,
