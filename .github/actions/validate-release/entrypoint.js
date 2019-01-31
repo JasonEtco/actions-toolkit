@@ -10,14 +10,14 @@ if (release.draft) {
   process.exit(0)
 }
 
-const version = semver.valid(release.tag_name)
-if (!version) {
+const tag = semver.valid(release.tag_name)
+if (!tag) {
   console.error(`The tag ${release.tag_name} is not a valid tag.`)
   process.exit(1)
 }
 
-if (pkg.version !== version) {
-  console.error(`Tag ${version} and version in the package.json ${pkg.version} are not the same.`)
+if (pkg.version !== tag) {
+  console.error(`Tag ${tag} and version in the package.json ${pkg.version} are not the same.`)
   process.exit(1)
 }
 
@@ -26,4 +26,4 @@ if (release.prerelease && semver.prerelease(release.tag_name) === null) {
   process.exit(1)
 }
 
-console.log(`Release of version ${version} is all set!`)
+console.log(`Release of version ${tag} is all set!`)
