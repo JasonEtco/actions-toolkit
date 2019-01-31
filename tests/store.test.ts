@@ -22,7 +22,7 @@ describe('Store', () => {
 
   describe('#write', () => {
     it('writes the entries to a file', async () => {
-      const store = new Store()
+      const store = new Store(path.join(__dirname, 'fixtures', 'empty.txt'))
       store.set('foo', true).set('bar', false)
       await store.write(file)
       expect(fs.existsSync(file)).toBe(true)

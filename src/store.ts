@@ -1,14 +1,19 @@
 import fs from 'fs'
 
 export default class Store extends Map<string, any> {
-  constructor (path?: string) {
-    if (path && fs.existsSync(path)) {
+  constructor (path: string) {
+    if (fs.existsSync(path)) {
       const contents = fs.readFileSync(path, 'utf8')
       const json = JSON.parse(contents)
       super(json)
     } else {
       super()
     }
+
+    process.on('exit', async () => {
+      if (this.size === 0) return
+      return this.write(path)
+    })
   }
 
   public async write (path: string) {
