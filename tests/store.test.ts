@@ -10,6 +10,7 @@ describe('Store', () => {
       const store = new Store(path.join(__dirname, 'fixtures', 'map.txt'))
       expect(store).toBeInstanceOf(Store)
       expect(store).toMatchSnapshot()
+      expect(store.get('foo')).toBe(true)
     })
 
     it('does not load a new map from a file if the file does not exist', async () => {
