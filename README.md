@@ -52,6 +52,7 @@ This will create a new folder `my-cool-action` with the following files:
 * [Reading files](#toolsgetfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
 * [In-repo configuration](#toolsconfigfilename)
+* [Pass information to another action](#toolsstore)
 * [Inspect the webhook event payload](#toolscontext)
 
 ### tools.github
@@ -152,6 +153,26 @@ The GitHub API token being used to authenticate requests.
 ### tools.workspace
 
 A path to a clone of the repository.
+
+<br>
+
+### tools.store
+
+Actions can pass information to each other by writing to a file that is shared across the workflow. `tools.store` is an abstraction (and an extension) of an [ES6 Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map):
+
+Store a value:
+
+```js
+tools.store.set('foo', true)
+```
+
+Then, in a later action:
+
+```js
+const foo = tools.store.get('foo')
+console.log(foo)
+// -> true
+```
 
 <br>
 
