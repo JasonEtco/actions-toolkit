@@ -18,4 +18,5 @@ action "npm publish" {
   needs = ["validate release", "npm ci"]
   uses = "actions/npm@master"
   args = "publish"
+  secrets = ["NPM_TOKEN"]
 }
