@@ -5,9 +5,15 @@ import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
 import Context from './context'
 import { GitHub } from './github'
+import Store from './store'
 
 export class Toolkit {
   public context: Context
+
+  /**
+   * A key/value store for arbitrary data that can be accessed across actions in a workflow
+   */
+  public store: Store
 
   /**
    * A warning string that is memoized if there are missing environment variables
@@ -47,6 +53,7 @@ export class Toolkit {
 
     this.context = new Context()
     this.workspace = process.env.GITHUB_WORKSPACE as string
+    this.store = new Store(path.join(this.workspace, `${this.context.workflow}.txt`))
     this.token = process.env.GITHUB_TOKEN as string
     this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
