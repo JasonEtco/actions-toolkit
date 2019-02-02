@@ -174,7 +174,7 @@ console.log(foo)
 // -> true
 ```
 
-**Note**: the file is only saved to disk when the process ends and your action completes. This is to prevent conflicts while writing to file. If you need to write to disk, you can do so with `tools.store.save()`.
+**Note**: the file is only saved to disk when the process ends and your action completes. This is to prevent conflicts while writing to file. It will only write to a file if at least one key/value pair has been set. If you need to write to disk, you can do so with `tools.store.save()`.
 
 <br>
 
