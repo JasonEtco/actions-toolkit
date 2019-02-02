@@ -53,10 +53,10 @@ export class Toolkit {
 
     this.context = new Context()
     this.workspace = process.env.GITHUB_WORKSPACE as string
-    this.cache = load(this.context.workflow, path.resolve(this.workspace))
     this.token = process.env.GITHUB_TOKEN as string
     this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
+    this.cache = this.createCache()
   }
 
   /**
@@ -134,6 +134,15 @@ export class Toolkit {
   public async runInWorkspace (command: string, args?: string[] | string, opts?: ExecaOptions) {
     if (typeof args === 'string') args = [args]
     return execa(command, args, { cwd: this.workspace, ...opts })
+  }
+
+  /**
+   * Create an instance of flat-cache
+   */
+  private createCache () {
+    const cache = load(this.context.workflow, path.resolve(this.workspace))
+    process.on('exit', () => cache.save())
+    return cache
   }
 
   /**
