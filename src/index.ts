@@ -1,11 +1,11 @@
 import execa, { Options as ExecaOptions } from 'execa'
-import { Cache, load } from 'flat-cache'
 import fs from 'fs'
 import yaml from 'js-yaml'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
 import Context from './context'
 import { GitHub } from './github'
+import { Store } from './store'
 
 export class Toolkit {
   public context: Context
@@ -13,7 +13,7 @@ export class Toolkit {
   /**
    * A key/value store for arbitrary data that can be accessed across actions in a workflow
    */
-  public cache: Cache
+  public store: Store
 
   /**
    * A warning string that is memoized if there are missing environment variables
@@ -56,7 +56,7 @@ export class Toolkit {
     this.token = process.env.GITHUB_TOKEN as string
     this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
-    this.cache = this.createCache()
+    this.store = new Store(this.context.workflow, this.workspace)
   }
 
   /**
@@ -134,15 +134,6 @@ export class Toolkit {
   public async runInWorkspace (command: string, args?: string[] | string, opts?: ExecaOptions) {
     if (typeof args === 'string') args = [args]
     return execa(command, args, { cwd: this.workspace, ...opts })
-  }
-
-  /**
-   * Create an instance of flat-cache
-   */
-  private createCache () {
-    const cache = load(`.${this.context.workflow}-cache`, path.resolve(this.workspace))
-    process.on('exit', () => cache.save(true))
-    return cache
   }
 
   /**
