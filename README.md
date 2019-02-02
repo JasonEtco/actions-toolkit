@@ -156,23 +156,25 @@ A path to a clone of the repository.
 
 <br>
 
-### tools.cache
+### tools.store
 
-Actions can pass information to each other by writing to a file that is shared across the workflow. `tools.cache` is an instance of [`flat-cache`](https://www.npmjs.com/package/flat-cache):
+Actions can pass information to each other by writing to a file that is shared across the workflow. `tools.cache` is a modified instance of [`flat-cache`](https://www.npmjs.com/package/flat-cache):
 
 Store a value:
 
 ```js
-tools.cache.setKey('foo', true)
+tools.store.set('foo', true)
 ```
 
-Then, in a later action:
+Then, in a later action (or even the same action):
 
 ```js
-const foo = tools.store.getKey('foo')
+const foo = tools.store.get('foo')
 console.log(foo)
 // -> true
 ```
+
+**Note**: the file is only saved to disk when the process ends and your action completes. This is to prevent conflicts while writing to file. If you need to write to disk, you can do so with `tools.store.save()`.
 
 <br>
 
