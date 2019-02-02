@@ -52,6 +52,7 @@ This will create a new folder `my-cool-action` with the following files:
 * [Reading files](#toolsgetfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
 * [In-repo configuration](#toolsconfigfilename)
+* [Pass information to another action](#toolsstore)
 * [Inspect the webhook event payload](#toolscontext)
 
 ### tools.github
@@ -152,6 +153,28 @@ The GitHub API token being used to authenticate requests.
 ### tools.workspace
 
 A path to a clone of the repository.
+
+<br>
+
+### tools.store
+
+Actions can pass information to each other by writing to a file that is shared across the workflow. `tools.cache` is a modified instance of [`flat-cache`](https://www.npmjs.com/package/flat-cache):
+
+Store a value:
+
+```js
+tools.store.set('foo', true)
+```
+
+Then, in a later action (or even the same action):
+
+```js
+const foo = tools.store.get('foo')
+console.log(foo)
+// -> true
+```
+
+**Note**: the file is only saved to disk when the process ends and your action completes. This is to prevent conflicts while writing to file. It will only write to a file if at least one key/value pair has been set. If you need to write to disk, you can do so with `tools.store.save()`.
 
 <br>
 
