@@ -156,20 +156,20 @@ A path to a clone of the repository.
 
 <br>
 
-### tools.store
+### tools.cache
 
-Actions can pass information to each other by writing to a file that is shared across the workflow. `tools.store` is an abstraction (and an extension) of an [ES6 Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map):
+Actions can pass information to each other by writing to a file that is shared across the workflow. `tools.cache` is an instance of [`flat-cache`](https://www.npmjs.com/package/flat-cache):
 
 Store a value:
 
 ```js
-tools.store.set('foo', true)
+tools.cache.setKey('foo', true)
 ```
 
 Then, in a later action:
 
 ```js
-const foo = tools.store.get('foo')
+const foo = tools.store.getKey('foo')
 console.log(foo)
 // -> true
 ```
