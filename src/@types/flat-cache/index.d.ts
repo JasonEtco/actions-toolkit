@@ -5,6 +5,7 @@ declare module 'flat-cache' {
     getKey (key: string): any
     removeKey (key: string): void
     save (noPrune?: boolean): void
+    keys (): string[]
   }
 
   export function load (id: string, path?: string): Cache

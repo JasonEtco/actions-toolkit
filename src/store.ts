@@ -45,7 +45,9 @@ export class Store {
     this.save = this.cache.save.bind(this.cache, true)
 
     process.on('exit', () => {
-      this.save()
+      if (this.cache.keys().length > 0) {
+        this.save()
+      }
     })
   }
 }
