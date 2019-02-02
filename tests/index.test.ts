@@ -1,3 +1,4 @@
+import fs from 'fs'
 import nock from 'nock'
 import path from 'path'
 import { Toolkit } from '../src'
@@ -82,6 +83,25 @@ describe('Toolkit', () => {
     it('runs the command in the workspace with some options', async () => {
       const result = await toolkit.runInWorkspace('throw', undefined, { reject: false })
       expect(result).toMatchSnapshot()
+    })
+  })
+
+  describe('#cache', () => {
+    it('calls .save() on process exit', () => {
+      toolkit.cache.save = jest.fn()
+      process.emit('exit' as 'disconnect')
+      expect(toolkit.cache.save).toHaveBeenCalled()
+    })
+
+    it('actually saves on process exit', () => {
+      toolkit.cache.setKey('foo', 'bar')
+      process.emit('exit' as 'disconnect')
+      expect(
+        fs.existsSync(path.join(
+          process.env.GITHUB_WORKSPACE as string,
+          process.env.GITHUB_WORKFLOW as string
+        ))
+      ).toBe(true)
     })
   })
 
