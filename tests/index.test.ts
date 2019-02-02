@@ -99,7 +99,7 @@ describe('Toolkit', () => {
       expect(
         fs.existsSync(path.join(
           process.env.GITHUB_WORKSPACE as string,
-          process.env.GITHUB_WORKFLOW as string
+          `.${process.env.GITHUB_WORKFLOW as string}-cache`
         ))
       ).toBe(true)
     })

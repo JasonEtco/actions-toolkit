@@ -140,7 +140,7 @@ export class Toolkit {
    * Create an instance of flat-cache
    */
   private createCache () {
-    const cache = load(this.context.workflow, path.resolve(this.workspace))
+    const cache = load(`.${this.context.workflow}-cache`, path.resolve(this.workspace))
     process.on('exit', () => cache.save(true))
     return cache
   }
