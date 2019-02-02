@@ -86,20 +86,20 @@ describe('Toolkit', () => {
     })
   })
 
-  describe('#cache', () => {
+  describe('#store', () => {
     it('calls .save() on process exit', () => {
-      toolkit.cache.save = jest.fn()
+      toolkit.store.save = jest.fn()
       process.emit('exit' as 'disconnect')
-      expect(toolkit.cache.save).toHaveBeenCalled()
+      expect(toolkit.store.save).toHaveBeenCalled()
     })
 
     it('actually saves on process exit', () => {
-      toolkit.cache.setKey('foo', 'bar')
+      toolkit.store.set('foo', 'bar')
       process.emit('exit' as 'disconnect')
       expect(
         fs.existsSync(path.join(
           process.env.GITHUB_WORKSPACE as string,
-          `.${process.env.GITHUB_WORKFLOW as string}-cache`
+          `.${process.env.GITHUB_WORKFLOW as string}-store`
         ))
       ).toBe(true)
     })
