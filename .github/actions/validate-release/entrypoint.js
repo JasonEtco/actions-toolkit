@@ -7,7 +7,8 @@ const { release } = tools.context.payload
 
 if (release.draft) {
   console.log('This release is a draft! Aborting.')
-  process.exit(0)
+  // Exiting with a 78 makes it a "Neutral" result
+  process.exit(78)
 }
 
 const tag = semver.valid(release.tag_name)
