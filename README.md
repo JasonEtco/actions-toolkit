@@ -158,7 +158,7 @@ A path to a clone of the repository.
 
 ### tools.store
 
-Actions can pass information to each other by writing to a file that is shared across the workflow. `tools.cache` is a modified instance of [`flat-cache`](https://www.npmjs.com/package/flat-cache):
+Actions can pass information to each other by writing to a file that is shared across the workflow. `tools.store` is a modified instance of [`flat-cache`](https://www.npmjs.com/package/flat-cache):
 
 Store a value:
 
