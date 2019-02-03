@@ -21,9 +21,23 @@ if (pkg.version !== tag) {
   process.exit(1)
 }
 
-if (release.prerelease && semver.prerelease(release.tag_name) === null) {
-  console.error(`The release is a prerelease, but the version tag is not.`)
-  process.exit(1)
+if (release.prerelease) {
+  const prerelease_tag = semver.prerelease(release.tag_name)
+
+  if (prerelease_tag === null) {
+    console.error(`The release is a prerelease, but the version tag is not.`)
+    process.exit(1)
+  }
+
+  const VALID_TAGS = ['beta', 'next']
+  const [tag_name] = prerelease_tag
+
+  if (!VALID_TAGS.includes(tag_name)) {
+    console.error(`Publish tag ${tag_name} is not a valid tag - it must be one of ${VALID_TAGS.join(', ')}`)
+    process.exit(1)
+  }
+
+  fs.writeFileSync(path.join(tools.workspace, 'release-workflow-tag'), tag_name)
 }
 
 console.log(`Release of version ${tag} is all set!`)
