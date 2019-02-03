@@ -5,6 +5,12 @@ const tools = new Toolkit()
 const pkg = tools.getPackageJSON()
 const { release } = tools.context.payload
 
+// Little helper function to log an error then exit
+function fail (message) {
+  console.error(message)
+  process.exit(1)
+}
+
 if (release.draft) {
   console.log('This release is a draft! Aborting.')
   // Exiting with a 78 makes it a "Neutral" result
@@ -13,29 +19,25 @@ if (release.draft) {
 
 const tag = semver.valid(release.tag_name)
 if (!tag) {
-  console.error(`The tag ${release.tag_name} is not a valid tag.`)
-  process.exit(1)
+  fail(`The tag ${release.tag_name} is not a valid tag.`)
 }
 
 if (pkg.version !== tag) {
-  console.error(`Tag ${tag} and version in the package.json ${pkg.version} are not the same.`)
-  process.exit(1)
+  fail(`Tag ${tag} and version in the package.json ${pkg.version} are not the same.`)
 }
 
 if (release.prerelease) {
   const prerelease_tag = semver.prerelease(release.tag_name)
 
   if (prerelease_tag === null) {
-    console.error(`The release is a prerelease, but the version tag is not.`)
-    process.exit(1)
+    fail(`The release is a prerelease, but the version tag is not.`)
   }
 
   const VALID_TAGS = ['beta', 'next']
   const [tag_name] = prerelease_tag
 
   if (!VALID_TAGS.includes(tag_name)) {
-    console.error(`Publish tag ${tag_name} is not a valid tag - it must be one of ${VALID_TAGS.join(', ')}`)
-    process.exit(1)
+    fail(`Publish tag ${tag_name} is not a valid tag - it must be one of ${VALID_TAGS.join(', ')}`)
   }
 
   fs.writeFileSync(path.join(tools.workspace, 'release-workflow-tag'), tag_name)
