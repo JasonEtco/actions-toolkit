@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+set -o pipefail
+
+# Ensure that the NPM_AUTH_TOKEN secret is included
+if [[ -z "$NPM_AUTH_TOKEN" ]]; then
+  echo "Set the NPM_AUTH_TOKEN env variable."
+  exit 1
+fi
+
+FILE=/release-workflow-tag
+if [ ! -f $FILE ]; then
+  echo "Publishing to @latest"
+  npm publish
+else
+  TAG=$(cat $FILE)
+  npm publish --tag $TAG
+fi
