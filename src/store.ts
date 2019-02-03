@@ -35,8 +35,8 @@ export class Store {
   private cache: Cache
 
   constructor (workflow: string, workspace: string) {
-    this.file = `.${workflow}-cache`
-    this.cache = load(this.file, path.resolve(workspace))
+    this.file = `.${workflow || 'workflow'}-cache`
+    this.cache = load(this.file, path.resolve(workspace || process.cwd()))
 
     this.get = this.cache.getKey.bind(this.cache)
     this.set = this.cache.setKey.bind(this.cache)
