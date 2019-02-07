@@ -9,6 +9,26 @@ describe('Toolkit', () => {
     toolkit = new Toolkit()
   })
 
+  describe('#constructor', () => {
+    let exit: (code?: number) => never
+
+    beforeEach(() => {
+      exit = global.process.exit
+      const p = global.process as any
+      p.exit = jest.fn()
+    })
+
+    it('exits if the event is not allowed', () => {
+      // tslint:disable-next-line
+      new Toolkit({ only: ['issues'] })
+      expect(process.exit).toHaveBeenCalledWith(1)
+    })
+
+    afterEach(() => {
+      global.process.exit = exit
+    })
+  })
+
   describe('#github', () => {
     it('returns a GitHub client', () => {
       expect(toolkit.github).toBeInstanceOf(Object)
@@ -98,26 +118,6 @@ describe('Toolkit', () => {
 
       console.warn = before
       // tslint:enable:no-console
-    })
-  })
-
-  describe('#constructor', () => {
-    let exit: (code?: number) => never
-
-    beforeEach(() => {
-      exit = global.process.exit
-      const p = global.process as any
-      p.exit = jest.fn()
-    })
-
-    it('exits if the event is not allowed', () => {
-      // tslint:disable-next-line
-      new Toolkit({ only: ['issues'] })
-      expect(process.exit).toHaveBeenCalledWith(1)
-    })
-
-    afterEach(() => {
-      global.process.exit = exit
     })
   })
 })
