@@ -20,11 +20,6 @@ export class Toolkit {
   public store: Store
 
   /**
-   * A warning string that is memoized if there are missing environment variables
-   */
-  public warning: string | undefined
-
-  /**
    * Path to a clone of the repository
    */
   public workspace: string
@@ -175,7 +170,6 @@ export class Toolkit {
 
       // tslint:disable-next-line:no-console
       console.warn(warning)
-      this.warning = warning
     }
   }
 }

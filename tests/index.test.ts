@@ -19,9 +19,24 @@ describe('Toolkit', () => {
     })
 
     it('exits if the event is not allowed', () => {
-      // tslint:disable-next-line
+      // tslint:disable-next-line:no-unused-expression
       new Toolkit({ only: ['issues'] })
       expect(process.exit).toHaveBeenCalledWith(1)
+    })
+
+    it('logs the expected string with missing env vars', () => {
+      // tslint:disable:no-console
+      const before = console.warn
+      const c = console as any
+      c.warn = jest.fn()
+
+      delete process.env.HOME
+      // Toolkit, but number two. Ergo, twolkit. Open an issue if this isn't clear.
+      new Toolkit() // tslint:disable-line:no-unused-expression
+      expect(c.warn.mock.calls).toMatchSnapshot()
+
+      console.warn = before
+      // tslint:enable:no-console
     })
 
     afterEach(() => {
@@ -102,22 +117,6 @@ describe('Toolkit', () => {
     it('runs the command in the workspace with some options', async () => {
       const result = await toolkit.runInWorkspace('throw', undefined, { reject: false })
       expect(result).toMatchSnapshot()
-    })
-  })
-
-  describe('#warnForMissingEnvVars', () => {
-    it('logs the expected string', () => {
-      // tslint:disable:no-console
-      const before = console.warn
-      console.warn = f => f
-
-      delete process.env.HOME
-      // Toolkit, but number two. Ergo, twolkit. Open an issue if this isn't clear.
-      const twolkit = new Toolkit()
-      expect(twolkit.warning).toMatchSnapshot()
-
-      console.warn = before
-      // tslint:enable:no-console
     })
   })
 })
