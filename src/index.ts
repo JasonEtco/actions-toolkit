@@ -50,6 +50,7 @@ export class Toolkit {
 
   constructor (opts?: ToolkitOptions) {
     this.opts = opts
+
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
 
