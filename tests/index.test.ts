@@ -4,9 +4,17 @@ import { Toolkit } from '../src'
 
 describe('Toolkit', () => {
   let toolkit: Toolkit
+  let logger: any
 
   beforeEach(() => {
     toolkit = new Toolkit()
+    logger = console as any
+    logger = {
+      error: jest.fn(),
+      log: jest.fn(),
+      warn: jest.fn()
+    }
+    console = logger
   })
 
   describe('#constructor', () => {
@@ -25,18 +33,12 @@ describe('Toolkit', () => {
     })
 
     it('logs the expected string with missing env vars', () => {
-      // tslint:disable:no-console
-      const before = console.warn
-      const c = console as any
-      c.warn = jest.fn()
+      logger.warn = jest.fn()
 
       delete process.env.HOME
       // Toolkit, but number two. Ergo, twolkit. Open an issue if this isn't clear.
       new Toolkit() // tslint:disable-line:no-unused-expression
-      expect(c.warn.mock.calls).toMatchSnapshot()
-
-      console.warn = before
-      // tslint:enable:no-console
+      expect(logger.warn.mock.calls).toMatchSnapshot()
     })
 
     afterEach(() => {
