@@ -7,6 +7,10 @@ import Context from './context'
 import { GitHub } from './github'
 import { Store } from './store'
 
+export interface ToolkitOptions {
+  only?: string[]
+}
+
 export class Toolkit {
   public context: Context
 
@@ -47,7 +51,10 @@ export class Toolkit {
    */
   public github: GitHub
 
-  constructor () {
+  public opts?: ToolkitOptions
+
+  constructor (opts?: ToolkitOptions) {
+    this.opts = opts
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
 
@@ -57,6 +64,12 @@ export class Toolkit {
     this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
     this.store = new Store(this.context.workflow, this.workspace)
+
+    if (opts && Array.isArray(opts.only) && !opts.only.includes(this.context.event)) {
+      // tslint:disable-next-line:no-console
+      console.error(`Event ${this.context.event} is not supported by this action.`)
+      process.exit(1)
+    }
   }
 
   /**
