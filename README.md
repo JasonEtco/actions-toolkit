@@ -47,7 +47,7 @@ This will create a new folder `my-cool-action` with the following files:
 
 ## API
 
-* [The Toolkit class](#toolkit)
+* [The Toolkit class](#toolkit-options)
 * [Authenticated GitHub API client](#toolsgithub)
 * [Parsing arguments](#toolsarguments)
 * [Reading files](#toolsgetfilepath-encoding--utf8)
