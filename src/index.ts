@@ -16,11 +16,6 @@ export class Toolkit {
   public store: Store
 
   /**
-   * A warning string that is memoized if there are missing environment variables
-   */
-  public warning: string | undefined
-
-  /**
    * Path to a clone of the repository
    */
   public workspace: string
@@ -159,10 +154,7 @@ export class Toolkit {
       // This isn't being run inside of a GitHub Action environment!
       const list = requiredButMissing.map(key => `- ${key}`).join('\n')
       const warning = `There are environment variables missing from this runtime, but would be present on GitHub.\n${list}`
-
-      // tslint:disable-next-line:no-console
-      console.warn(warning)
-      this.warning = warning
+      throw new Error(warning)
     }
   }
 }
