@@ -161,11 +161,11 @@ export class Toolkit {
     const { event } = this.opts
     if (!event) return
 
-    const failed = Array.isArray(event)
-      ? !event.some(e => this.eventIsAllowed(e))
-      : !this.eventIsAllowed(event)
+    const passed = Array.isArray(event)
+      ? event.some(e => this.eventIsAllowed(e))
+      : this.eventIsAllowed(event)
 
-    if (failed) {
+    if (!passed) {
       const actionStr = this.context.payload.action ? `.${this.context.payload.action}` : ''
       this.log.error(`Event \`${this.context.event}${actionStr}\` is not supported by this action.`)
       process.exit(1)
