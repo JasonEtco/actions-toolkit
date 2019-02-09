@@ -151,10 +151,10 @@ export class Toolkit {
     const [eventName, action] = event.split('.')
 
     if (action) {
-      return this.context.payload.action !== action
+      return eventName === this.context.event && this.context.payload.action === action
     }
 
-    return eventName !== this.context.event
+    return eventName === this.context.event
   }
 
   private checkAllowedEvents () {
@@ -162,8 +162,8 @@ export class Toolkit {
     if (!event) return
 
     const failed = Array.isArray(event)
-      ? event.some(e => this.eventIsAllowed(e))
-      : this.eventIsAllowed(event)
+      ? !event.some(e => this.eventIsAllowed(e))
+      : !this.eventIsAllowed(event)
 
     if (failed) {
       const actionStr = this.context.payload.action ? `.${this.context.payload.action}` : ''

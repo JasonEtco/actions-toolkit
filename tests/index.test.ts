@@ -117,8 +117,8 @@ describe('Toolkit#constructor', () => {
   it('does not exit if the event is one of the allowed with an array of events', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request', 'issues'] })
-    expect(process.exit).toHaveBeenCalledWith(1)
-    expect(logger.error.mock.calls).toMatchSnapshot()
+    expect(process.exit).not.toHaveBeenCalled()
+    expect(logger.error).not.toHaveBeenCalled()
   })
 
   it('exits if the event is not allowed with a single event', () => {
