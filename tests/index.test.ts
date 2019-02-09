@@ -7,43 +7,12 @@ describe('Toolkit', () => {
   let logger: any
 
   beforeEach(() => {
-    toolkit = new Toolkit()
-    logger = console as any
     logger = {
       error: jest.fn(),
       log: jest.fn(),
       warn: jest.fn()
     }
-    console = logger
-  })
-
-  describe('#constructor', () => {
-    let exit: (code?: number) => never
-
-    beforeEach(() => {
-      exit = global.process.exit
-      const p = global.process as any
-      p.exit = jest.fn()
-    })
-
-    it('exits if the event is not allowed', () => {
-      // tslint:disable-next-line:no-unused-expression
-      new Toolkit({ only: ['issues'] })
-      expect(process.exit).toHaveBeenCalledWith(1)
-    })
-
-    it('logs the expected string with missing env vars', () => {
-      logger.warn = jest.fn()
-
-      delete process.env.HOME
-      // Toolkit, but number two. Ergo, twolkit. Open an issue if this isn't clear.
-      new Toolkit() // tslint:disable-line:no-unused-expression
-      expect(logger.warn.mock.calls).toMatchSnapshot()
-    })
-
-    afterEach(() => {
-      global.process.exit = exit
-    })
+    toolkit = new Toolkit({ logger })
   })
 
   describe('#github', () => {
@@ -120,5 +89,66 @@ describe('Toolkit', () => {
       const result = await toolkit.runInWorkspace('throw', undefined, { reject: false })
       expect(result).toMatchSnapshot()
     })
+  })
+})
+
+describe('Toolkit#constructor', () => {
+  let logger: any
+  let exit: (code?: number) => never
+
+  beforeEach(() => {
+    logger = {
+      error: jest.fn(),
+      log: jest.fn(),
+      warn: jest.fn()
+    }
+    exit = global.process.exit
+    const p = global.process as any
+    p.exit = jest.fn()
+  })
+
+  it('exits if the event is not allowed with an array of events', () => {
+    // tslint:disable-next-line:no-unused-expression
+    new Toolkit({ logger, event: ['pull_request'] })
+    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(logger.error.mock.calls).toMatchSnapshot()
+  })
+
+  it('does not exit if the event is one of the allowed with an array of events', () => {
+    // tslint:disable-next-line:no-unused-expression
+    new Toolkit({ logger, event: ['pull_request', 'issues'] })
+    expect(process.exit).not.toHaveBeenCalled()
+    expect(logger.error).not.toHaveBeenCalled()
+  })
+
+  it('exits if the event is not allowed with a single event', () => {
+    // tslint:disable-next-line:no-unused-expression
+    new Toolkit({ logger, event: 'pull_request' })
+    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(logger.error.mock.calls).toMatchSnapshot()
+  })
+
+  it('exits if the event is not allowed with an array of events with actions', () => {
+    // tslint:disable-next-line:no-unused-expression
+    new Toolkit({ logger, event: ['pull_request.opened'] })
+    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(logger.error.mock.calls).toMatchSnapshot()
+  })
+
+  it('exits if the event is not allowed with a single event with an action', () => {
+    // tslint:disable-next-line:no-unused-expression
+    new Toolkit({ logger, event: 'pull_request.opened' })
+    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(logger.error.mock.calls).toMatchSnapshot()
+  })
+
+  it('logs the expected string with missing env vars', () => {
+    delete process.env.HOME
+    new Toolkit({ logger }) // tslint:disable-line:no-unused-expression
+    expect(logger.warn.mock.calls).toMatchSnapshot()
+  })
+
+  afterEach(() => {
+    global.process.exit = exit
   })
 })

@@ -9,7 +9,8 @@ import { GitHub } from './github'
 import { Store } from './store'
 
 export interface ToolkitOptions {
-  only?: string[]
+  event?: string | string[],
+  logger?: Console | any
 }
 
 export class Toolkit {
@@ -47,15 +48,18 @@ export class Toolkit {
    */
   public github: GitHub
 
-  public opts?: ToolkitOptions
+  public opts: ToolkitOptions
 
   /**
    * A collection of methods used to stop an action while it's being run
    */
   public exit: Exit
 
-  constructor (opts?: ToolkitOptions) {
+  public log: Console | any
+
+  constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
+    this.log = opts.logger || console
 
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
@@ -67,12 +71,7 @@ export class Toolkit {
     this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
     this.store = new Store(this.context.workflow, this.workspace)
-
-    if (opts && Array.isArray(opts.only) && !opts.only.includes(this.context.event)) {
-      // tslint:disable-next-line:no-console
-      console.error(`Event ${this.context.event} is not supported by this action.`)
-      process.exit(1)
-    }
+    this.checkAllowedEvents()
   }
 
   /**
@@ -153,6 +152,34 @@ export class Toolkit {
   }
 
   /**
+   * Returns true if this event is allowed
+   */
+  private eventIsAllowed (event: string) {
+    const [eventName, action] = event.split('.')
+
+    if (action) {
+      return eventName === this.context.event && this.context.payload.action === action
+    }
+
+    return eventName === this.context.event
+  }
+
+  private checkAllowedEvents () {
+    const { event } = this.opts
+    if (!event) return
+
+    const passed = Array.isArray(event)
+      ? event.some(e => this.eventIsAllowed(e))
+      : this.eventIsAllowed(event)
+
+    if (!passed) {
+      const actionStr = this.context.payload.action ? `.${this.context.payload.action}` : ''
+      this.log.error(`Event \`${this.context.event}${actionStr}\` is not supported by this action.`)
+      process.exit(1)
+    }
+  }
+
+  /**
    * Log warnings to the console for missing environment variables
    */
   private warnForMissingEnvVars () {
@@ -175,9 +202,7 @@ export class Toolkit {
       // This isn't being run inside of a GitHub Action environment!
       const list = requiredButMissing.map(key => `- ${key}`).join('\n')
       const warning = `There are environment variables missing from this runtime, but would be present on GitHub.\n${list}`
-
-      // tslint:disable-next-line:no-console
-      console.warn(warning)
+      this.log.warn(warning)
     }
   }
 }

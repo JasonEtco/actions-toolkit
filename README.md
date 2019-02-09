@@ -58,13 +58,29 @@ This will create a new folder `my-cool-action` with the following files:
 
 ### Toolkit options
 
-#### only (optional)
+#### event (optional)
 
-An optional array of [events that this action works with](https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#events-supported-in-workflow-files). If omitted, the action will run for any event - if present, the action will exit with a failing status code for any event that is not allowed.
+An optional list of [events that this action works with](https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#events-supported-in-workflow-files). If omitted, the action will run for any event - if present, the action will exit with a failing status code for any event that is not allowed.
 
 ```js
 const tools = new Toolkit({
-  only: ['issues', 'pull_requests']
+  event: ['issues', 'pull_requests']
+})
+```
+
+You can also pass a single string:
+
+```js
+const tools = new Toolkit({
+  event: 'issues'
+})
+```
+
+And/or strings that include an action (what actually happened to trigger this event) for even more specificity:
+
+```js
+const tools = new Toolkit({
+  event: ['issues.created']
 })
 ```
 
