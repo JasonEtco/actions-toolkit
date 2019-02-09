@@ -140,16 +140,31 @@ export class Toolkit {
     return execa(command, args, { cwd: this.workspace, ...opts })
   }
 
+  /**
+   * Returns true if this event is allowed
+   */
+  private eventIsAllowed (event: string) {
+    const [eventName, action] = event.split('.')
+
+    if (action) {
+      return this.context.payload.action !== action
+    }
+
+    return eventName !== this.context.event
+  }
+
   private checkAllowedEvents () {
     const { event } = this.opts
     if (!event) return
 
-    if (
-      (Array.isArray(event) && !event.includes(this.context.event)) ||
-      (event !== this.context.event)
-    ) {
+    const failed = Array.isArray(event)
+      ? event.some(e => this.eventIsAllowed(e))
+      : this.eventIsAllowed(event)
+
+    if (failed) {
+      const actionStr = this.context.payload.action ? `.${this.context.payload.action}` : ''
       // tslint:disable-next-line:no-console
-      console.error(`Event ${this.context.event} is not supported by this action.`)
+      console.error(`Event ${this.context.event}${actionStr} is not supported by this action.`)
       process.exit(1)
     }
   }

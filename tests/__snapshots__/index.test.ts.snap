@@ -1,14 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Toolkit #constructor logs the expected string with missing env vars 1`] = `
-Array [
-  Array [
-    "There are environment variables missing from this runtime, but would be present on GitHub.
-- HOME",
-  ],
-]
-`;
-
 exports[`Toolkit #getFile gets the contents of a file 1`] = `"I'm writing this on a plane ✈️"`;
 
 exports[`Toolkit #getFile gets the contents of a file with custom encoding 1`] = `"SSdtIHdyaXRpbmcgdGhpcyBvbiBhIHBsYW5lIOKciO+4jw=="`;
@@ -39,3 +30,12 @@ Object {
 `;
 
 exports[`Toolkit #runInWorkspace runs the command in the workspace with some options 1`] = `[Error: spawn throw ENOENT]`;
+
+exports[`Toolkit#constructor logs the expected string with missing env vars 1`] = `
+Array [
+  Array [
+    "There are environment variables missing from this runtime, but would be present on GitHub.
+- HOME",
+  ],
+]
+`;
