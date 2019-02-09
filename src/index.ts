@@ -6,6 +6,18 @@ import path from 'path'
 import Context from './context'
 import { GitHub } from './github'
 import { Store } from './store'
+/**
+ * The code to exit an action with a "success" state
+ */
+export const SuccessCode = 0
+/**
+ * The code to exit an action with a "failure" state
+ */
+export const FailureCode = 1
+/**
+ * The code to exit an action with a "neutral" state
+ */
+export const NeutralCode = 78
 
 export interface ToolkitOptions {
   only?: string[]
