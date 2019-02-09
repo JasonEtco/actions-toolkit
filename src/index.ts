@@ -4,20 +4,9 @@ import yaml from 'js-yaml'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
 import Context from './context'
+import { Exit } from './exit'
 import { GitHub } from './github'
 import { Store } from './store'
-/**
- * The code to exit an action with a "success" state
- */
-export const SuccessCode = 0
-/**
- * The code to exit an action with a "failure" state
- */
-export const FailureCode = 1
-/**
- * The code to exit an action with a "neutral" state
- */
-export const NeutralCode = 78
 
 export interface ToolkitOptions {
   only?: string[]
@@ -60,12 +49,18 @@ export class Toolkit {
 
   public opts?: ToolkitOptions
 
+  /**
+   * A collection of methods used to stop an action while it's being run
+   */
+  public exit: Exit
+
   constructor (opts?: ToolkitOptions) {
     this.opts = opts
 
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
 
+    this.exit = new Exit()
     this.context = new Context()
     this.workspace = process.env.GITHUB_WORKSPACE as string
     this.token = process.env.GITHUB_TOKEN as string
