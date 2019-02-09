@@ -2,6 +2,7 @@
 
 exports[`Context .payload returns the payload object 1`] = `
 Object {
+  "action": "opened",
   "issue": Object {
     "number": 1,
   },
