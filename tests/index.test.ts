@@ -144,7 +144,6 @@ describe('Toolkit#constructor', () => {
 
   it('logs the expected string with missing env vars', () => {
     delete process.env.HOME
-    // Toolkit, but number two. Ergo, twolkit. Open an issue if this isn't clear.
     new Toolkit({ logger }) // tslint:disable-line:no-unused-expression
     expect(logger.warn.mock.calls).toMatchSnapshot()
   })
