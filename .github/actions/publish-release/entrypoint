@@ -15,5 +15,6 @@ if [ ! -f $FILE ]; then
   npm publish
 else
   TAG=$(cat $FILE)
+  echo "Publishing to @${TAG}"
   npm publish --tag $TAG
 fi
