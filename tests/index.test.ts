@@ -26,9 +26,15 @@ describe('Toolkit', () => {
       p.exit = jest.fn()
     })
 
+    it('exits if the event is not allowed with an array of eventts', () => {
+      // tslint:disable-next-line:no-unused-expression
+      new Toolkit({ event: ['issues'] })
+      expect(process.exit).toHaveBeenCalledWith(1)
+    })
+
     it('exits if the event is not allowed', () => {
       // tslint:disable-next-line:no-unused-expression
-      new Toolkit({ only: ['issues'] })
+      new Toolkit({ event: 'issues' })
       expect(process.exit).toHaveBeenCalledWith(1)
     })
 

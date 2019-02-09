@@ -8,7 +8,7 @@ import { GitHub } from './github'
 import { Store } from './store'
 
 export interface ToolkitOptions {
-  only?: string[]
+  event?: string | string[]
 }
 
 export class Toolkit {
@@ -46,9 +46,9 @@ export class Toolkit {
    */
   public github: GitHub
 
-  public opts?: ToolkitOptions
+  public opts: ToolkitOptions
 
-  constructor (opts?: ToolkitOptions) {
+  constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
 
     // Print a console warning for missing environment variables
@@ -60,12 +60,7 @@ export class Toolkit {
     this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
     this.store = new Store(this.context.workflow, this.workspace)
-
-    if (opts && Array.isArray(opts.only) && !opts.only.includes(this.context.event)) {
-      // tslint:disable-next-line:no-console
-      console.error(`Event ${this.context.event} is not supported by this action.`)
-      process.exit(1)
-    }
+    this.checkAllowedEvents()
   }
 
   /**
@@ -143,6 +138,20 @@ export class Toolkit {
   public async runInWorkspace (command: string, args?: string[] | string, opts?: ExecaOptions) {
     if (typeof args === 'string') args = [args]
     return execa(command, args, { cwd: this.workspace, ...opts })
+  }
+
+  private checkAllowedEvents () {
+    const { event } = this.opts
+    if (!event) return
+
+    if (
+      (Array.isArray(event) && !event.includes(this.context.event)) ||
+      (event !== this.context.event)
+    ) {
+      // tslint:disable-next-line:no-console
+      console.error(`Event ${this.context.event} is not supported by this action.`)
+      process.exit(1)
+    }
   }
 
   /**
