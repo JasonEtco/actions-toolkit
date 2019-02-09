@@ -1,31 +1,25 @@
 // tslint:disable:no-console
 
+/**
+ * The code to exit an action with a "success" state
+ */
+export const SuccessCode = 0
+/**
+ * The code to exit an action with a "failure" state
+ */
+export const FailureCode = 1
+/**
+ * The code to exit an action with a "neutral" state
+ */
+export const NeutralCode = 78
+
 export class Exit {
-  /**
-   * The code to exit an action with a "success" state
-   */
-  public SuccessCode: number
-  /**
-   * The code to exit an action with a "failure" state
-   */
-  public FailureCode: number
-  /**
-   * The code to exit an action with a "neutral" state
-   */
-  public NeutralCode: number
-
-  constructor () {
-    this.SuccessCode = 0
-    this.FailureCode = 1
-    this.NeutralCode = 78
-  }
-
   /**
    * Stop the action with a "success" status
    */
   public success (message?: string) {
     if (message) console.log(message)
-    process.exit(this.SuccessCode)
+    process.exit(SuccessCode)
   }
 
   /**
@@ -33,7 +27,7 @@ export class Exit {
    */
   public neutral (message?: string) {
     if (message) console.log(message)
-    process.exit(this.NeutralCode)
+    process.exit(NeutralCode)
   }
 
   /**
@@ -41,6 +35,6 @@ export class Exit {
    */
   public failure (message?: string) {
     if (message) console.error(message)
-    process.exit(this.FailureCode)
+    process.exit(FailureCode)
   }
 }
