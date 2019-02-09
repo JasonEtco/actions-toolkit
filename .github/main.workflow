@@ -16,6 +16,6 @@ action "npm ci" {
 
 action "publish release" {
   needs = ["validate release", "npm ci"]
-  uses = "./github/actions/publish-release"
+  uses = "./.github/actions/publish-release"
   secrets = ["NPM_AUTH_TOKEN"]
 }
