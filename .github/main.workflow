@@ -1,6 +1,6 @@
 workflow "Publish a release to npm" {
   on = "release"
-  resolves = ["npm publish"]
+  resolves = ["publish release"]
 }
 
 # Checks that the release is not a draft
@@ -14,9 +14,8 @@ action "npm ci" {
   args = "ci"
 }
 
-action "npm publish" {
+action "publish release" {
   needs = ["validate release", "npm ci"]
-  uses = "actions/npm@master"
-  args = "publish"
+  uses = "./.github/actions/publish-release"
   secrets = ["NPM_AUTH_TOKEN"]
 }
