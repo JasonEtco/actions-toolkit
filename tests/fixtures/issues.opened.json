@@ -1,4 +1,5 @@
 {
+  "action": "opened",
   "repository": {
     "owner": {
       "login": "JasonEtco"

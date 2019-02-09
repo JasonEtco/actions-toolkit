@@ -47,6 +47,7 @@ This will create a new folder `my-cool-action` with the following files:
 
 ## API
 
+* [The Toolkit class](#toolkit-options)
 * [Authenticated GitHub API client](#toolsgithub)
 * [Parsing arguments](#toolsarguments)
 * [Reading files](#toolsgetfilepath-encoding--utf8)
@@ -54,6 +55,34 @@ This will create a new folder `my-cool-action` with the following files:
 * [In-repo configuration](#toolsconfigfilename)
 * [Pass information to another action](#toolsstore)
 * [Inspect the webhook event payload](#toolscontext)
+
+### Toolkit options
+
+#### event (optional)
+
+An optional list of [events that this action works with](https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#events-supported-in-workflow-files). If omitted, the action will run for any event - if present, the action will exit with a failing status code for any event that is not allowed.
+
+```js
+const tools = new Toolkit({
+  event: ['issues', 'pull_requests']
+})
+```
+
+You can also pass a single string:
+
+```js
+const tools = new Toolkit({
+  event: 'issues'
+})
+```
+
+And/or strings that include an action (what actually happened to trigger this event) for even more specificity:
+
+```js
+const tools = new Toolkit({
+  event: ['issues.created']
+})
+```
 
 ### tools.github
 
