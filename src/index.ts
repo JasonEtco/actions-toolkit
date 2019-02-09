@@ -8,7 +8,8 @@ import { GitHub } from './github'
 import { Store } from './store'
 
 export interface ToolkitOptions {
-  event?: string | string[]
+  event?: string | string[],
+  logger?: Console | any
 }
 
 export class Toolkit {
@@ -48,8 +49,11 @@ export class Toolkit {
 
   public opts: ToolkitOptions
 
+  public log: Console | any
+
   constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
+    this.log = opts.logger || console
 
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
@@ -163,8 +167,7 @@ export class Toolkit {
 
     if (failed) {
       const actionStr = this.context.payload.action ? `.${this.context.payload.action}` : ''
-      // tslint:disable-next-line:no-console
-      console.error(`Event ${this.context.event}${actionStr} is not supported by this action.`)
+      this.log.error(`Event \`${this.context.event}${actionStr}\` is not supported by this action.`)
       process.exit(1)
     }
   }
@@ -192,9 +195,7 @@ export class Toolkit {
       // This isn't being run inside of a GitHub Action environment!
       const list = requiredButMissing.map(key => `- ${key}`).join('\n')
       const warning = `There are environment variables missing from this runtime, but would be present on GitHub.\n${list}`
-
-      // tslint:disable-next-line:no-console
-      console.warn(warning)
+      this.log.warn(warning)
     }
   }
 }

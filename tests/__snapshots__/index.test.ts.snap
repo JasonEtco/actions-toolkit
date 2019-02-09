@@ -31,6 +31,46 @@ Object {
 
 exports[`Toolkit #runInWorkspace runs the command in the workspace with some options 1`] = `[Error: spawn throw ENOENT]`;
 
+exports[`Toolkit#constructor does not exit if the event is one of the allowed with an array of events 1`] = `
+Array [
+  Array [
+    "Event \`issues.opened\` is not supported by this action.",
+  ],
+]
+`;
+
+exports[`Toolkit#constructor exits if the event is not allowed with a single event 1`] = `
+Array [
+  Array [
+    "Event \`issues.opened\` is not supported by this action.",
+  ],
+]
+`;
+
+exports[`Toolkit#constructor exits if the event is not allowed with a single event with an action 1`] = `
+Array [
+  Array [
+    "Event \`issues\` is not supported by this action.",
+  ],
+]
+`;
+
+exports[`Toolkit#constructor exits if the event is not allowed with an array of events 1`] = `
+Array [
+  Array [
+    "Event \`issues.opened\` is not supported by this action.",
+  ],
+]
+`;
+
+exports[`Toolkit#constructor exits if the event is not allowed with an array of events with actions 1`] = `
+Array [
+  Array [
+    "Event \`issues\` is not supported by this action.",
+  ],
+]
+`;
+
 exports[`Toolkit#constructor logs the expected string with missing env vars 1`] = `
 Array [
   Array [
