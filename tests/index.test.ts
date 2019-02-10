@@ -88,15 +88,14 @@ describe('Toolkit', () => {
 })
 
 describe('Toolkit#constructor', () => {
-  let logger: any
+  let logger: Signale
   let exit: (code?: number) => never
 
   beforeEach(() => {
-    logger = {
-      error: jest.fn(),
-      log: jest.fn(),
-      warn: jest.fn()
-    }
+    logger = new Signale({ disabled: true })
+    logger.error = jest.fn()
+    logger.warn = jest.fn()
+
     exit = global.process.exit
     const p = global.process as any
     p.exit = jest.fn()
@@ -106,7 +105,7 @@ describe('Toolkit#constructor', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request'] })
     expect(process.exit).toHaveBeenCalledWith(1)
-    expect(logger.error.mock.calls).toMatchSnapshot()
+    expect((logger.error as any).mock.calls).toMatchSnapshot()
   })
 
   it('does not exit if the event is one of the allowed with an array of events', () => {
@@ -120,27 +119,27 @@ describe('Toolkit#constructor', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: 'pull_request' })
     expect(process.exit).toHaveBeenCalledWith(1)
-    expect(logger.error.mock.calls).toMatchSnapshot()
+    expect((logger.error as any).mock.calls).toMatchSnapshot()
   })
 
   it('exits if the event is not allowed with an array of events with actions', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request.opened'] })
     expect(process.exit).toHaveBeenCalledWith(1)
-    expect(logger.error.mock.calls).toMatchSnapshot()
+    expect((logger.error as any).mock.calls).toMatchSnapshot()
   })
 
   it('exits if the event is not allowed with a single event with an action', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: 'pull_request.opened' })
     expect(process.exit).toHaveBeenCalledWith(1)
-    expect(logger.error.mock.calls).toMatchSnapshot()
+    expect((logger.error as any).mock.calls).toMatchSnapshot()
   })
 
   it('logs the expected string with missing env vars', () => {
     delete process.env.HOME
     new Toolkit({ logger }) // tslint:disable-line:no-unused-expression
-    expect(logger.warn.mock.calls).toMatchSnapshot()
+    expect((logger.warn as any).mock.calls).toMatchSnapshot()
   })
 
   afterEach(() => {
