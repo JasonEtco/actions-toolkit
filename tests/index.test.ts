@@ -1,18 +1,13 @@
 import nock from 'nock'
 import path from 'path'
+import { Signale } from 'signale'
 import { Toolkit } from '../src'
 
 describe('Toolkit', () => {
   let toolkit: Toolkit
-  let logger: any
 
   beforeEach(() => {
-    logger = {
-      error: jest.fn(),
-      log: jest.fn(),
-      warn: jest.fn()
-    }
-    toolkit = new Toolkit({ logger })
+    toolkit = new Toolkit({ logger: new Signale({ disabled: true }) })
   })
 
   describe('#github', () => {
