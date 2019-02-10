@@ -54,6 +54,7 @@ This will create a new folder `my-cool-action` with the following files:
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
 * [In-repo configuration](#toolsconfigfilename)
 * [Pass information to another action](#toolsstore)
+* [End the action's process](#toolsexit)
 * [Inspect the webhook event payload](#toolscontext)
 
 ### Toolkit options
@@ -182,6 +183,18 @@ The GitHub API token being used to authenticate requests.
 ### tools.workspace
 
 A path to a clone of the repository.
+
+<br>
+
+### tools.exit
+
+A collection of methods to end the action's process and tell GitHub what status to set (success, neutral or failure). Internally, these methods call `process.exit` with the [appropriate exit code](https://developer.github.com/actions/creating-github-actions/accessing-the-runtime-environment/#exit-codes-and-statuses). You can pass an optional message to each one to be logged before exiting. This can be used like an early return:
+
+```js
+if (someCheck) tools.exit.neutral('No _action_ necessary!') 
+if (anError) tools.exit.failure('We failed!')
+tools.exit.success('We did it team!')
+```
 
 <br>
 
