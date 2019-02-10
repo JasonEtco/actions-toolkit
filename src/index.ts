@@ -3,6 +3,7 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
+import { Signale } from 'signale'
 import Context from './context'
 import { Exit } from './exit'
 import { GitHub } from './github'
@@ -10,7 +11,7 @@ import { Store } from './store'
 
 export interface ToolkitOptions {
   event?: string | string[],
-  logger?: Console | any
+  logger?: Signale | any
 }
 
 export class Toolkit {
@@ -55,11 +56,14 @@ export class Toolkit {
    */
   public exit: Exit
 
-  public log: Console | any
+  /**
+   * A general-purpose logger. An instance of [Signale](https://github.com/klaussinani/signale)
+   */
+  public log: Signale
 
   constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
-    this.log = opts.logger || console
+    this.log = opts.logger || new Signale({ config: { underlineLabel: false } })
 
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
