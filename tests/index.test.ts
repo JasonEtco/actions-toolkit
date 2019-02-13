@@ -2,6 +2,7 @@ import nock from 'nock'
 import path from 'path'
 import { Signale } from 'signale'
 import { Toolkit } from '../src'
+import { NeutralCode } from '../src/exit'
 
 describe('Toolkit', () => {
   let toolkit: Toolkit
@@ -104,7 +105,7 @@ describe('Toolkit#constructor', () => {
   it('exits if the event is not allowed with an array of events', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request'] })
-    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect((logger.error as any).mock.calls).toMatchSnapshot()
   })
 
@@ -118,21 +119,21 @@ describe('Toolkit#constructor', () => {
   it('exits if the event is not allowed with a single event', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: 'pull_request' })
-    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect((logger.error as any).mock.calls).toMatchSnapshot()
   })
 
   it('exits if the event is not allowed with an array of events with actions', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request.opened'] })
-    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect((logger.error as any).mock.calls).toMatchSnapshot()
   })
 
   it('exits if the event is not allowed with a single event with an action', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: 'pull_request.opened' })
-    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect((logger.error as any).mock.calls).toMatchSnapshot()
   })
 
