@@ -175,7 +175,7 @@ export class Toolkit {
     if (!passed) {
       const actionStr = this.context.payload.action ? `.${this.context.payload.action}` : ''
       this.log.error(`Event \`${this.context.event}${actionStr}\` is not supported by this action.`)
-      process.exit(1)
+      this.exit.neutral()
     }
   }
 
