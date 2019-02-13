@@ -89,11 +89,11 @@ describe('Toolkit', () => {
 })
 
 describe('Toolkit#constructor', () => {
-  let logger: Signale
+  let logger: jest.Mocked<Signale>
   let exit: (code?: number) => never
 
   beforeEach(() => {
-    logger = new Signale({ disabled: true })
+    logger = new Signale() as jest.Mocked<Signale>
     logger.error = jest.fn()
     logger.warn = jest.fn()
 
@@ -106,7 +106,7 @@ describe('Toolkit#constructor', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request'] })
     expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect((logger.error as any).mock.calls).toMatchSnapshot()
+    expect(logger.error.mock.calls).toMatchSnapshot()
   })
 
   it('does not exit if the event is one of the allowed with an array of events', () => {
@@ -120,21 +120,21 @@ describe('Toolkit#constructor', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: 'pull_request' })
     expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect((logger.error as any).mock.calls).toMatchSnapshot()
+    expect(logger.error.mock.calls).toMatchSnapshot()
   })
 
   it('exits if the event is not allowed with an array of events with actions', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request.opened'] })
     expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect((logger.error as any).mock.calls).toMatchSnapshot()
+    expect(logger.error.mock.calls).toMatchSnapshot()
   })
 
   it('exits if the event is not allowed with a single event with an action', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: 'pull_request.opened' })
     expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect((logger.error as any).mock.calls).toMatchSnapshot()
+    expect(logger.error.mock.calls).toMatchSnapshot()
   })
 
   it('logs the expected string with missing env vars', () => {
