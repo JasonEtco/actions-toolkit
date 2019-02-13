@@ -45,7 +45,7 @@ export interface WebhookPayloadWithRepository {
   }
 }
 
-export default class Context {
+export class Context {
   /**
    * Webhook payload object that triggered the workflow
    */
