@@ -11,7 +11,7 @@ import { Store } from './store'
 
 export interface ToolkitOptions {
   event?: string | string[],
-  logger?: Signale | any
+  logger?: Signale
 }
 
 export class Toolkit {
