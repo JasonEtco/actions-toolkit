@@ -140,7 +140,7 @@ describe('Toolkit#constructor', () => {
   it('logs the expected string with missing env vars', () => {
     delete process.env.HOME
     new Toolkit({ logger }) // tslint:disable-line:no-unused-expression
-    expect((logger.warn as any).mock.calls).toMatchSnapshot()
+    expect(logger.warn.mock.calls).toMatchSnapshot()
   })
 
   afterEach(() => {
