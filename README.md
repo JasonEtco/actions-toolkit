@@ -104,6 +104,31 @@ const result = await tools.github.graphql(query, variables)
 
 <br>
 
+### tools.log
+
+actions-toolkit comes with a handy instance of [Signale](https://github.com/klaussinani/signale), a really great logging utility. Check out their docs for [the full list of methods](https://github.com/klaussinani/signale#usage). You can use those methods in your action:
+
+```js
+tools.log.info('Gonna try this...')
+try {
+  risky()
+  tools.log.success('We did it!')
+} catch (error) {
+  tools.log.fatal(error)
+}
+```
+
+In the GitHub Actions output, this is the result:
+
+```
+ℹ  info      Gonna try this...
+✖  fatal     Error: Something bad happened! 
+    at Object.<anonymous> (/entrypoint.js:5:17)
+    at Module._compile (internal/modules/cjs/loader.js:734:30)
+```
+
+<br>
+
 ### tools.config(filename)
 
 Get the configuration settings for this action in the project workspace. This method can be used in three different ways:
