@@ -106,7 +106,7 @@ const result = await tools.github.graphql(query, variables)
 
 ### tools.log
 
-actions-toolkit comes with a handy instance of [Signale](https://github.com/klaussinani/signale), a really great logging utility. Check out their docs for [the full list of methods](https://github.com/klaussinani/signale#usage). You can use those methods in your action:
+This library comes with an instance of [Signale](https://github.com/klaussinani/signale), a great **logging utility**. Check out their docs for [the full list of methods](https://github.com/klaussinani/signale#usage). You can use those methods in your action:
 
 ```js
 tools.log.info('Gonna try this...')
