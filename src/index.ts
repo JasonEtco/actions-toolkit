@@ -63,6 +63,8 @@ export class Toolkit {
 
   constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
+
+    // Disable the underline to prevent extra white space in the Actions log output
     this.log = opts.logger || new Signale({ config: { underlineLabel: false } })
 
     // Print a console warning for missing environment variables
