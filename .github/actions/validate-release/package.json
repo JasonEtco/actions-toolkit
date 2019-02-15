@@ -1,9 +1,0 @@
-{
-  "name": "validate-release",
-  "private": true,
-  "main": "index.js",
-  "dependencies": {
-    "actions-toolkit": "^1.4.0",
-    "semver": "^5.6.0"
-  }
-}
