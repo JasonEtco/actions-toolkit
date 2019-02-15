@@ -1,6 +1,6 @@
 workflow "Publish a release to npm" {
   on = "release"
-  resolves = ["publish release"]
+  resolves = ["npm ci", "publish release"]
 }
 
 # Checks that the release is not a draft
