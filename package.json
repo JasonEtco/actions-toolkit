@@ -1,6 +1,6 @@
 {
   "name": "actions-toolkit",
-  "version": "1.5.0-beta.1",
+  "version": "1.5.0-beta.2",
   "description": "A toolkit for building GitHub Actions in Node.js",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
