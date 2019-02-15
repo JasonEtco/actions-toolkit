@@ -6,7 +6,7 @@ workflow "Publish a release to npm" {
 # Checks that the release is not a draft
 # and it is attached to a valid semver tag
 action "validate release" {
-  uses = "./.github/actions/validate-release"
+  uses = "JasonEtco/validate-semver-release@master"
 }
 
 action "npm ci" {
