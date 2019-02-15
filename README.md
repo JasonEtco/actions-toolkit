@@ -107,9 +107,10 @@ const result = await tools.github.graphql(query, variables)
 
 ### tools.log
 
-This library comes with an instance of [Signale](https://github.com/klaussinani/signale), a great **logging utility**. Check out their docs for [the full list of methods](https://github.com/klaussinani/signale#usage). You can use those methods in your action:
+This library comes with a slightly-customized instance of [Signale](https://github.com/klaussinani/signale), a great **logging utility**. Check out their docs for [the full list of methods](https://github.com/klaussinani/signale#usage). You can use those methods in your action:
 
 ```js
+tools.log('Welcome to this example!')
 tools.log.info('Gonna try this...')
 try {
   risky()
@@ -122,6 +123,7 @@ try {
 In the GitHub Actions output, this is the result:
 
 ```
+ℹ  info      Welcome to this example!
 ℹ  info      Gonna try this...
 ✖  fatal     Error: Something bad happened! 
     at Object.<anonymous> (/entrypoint.js:5:17)
