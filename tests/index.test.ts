@@ -86,6 +86,21 @@ describe('Toolkit', () => {
       expect(result).toMatchSnapshot()
     })
   })
+
+  describe('#wrapLogger', () => {
+    it('wraps the provided logger and allows for a callable class', () => {
+      const logger = new Signale() as jest.Mocked<Signale>
+      logger.info = jest.fn()
+      const twolkit = new Toolkit({ logger })
+
+      twolkit.log('Hello!')
+      twolkit.log.info('Hi!')
+
+      expect(logger.info).toHaveBeenCalledTimes(2)
+      expect(logger.info).toHaveBeenCalledWith('Hello!')
+      expect(logger.info).toHaveBeenCalledWith('Hi!')
+    })
+  })
 })
 
 describe('Toolkit#constructor', () => {
