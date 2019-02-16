@@ -1,19 +1,14 @@
 import nock from 'nock'
 import path from 'path'
+import { Signale } from 'signale'
 import { Toolkit } from '../src'
 import { NeutralCode } from '../src/exit'
 
 describe('Toolkit', () => {
   let toolkit: Toolkit
-  let logger: any
 
   beforeEach(() => {
-    logger = {
-      error: jest.fn(),
-      log: jest.fn(),
-      warn: jest.fn()
-    }
-    toolkit = new Toolkit({ logger })
+    toolkit = new Toolkit({ logger: new Signale({ disabled: true }) })
   })
 
   describe('#github', () => {
@@ -91,18 +86,32 @@ describe('Toolkit', () => {
       expect(result).toMatchSnapshot()
     })
   })
+
+  describe('#wrapLogger', () => {
+    it('wraps the provided logger and allows for a callable class', () => {
+      const logger = new Signale() as jest.Mocked<Signale>
+      logger.info = jest.fn()
+      const twolkit = new Toolkit({ logger })
+
+      twolkit.log('Hello!')
+      twolkit.log.info('Hi!')
+
+      expect(logger.info).toHaveBeenCalledTimes(2)
+      expect(logger.info).toHaveBeenCalledWith('Hello!')
+      expect(logger.info).toHaveBeenCalledWith('Hi!')
+    })
+  })
 })
 
 describe('Toolkit#constructor', () => {
-  let logger: any
+  let logger: jest.Mocked<Signale>
   let exit: (code?: number) => never
 
   beforeEach(() => {
-    logger = {
-      error: jest.fn(),
-      log: jest.fn(),
-      warn: jest.fn()
-    }
+    logger = new Signale() as jest.Mocked<Signale>
+    logger.error = jest.fn()
+    logger.warn = jest.fn()
+
     exit = global.process.exit
     const p = global.process as any
     p.exit = jest.fn()

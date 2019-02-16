@@ -49,6 +49,7 @@ This will create a new folder `my-cool-action` with the following files:
 
 * [The Toolkit class](#toolkit-options)
 * [Authenticated GitHub API client](#toolsgithub)
+* [Logging](#toolslog)
 * [Parsing arguments](#toolsarguments)
 * [Reading files](#toolsgetfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
@@ -100,6 +101,33 @@ You can also make GraphQL requests:
 
 ```js
 const result = await tools.github.graphql(query, variables)
+```
+
+<br>
+
+### tools.log
+
+This library comes with a slightly-customized instance of [Signale](https://github.com/klaussinani/signale), a great **logging utility**. Check out their docs for [the full list of methods](https://github.com/klaussinani/signale#usage). You can use those methods in your action:
+
+```js
+tools.log('Welcome to this example!')
+tools.log.info('Gonna try this...')
+try {
+  risky()
+  tools.log.success('We did it!')
+} catch (error) {
+  tools.log.fatal(error)
+}
+```
+
+In the GitHub Actions output, this is the result:
+
+```
+ℹ  info      Welcome to this example!
+ℹ  info      Gonna try this...
+✖  fatal     Error: Something bad happened! 
+    at Object.<anonymous> (/entrypoint.js:5:17)
+    at Module._compile (internal/modules/cjs/loader.js:734:30)
 ```
 
 <br>

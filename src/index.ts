@@ -3,6 +3,7 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
+import { LoggerFunc, Signale } from 'signale'
 import { Context } from './context'
 import { Exit } from './exit'
 import { GitHub } from './github'
@@ -10,7 +11,7 @@ import { Store } from './store'
 
 export interface ToolkitOptions {
   event?: string | string[],
-  logger?: Console | any
+  logger?: Signale
 }
 
 export class Toolkit {
@@ -55,11 +56,16 @@ export class Toolkit {
    */
   public exit: Exit
 
-  public log: Console | any
+  /**
+   * A general-purpose logger. An instance of [Signale](https://github.com/klaussinani/signale)
+   */
+  public log: Signale & LoggerFunc
 
   constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
-    this.log = opts.logger || console
+
+    // Disable the underline to prevent extra white space in the Actions log output
+    this.log = this.wrapLogger(opts.logger)
 
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
@@ -177,6 +183,15 @@ export class Toolkit {
       this.log.error(`Event \`${this.context.event}${actionStr}\` is not supported by this action.`)
       this.exit.neutral()
     }
+  }
+
+  /**
+   * Wrap a Signale logger so that its a callable class
+   */
+  private wrapLogger (logger?: Signale) {
+    if (!logger) logger = new Signale({ config: { underlineLabel: false } })
+    const fn = logger.info.bind(logger)
+    return Object.assign(fn, logger)
   }
 
   /**
