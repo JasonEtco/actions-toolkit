@@ -9,7 +9,7 @@ action "GitHub Action for npm" {
 }
 
 action "Validate release" {
-  uses = "./.github/actions/validate-release"
+  uses = "JasonEtco/validate-semver-release@master"
 }
 
 action "Publish release" {
