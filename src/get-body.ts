@@ -10,4 +10,5 @@ export function getBody (payload: WebhookPayloadWithRepository): string | undefi
   // If neither of those comments are present, check the body
   if (payload.issue) return payload.issue.body
   if (payload.pull_request) return payload.pull_request.body
+  return undefined
 }
