@@ -6,6 +6,7 @@ import path from 'path'
 import { LoggerFunc, Signale } from 'signale'
 import { Context } from './context'
 import { Exit } from './exit'
+import { getBody } from './get-body'
 import { GitHub } from './github'
 import { Store } from './store'
 
@@ -77,7 +78,7 @@ export class Toolkit {
     this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
     this.store = new Store(this.context.workflow, this.workspace)
-    this.checkAllowedEvents()
+    this.checkAllowedEvents(this.opts.event)
   }
 
   /**
@@ -158,6 +159,34 @@ export class Toolkit {
   }
 
   /**
+   * Run the handler when someone triggers the `/command` in a comment body.
+   *
+   * @param command - Command to listen for
+   * @param handler - Handler to run when the command is used
+   */
+  public command (command: string, handler: (args: ParsedArgs) => void) {
+    this.checkAllowedEvents([
+      'pull_request',
+      'issues',
+      'issue_comment',
+      'commit_comment',
+      'pull_request_review',
+      'pull_request_review_comment'
+    ])
+
+    const reg = new RegExp(`(?:^|\s)\/${command}\b(?<args>.*)`)
+
+    const body = getBody(this.context.payload)
+    if (!body) return
+
+    const match = body.match(reg)
+    if (!match || !match.groups) return
+
+    const args = match.groups.args
+    return handler(minimist(args.split(' ')))
+  }
+
+  /**
    * Returns true if this event is allowed
    */
   private eventIsAllowed (event: string) {
@@ -170,8 +199,7 @@ export class Toolkit {
     return eventName === this.context.event
   }
 
-  private checkAllowedEvents () {
-    const { event } = this.opts
+  private checkAllowedEvents (event: string | string[] | undefined) {
     if (!event) return
 
     const passed = Array.isArray(event)
