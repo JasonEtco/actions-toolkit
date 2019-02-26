@@ -165,6 +165,11 @@ export class Toolkit {
    * @param handler - Handler to run when the command is used
    */
   public command (command: string, handler: (args: ParsedArgs) => void) {
+    // Don't trigger for bots
+    if (this.context.payload.sender && this.context.payload.sender.type === 'Bot') {
+      return
+    }
+
     this.checkAllowedEvents([
       'pull_request',
       'issues',
