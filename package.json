@@ -63,6 +63,7 @@
     "signale": "^1.3.0"
   },
   "jest": {
+    "testEnvironment": "node",
     "setupFiles": [
       "<rootDir>/tests/setup.ts"
     ],
