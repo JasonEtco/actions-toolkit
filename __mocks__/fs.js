@@ -1,7 +1,7 @@
 const fs = jest.genMockFromModule('fs')
 const realFs = jest.requireActual('fs')
 
-let fileHolder = new Map()
+const fileHolder = new Map()
 
 // Allow reading from disk.
 fs.readdir = realFs.readdir
@@ -15,7 +15,7 @@ fs.writeFile = (path, contents, cb) => {
 }
 
 // Add some helper methods for getting and setting memory FS.
-fs.__reset = () => { fileHolder = new Map() }
+fs.__reset = () => fileHolder.clear()
 fs.__getContents = path => fileHolder.get(path)
 
 module.exports = fs
