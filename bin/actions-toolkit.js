@@ -5,7 +5,6 @@ const path = require('path')
 const { promisify } = require('util')
 const minimist = require('minimist')
 const { prompt } = require('enquirer')
-const { render } = require('mustache')
 const colors = require('./colors.json')
 const icons = require('./feather-icons.json')
 
@@ -56,9 +55,13 @@ const getActionMetadata = () => prompt([
   throw error
 })
 
-const createDockerfile = async ({ name, description, icon, color }) => {
+const createDockerfile = async (options) => {
   const dockerfileTemplate = await readFile(path.join(templateDir, 'Dockerfile'), 'utf8')
-  return render(dockerfileTemplate, { name, description, icon, color })
+  return dockerfileTemplate
+    .replace(':NAME', options.name)
+    .replace(':DESCRIPTION', options.description)
+    .replace(':ICON', options.icon)
+    .replace(':COLOR', options.color)
 }
 
 const main = async () => {

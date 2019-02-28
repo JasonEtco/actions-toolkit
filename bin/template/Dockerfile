@@ -11,12 +11,12 @@
 FROM node:slim
 
 # Labels for GitHub to read your action
-LABEL "com.github.actions.name"="{{name}}"
-LABEL "com.github.actions.description"="{{{description}}}"
+LABEL "com.github.actions.name"=":NAME"
+LABEL "com.github.actions.description"=":DESCRIPTION"
 # Here all of the available icons: https://feathericons.com/
-LABEL "com.github.actions.icon"="{{icon}}"
+LABEL "com.github.actions.icon"=":ICON"
 # And all of the available colors: https://developer.github.com/actions/creating-github-actions/creating-a-docker-container/#label
-LABEL "com.github.actions.color"="{{color}}"
+LABEL "com.github.actions.color"=":COLOR"
 
 # Copy the package.json and package-lock.json
 COPY package*.json ./
