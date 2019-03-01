@@ -4,15 +4,16 @@ const realFs = jest.requireActual('fs')
 const fileHolder = new Map()
 
 // Allow reading from disk.
-fs.readdir = realFs.readdir
 fs.readFile = realFs.readFile
 
 // Write file contents to memory.
-fs.writeFile = (path, contents, cb) => {
+fs.writeFile = jest.fn((path, contents, cb) => {
   fileHolder.set(path, contents)
   // In mock world, we can never fail. :')
   cb(null)
-}
+})
+
+fs.mkdir = jest.fn((path, cb) => { cb(null) })
 
 // Add some helper methods for getting and setting memory FS.
 fs.__reset = () => fileHolder.clear()
