@@ -2,7 +2,7 @@ const fs = require('fs')
 const https = require('https')
 const path = require('path')
 
-https.get('https://unpkg.com/feather-icons@4.19.0/dist/icons.json', resp => {
+https.get('https://unpkg.com/feather-icons/dist/icons.json', resp => {
   let data = ''
 
   resp.on('data', chunk => {
