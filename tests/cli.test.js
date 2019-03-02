@@ -48,7 +48,7 @@ test('fails to start creating project in a directory that already exists', async
     cb(error)
   })
 
-  expect(runCLI('my-project-name')).rejects.toThrowError(
+  await expect(runCLI('my-project-name')).rejects.toThrowError(
     /Folder my-project-name already exists!/
   )
 })
