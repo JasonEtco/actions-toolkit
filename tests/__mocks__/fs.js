@@ -15,8 +15,7 @@ fs.writeFile = jest.fn((path, contents, cb) => {
 
 fs.mkdir = jest.fn((path, cb) => { cb(null) })
 
-// Add some helper methods for getting and setting memory FS.
-fs.__reset = () => fileHolder.clear()
+// Add a helper method for getting memory FS.
 fs.__getContents = path => fileHolder.get(path)
 
 module.exports = fs

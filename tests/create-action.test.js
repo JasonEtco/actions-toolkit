@@ -11,22 +11,27 @@ jest.mock('enquirer')
 let mockFs
 
 const runCLI = (...args) => {
-  process.exit = jest.fn()
-  console.log = jest.fn()
-  console.error = jest.fn()
-  process.cwd = jest.fn(() => '.')
-  const bin = require('../bin/actions-toolkit')
-  return bin(args)
+  const createAction = require('../bin/create-action')
+  return createAction(args)
 }
 
 beforeEach(() => {
   jest.resetModules()
   mockFs = require('fs')
-  mockFs.__reset()
+
+  process.exit = jest.fn()
+  console.log = jest.fn()
+  console.error = jest.fn()
+  process.cwd = jest.fn(() => '.')
+})
+
+afterEach(() => {
+  jest.restoreAllMocks()
 })
 
 test('prints help when no arguments are passed', async () => {
   await runCLI()
+
   expect(process.exit).toHaveBeenCalledWith(1)
   expect(console.log).toHaveBeenCalledWith(
     expect.stringMatching(/Usage: npx actions-toolkit <name>/)
@@ -35,6 +40,7 @@ test('prints help when no arguments are passed', async () => {
 
 test('prints help when --help is passed', async () => {
   await runCLI('--help')
+
   expect(process.exit).toHaveBeenCalledWith(1)
   expect(console.log).toHaveBeenCalledWith(
     expect.stringMatching(/Usage: npx actions-toolkit <name>/)
@@ -53,6 +59,18 @@ test('fails to start creating project in a directory that already exists', async
   )
 })
 
+test('exits with a failure message when a user cancels the questionnaire', async () => {
+  // Mock enquirer to throw an error as if a user presses ctrl+c to cancel the questionnaire.
+  const mockEnquirer = require('enquirer')
+  mockEnquirer.prompt.mockImplementationOnce(() => {
+    throw new Error()
+  })
+
+  await expect(runCLI('my-project-name')).rejects.toThrowError(
+    /Cancelled. Maybe next time!/
+  )
+})
+
 test('creates project with labels passed to Dockerfile from questionnaire', async () => {
   jest.mock('../package.json', () => ({ version: '1.0.0-static-version-for-test' }))
   require('enquirer').__setAnswers({
@@ -64,6 +82,7 @@ test('creates project with labels passed to Dockerfile from questionnaire', asyn
   mockFs.mkdir.mockImplementationOnce((_, cb) => cb(null))
 
   await runCLI('my-project-name')
+
   expect(console.log).toHaveBeenCalledWith(
     expect.stringMatching(/Creating folder my-project-name.../)
   )

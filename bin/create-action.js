@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // @ts-check
 
 const fs = require('fs')
@@ -15,7 +14,10 @@ const mkdir = promisify(fs.mkdir)
 
 const templateDir = path.join(__dirname, 'template')
 
-/** A predicate function to ensure a string is not empty. */
+/** 
+ * A predicate function to ensure a string is not empty. 
+ * @returns {boolean}
+ */
 const isNotEmpty = value => value.length > 0
 
 /**
@@ -80,6 +82,13 @@ const createDockerfile = async (options) => {
     .replace(':COLOR', options.color)
 }
 
+/**
+ * Creates a `package.json` object with the latest version 
+ * of `actions-toolkit` ready to be installed.
+ * 
+ * @param {string} name The action package name.
+ * @returns {object} The `package.json` contents.
+ */
 const createPackageJson = (name) => {
   const { version } = require('../package.json')
   return {
@@ -92,7 +101,12 @@ const createPackageJson = (name) => {
   }
 }
 
-const runCLI = async (argv) => {
+/**
+ * 
+ * @param {string[]} argv The command line arguments to parse.
+ * @returns {Promise<void>} Nothing.
+ */
+const createAction = async (argv) => {
   const args = minimist(argv)
   const directoryName = args._[0]
   if (!directoryName || args.help) {
@@ -131,4 +145,4 @@ const runCLI = async (argv) => {
   console.log(`\nDone! Enjoy building your GitHub Action! Get started with:\n\ncd ${directoryName} && npm install`)
 }
 
-module.exports = runCLI
+module.exports = createAction
