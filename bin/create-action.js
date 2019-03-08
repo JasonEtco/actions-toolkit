@@ -149,7 +149,7 @@ const createAction = async (argv) => {
     }
   }
 
-  console.log("\nWelcome to actions-toolkit! Let's get started creating an action.")
+  console.log("\nWelcome to actions-toolkit! Let's get started creating an action.\n")
   const metadata = await getActionMetadata()
   const dockerfile = await createDockerfile(metadata)
   const packageJson = createPackageJson(directoryName)
