@@ -154,15 +154,14 @@ const createAction = async (argv) => {
   const dockerfile = await createDockerfile(metadata)
   const packageJson = createPackageJson(directoryName)
   const entrypoint = await readTemplate('entrypoint.js')
-  const files = [
+  await Promise.all([
     ['package.json', JSON.stringify(packageJson, null, 2)],
     ['Dockerfile', dockerfile],
     ['entrypoint.js', entrypoint]
-  ]
-  files.forEach(async ([filename, contents]) => {
+  ].map(async ([filename, contents]) => {
     console.log(`Creating ${filename}...`)
     await writeFile(path.join(base, filename), contents)
-  })
+  }))
 
   console.log(`\nDone! Enjoy building your GitHub Action! Get started with:\n\ncd ${directoryName} && npm install`)
 }
