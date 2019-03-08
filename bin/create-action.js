@@ -12,25 +12,38 @@ const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 const mkdir = promisify(fs.mkdir)
 
-const templateDir = path.join(__dirname, 'template')
+/**
+ * Reads a template file from disk.
+ *
+ * @param {string} filename The template filename to read.
+ * @returns {Promise<string>} The template file string contents.
+ */
+const readTemplate = filename => {
+  const templateDir = path.join(__dirname, 'template')
+  return readFile(path.join(templateDir, filename), 'utf8')
+}
 
-/** 
- * A predicate function to ensure a string is not empty. 
- * @returns {boolean}
+/**
+ * A predicate function to ensure a string is not empty.
+ *
+ * @param {string} value The string value.
+ * @returns {boolean} Whether the string is empty or not.
  */
 const isNotEmpty = value => value.length > 0
 
 /**
  * The options object returned from the CLI questionnaire prompt.
- * @typedef {object} PromptOptions
- * @property {string} name
- * @property {string} description
- * @property {string} icon
- * @property {string} color
+ * @typedef {object} PromptAnswers
+ * @property {string} name The action name.
+ * @property {string} description The action description.
+ * @property {string} icon The feather icon name. See `bin/feather-icons.json` for options.
+ * @property {string} color The GitHub Action color. See `bin/colors.json` for options.
  */
 
 /**
- * @returns {Promise<PromptOptions>}
+ * Prompts the user with a questionnaire to get key metadata for the GitHub Action.
+ *
+ * @returns {Promise<PromptAnswers>} An object containing prompt answers.
  */
 const getActionMetadata = async () => {
   try {
@@ -69,23 +82,25 @@ const getActionMetadata = async () => {
 }
 
 /**
+ * Creates a Dockerfile contents string, replacing variables in the Dockerfile template
+ * with values passed in by the user from the CLI prompt.
  *
- * @param {PromptOptions} options
+ * @param {PromptAnswers} answers The CLI prompt answers.
  * @returns {Promise<string>} The Dockerfile contents.
  */
-const createDockerfile = async (options) => {
-  const dockerfileTemplate = await readFile(path.join(templateDir, 'Dockerfile'), 'utf8')
+const createDockerfile = async (answers) => {
+  const dockerfileTemplate = await readTemplate('Dockerfile')
   return dockerfileTemplate
-    .replace(':NAME', options.name)
-    .replace(':DESCRIPTION', options.description)
-    .replace(':ICON', options.icon)
-    .replace(':COLOR', options.color)
+    .replace(':NAME', answers.name)
+    .replace(':DESCRIPTION', answers.description)
+    .replace(':ICON', answers.icon)
+    .replace(':COLOR', answers.color)
 }
 
 /**
- * Creates a `package.json` object with the latest version 
+ * Creates a `package.json` object with the latest version
  * of `actions-toolkit` ready to be installed.
- * 
+ *
  * @param {string} name The action package name.
  * @returns {object} The `package.json` contents.
  */
@@ -102,7 +117,9 @@ const createPackageJson = (name) => {
 }
 
 /**
- * 
+ * Runs the create action CLI prompt and bootstraps a new directory for the user.
+ *
+ * @public
  * @param {string[]} argv The command line arguments to parse.
  * @returns {Promise<void>} Nothing.
  */
@@ -112,6 +129,11 @@ const createAction = async (argv) => {
   if (!directoryName || args.help) {
     console.log(`\nUsage: npx actions-toolkit <name>`)
     process.exit(1)
+    // Although this return is unreachable,
+    // for some reason, code after this block is reached in unit tests,
+    // even while this calls `process.exit(1)`.
+    // Adding a `return` below fixes that issue in the tests.
+    // eslint-disable-next-line
     return
   }
   const base = path.join(process.cwd(), directoryName)
@@ -131,7 +153,7 @@ const createAction = async (argv) => {
   const metadata = await getActionMetadata()
   const dockerfile = await createDockerfile(metadata)
   const packageJson = createPackageJson(directoryName)
-  const entrypoint = await readFile(path.join(templateDir, 'entrypoint.js'), 'utf8')
+  const entrypoint = await readTemplate('entrypoint.js')
   const files = [
     ['package.json', JSON.stringify(packageJson, null, 2)],
     ['Dockerfile', dockerfile],
