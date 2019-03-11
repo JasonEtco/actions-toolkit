@@ -71,3 +71,11 @@ Array [
   ],
 ]
 `;
+
+exports[`Toolkit#constructor sets a named logger 1`] = `
+Array [
+  Array [
+    "hi there from foo logger",
+  ],
+]
+`;

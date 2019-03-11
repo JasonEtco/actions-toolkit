@@ -158,6 +158,15 @@ describe('Toolkit#constructor', () => {
     expect(logger.warn.mock.calls).toMatchSnapshot()
   })
 
+  it('sets a named logger', () => {
+    const tools = new Toolkit({ logger }) // tslint:disable-line:no-unused-expression
+    const fooLogger = {
+      success: jest.fn().mockImplementation(tools.createScopedLogger('foo').success)
+    }
+    fooLogger.success('hi there from foo logger')
+    expect(fooLogger.success.mock.calls).toMatchSnapshot()
+  })
+
   afterEach(() => {
     global.process.exit = exit
   })

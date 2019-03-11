@@ -158,6 +158,19 @@ export class Toolkit {
   }
 
   /**
+   * Create a scoped logger. Also an instance of [Signale](https://github.com/klaussinani/signale)
+   * This will prefix any logs with the name provided by @loggerScope
+   * @param loggerScope - Name of the scope
+   * @param logger - Provide a customized Signale logger
+   */
+  public createScopedLogger (loggerScope: string, logger?: Signale) {
+    if (!logger) logger = new Signale({ config: { underlineLabel: false } })
+    const loggerWithScope = logger.scope(loggerScope)
+    const fn = loggerWithScope.info.bind(loggerWithScope)
+    return Object.assign(fn, loggerWithScope)
+  }
+
+  /**
    * Returns true if this event is allowed
    */
   private eventIsAllowed (event: string) {
