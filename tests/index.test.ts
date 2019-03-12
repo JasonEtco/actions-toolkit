@@ -75,6 +75,19 @@ describe('Toolkit', () => {
         file: 'index.js'
       })
     })
+
+    it('does not call the handler if the body does not contain the command', () => {
+      const spy = jest.fn()
+      toolkit.context.payload.comment = { body: 'Hello how are you' }
+      toolkit.command('action', spy)
+      expect(spy).not.toHaveBeenCalled()
+    })
+
+    it('does not call the handler if no body is found', () => {
+      const spy = jest.fn()
+      toolkit.command('action', spy)
+      expect(spy).not.toHaveBeenCalled()
+    })
   })
 
   describe('#config', () => {
