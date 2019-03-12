@@ -76,18 +76,9 @@ describe('Toolkit', () => {
       })
     })
 
-    it('does not call the handler if the sender was a bot', () => {
-      const spy = jest.fn()
-
-      toolkit.context.payload.comment = { body: '/action' }
-      toolkit.context.payload.sender = { type: 'Bot' }
-
-      toolkit.command('action', spy)
-      expect(spy).not.toHaveBeenCalled()
-    })
-
     it('does not call the handler if the body does not contain the command', () => {
       const spy = jest.fn()
+      toolkit.context.payload.sender = { type: 'User' }
       toolkit.context.payload.comment = { body: 'Hello how are you' }
       toolkit.command('action', spy)
       expect(spy).not.toHaveBeenCalled()
@@ -95,6 +86,16 @@ describe('Toolkit', () => {
 
     it('does not call the handler if no body is found', () => {
       const spy = jest.fn()
+      toolkit.command('action', spy)
+      expect(spy).not.toHaveBeenCalled()
+    })
+
+    it('does not call the handler if the sender was a bot', () => {
+      const spy = jest.fn()
+
+      toolkit.context.payload.comment = { body: '/action' }
+      toolkit.context.payload.sender = { type: 'Bot' }
+
       toolkit.command('action', spy)
       expect(spy).not.toHaveBeenCalled()
     })
