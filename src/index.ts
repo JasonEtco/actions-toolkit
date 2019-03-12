@@ -164,7 +164,7 @@ export class Toolkit {
    * @param command - Command to listen for
    * @param handler - Handler to run when the command is used
    */
-  public command (command: string, handler: (args: ParsedArgs) => void) {
+  public command (command: string, handler: (args?: ParsedArgs) => void) {
     // Don't trigger for bots
     if (this.context.payload.sender && this.context.payload.sender.type === 'Bot') {
       return
@@ -179,16 +179,19 @@ export class Toolkit {
       'pull_request_review_comment'
     ])
 
-    const reg = new RegExp(`(?:^|\s)\/${command}\b(?<args>.*)`)
+    const reg = new RegExp(`\/${command}(?:\\s(.*))?`)
 
     const body = getBody(this.context.payload)
     if (!body) return
 
     const match = body.match(reg)
-    if (!match || !match.groups) return
+    if (!match) return
 
-    const args = match.groups.args
-    return handler(minimist(args.split(' ')))
+    if (match[1]) {
+      return handler(minimist(match[1].split(' ')))
+    } else {
+      return handler()
+    }
   }
 
   /**

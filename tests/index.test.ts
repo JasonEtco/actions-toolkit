@@ -57,6 +57,26 @@ describe('Toolkit', () => {
     })
   })
 
+  describe('#command', () => {
+    it('calls the handler without any args', () => {
+      const spy = jest.fn()
+      toolkit.context.payload.comment = { body: '/action' }
+      toolkit.command('action', spy)
+      expect(spy).toHaveBeenCalled()
+    })
+
+    it('calls the handler with parsed args', () => {
+      const spy = jest.fn()
+      toolkit.context.payload.comment = { body: '/action testing another --file index.js' }
+      toolkit.command('action', spy)
+      expect(spy).toHaveBeenCalled()
+      expect(spy).toHaveBeenCalledWith({
+        _: ['testing', 'another'],
+        file: 'index.js'
+      })
+    })
+  })
+
   describe('#config', () => {
     it('returns a property in the package.json', () => {
       const actual = toolkit.config('action')
