@@ -65,6 +65,20 @@ describe('Toolkit', () => {
       expect(spy).toHaveBeenCalled()
     })
 
+    it('ignores commands not at the beginning of the line', () => {
+      const spy = jest.fn()
+      toolkit.context.payload.comment = { body: 'Hello /action' }
+      toolkit.command('action', spy)
+      expect(spy).not.toHaveBeenCalled()
+    })
+
+    it('calls the handler with a command at the beginning of a line that is not the first line', () => {
+      const spy = jest.fn()
+      toolkit.context.payload.comment = { body: 'Hello\n/action' }
+      toolkit.command('action', spy)
+      expect(spy).toHaveBeenCalled()
+    })
+
     it('calls the handler with parsed args', () => {
       const spy = jest.fn()
       toolkit.context.payload.comment = { body: '/action testing another --file index.js' }
