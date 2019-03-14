@@ -66,7 +66,8 @@ const getActionMetadata = async () => {
         type: 'autocomplete',
         name: 'icon',
         message: 'Choose an icon for your action. Visit https://feathericons.com for a visual reference.',
-        choices: icons
+        choices: icons,
+        limit: 10
       },
       {
         type: 'autocomplete',
@@ -128,13 +129,7 @@ const createAction = async (argv) => {
   const directoryName = args._[0]
   if (!directoryName || args.help) {
     console.log(`\nUsage: npx actions-toolkit <name>`)
-    process.exit(1)
-    // Although this return is unreachable,
-    // for some reason, code after this block is reached in unit tests,
-    // even while this calls `process.exit(1)`.
-    // Adding a `return` below fixes that issue in the tests.
-    // eslint-disable-next-line
-    return
+    return process.exit(1)
   }
   const base = path.join(process.cwd(), directoryName)
   try {
