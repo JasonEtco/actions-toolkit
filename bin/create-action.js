@@ -45,42 +45,35 @@ const isNotEmpty = value => value.length > 0
  *
  * @returns {Promise<PromptAnswers>} An object containing prompt answers.
  */
-const getActionMetadata = async () => {
-  try {
-    return await prompt([
-      {
-        type: 'input',
-        name: 'name',
-        message: 'What is the name of your action?',
-        initial: 'Your action name',
-        validate: isNotEmpty
-      },
-      {
-        type: 'input',
-        name: 'description',
-        message: 'What is a short description of your action?',
-        initial: 'A description of your action',
-        validate: isNotEmpty
-      },
-      {
-        type: 'autocomplete',
-        name: 'icon',
-        message: 'Choose an icon for your action. Visit https://feathericons.com for a visual reference.',
-        choices: icons,
-        limit: 10
-      },
-      {
-        type: 'autocomplete',
-        name: 'color',
-        message: 'Choose a background color background color used in the visual workflow editor for your action.',
-        choices: colors
-      }
-    ])
-  } catch (err) {
-    // When prompt() rejects, that means the user has pressed ctrl+c to cancel input.
-    throw new Error('Cancelled. Maybe next time!')
+const getActionMetadata = () => prompt([
+  {
+    type: 'input',
+    name: 'name',
+    message: 'What is the name of your action?',
+    initial: 'Your action name',
+    validate: isNotEmpty
+  },
+  {
+    type: 'input',
+    name: 'description',
+    message: 'What is a short description of your action?',
+    initial: 'A description of your action',
+    validate: isNotEmpty
+  },
+  {
+    type: 'autocomplete',
+    name: 'icon',
+    message: 'Choose an icon for your action. Visit https://feathericons.com for a visual reference.',
+    choices: icons,
+    limit: 10
+  },
+  {
+    type: 'autocomplete',
+    name: 'color',
+    message: 'Choose a background color background color used in the visual workflow editor for your action.',
+    choices: colors
   }
-}
+])
 
 /**
  * Creates a Dockerfile contents string, replacing variables in the Dockerfile template
@@ -139,7 +132,6 @@ const createAction = async (argv) => {
     if (err.code === 'EEXIST') {
       throw new Error(`Folder ${base} already exists!`)
     } else {
-      console.error(err.code)
       throw err
     }
   }

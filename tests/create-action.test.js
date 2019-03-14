@@ -59,6 +59,16 @@ test('fails to start creating project in a directory that already exists', async
   )
 })
 
+test('throws unhandled fs.mkdir errors', async () => {
+  mockFs.mkdir.mockImplementationOnce((_, cb) => {
+    const error = new Error("EPERM: operation not permitted, mkdir '/etc'")
+    error.code = 'EPERM'
+    cb(error)
+  })
+
+  await expect(runCLI('my-project-name')).rejects.toThrowError(/EPERM: operation not permitted, mkdir '\/etc'/)
+})
+
 test('exits with a failure message when a user cancels the questionnaire', async () => {
   // Mock enquirer to throw an error as if a user presses ctrl+c to cancel the questionnaire.
   const mockEnquirer = require('enquirer')
@@ -66,9 +76,7 @@ test('exits with a failure message when a user cancels the questionnaire', async
     throw new Error()
   })
 
-  await expect(runCLI('my-project-name')).rejects.toThrowError(
-    /Cancelled. Maybe next time!/
-  )
+  await expect(runCLI('my-project-name')).rejects.toThrowError()
 })
 
 test('creates project with labels passed to Dockerfile from questionnaire', async () => {
