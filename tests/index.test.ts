@@ -97,7 +97,10 @@ describe('Toolkit', () => {
       expect(spy).toHaveBeenCalledWith({
         _: ['testing', 'another'],
         file: 'index.js'
-      })
+      }, expect.arrayContaining([
+        '/action testing another --file index.js',
+        'testing another --file index.js'
+      ]))
     })
 
     it('does not call the handler if the body does not contain the command', () => {

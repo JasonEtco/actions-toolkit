@@ -164,7 +164,7 @@ export class Toolkit {
    * @param command - Command to listen for
    * @param handler - Handler to run when the command is used
    */
-  public command (command: string, handler: (args?: ParsedArgs) => void) {
+  public command (command: string, handler: (args: ParsedArgs | {}, match: RegExpMatchArray) => void) {
     // Don't trigger for bots
     if (this.context.payload.sender && this.context.payload.sender.type === 'Bot') {
       return
@@ -188,9 +188,9 @@ export class Toolkit {
     if (!match) return
 
     if (match[1]) {
-      return handler(minimist(match[1].split(' ')))
+      return handler(minimist(match[1].split(' ')), match)
     } else {
-      return handler()
+      return handler({}, match)
     }
   }
 
