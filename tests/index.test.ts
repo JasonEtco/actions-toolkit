@@ -8,6 +8,9 @@ describe('Toolkit', () => {
   let toolkit: Toolkit
 
   beforeEach(() => {
+    // Mock the `process` event emitter to prevent memory
+    // leaks on repeated calls in tests - used by Store.
+    process.on = jest.fn()
     toolkit = new Toolkit({ logger: new Signale({ disabled: true }) })
   })
 
