@@ -141,11 +141,26 @@ Hey, let's deploy this!
 /deploy --app example --container node:alpine
 ```
 
-```js
-tools.command('deploy', args => {
+```ts
+tools.command('deploy', async (args: ParsedArgs, match: RegExpExecArray) => {
   console.log(args)
   // -> { app: 'example', container: 'node:alpine' }
 })
+```
+
+The handler will run multiple times for each match:
+
+```
+/deploy 1
+/deploy 2
+/deploy 3
+```
+
+```ts
+let i = 0
+await tools.command('deploy', () => { i++ })
+console.log(i)
+// -> 3
 ```
 
 <br>
