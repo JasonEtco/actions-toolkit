@@ -61,36 +61,37 @@ describe('Toolkit', () => {
   })
 
   describe('#command', () => {
+    let spy: jest.Mock<any, any>
+
+    beforeEach(() => {
+      spy = jest.fn()
+    })
+
     it('calls the handler without any args', async () => {
-      const spy = jest.fn()
       toolkit.context.payload.comment = { body: '/action' }
       await toolkit.command('action', spy)
       expect(spy).toHaveBeenCalled()
     })
 
     it('ignores commands not at the beginning of the line', async () => {
-      const spy = jest.fn()
       toolkit.context.payload.comment = { body: 'Hello /action' }
       await toolkit.command('action', spy)
       expect(spy).not.toHaveBeenCalled()
     })
 
     it('only matches the exact command', async () => {
-      const spy = jest.fn()
       toolkit.context.payload.comment = { body: '/actionssssssssss' }
       await toolkit.command('action', spy)
       expect(spy).not.toHaveBeenCalled()
     })
 
     it('calls the handler with a command at the beginning of a line that is not the first line', async () => {
-      const spy = jest.fn()
       toolkit.context.payload.comment = { body: 'Hello\n/action' }
       await toolkit.command('action', spy)
       expect(spy).toHaveBeenCalled()
     })
 
     it('calls the handler with parsed args', async () => {
-      const spy = jest.fn()
       toolkit.context.payload.comment = { body: '/action testing another --file index.js' }
       await toolkit.command('action', spy)
       expect(spy).toHaveBeenCalled()
@@ -104,34 +105,28 @@ describe('Toolkit', () => {
     })
 
     it('does not call the handler if the body does not contain the command', async () => {
-      const spy = jest.fn()
       toolkit.context.payload.comment = { body: 'Hello how are you' }
       await toolkit.command('action', spy)
       expect(spy).not.toHaveBeenCalled()
     })
 
     it('does not call the handler if no body is found', async () => {
-      const spy = jest.fn()
-      await toolkit.command('action', spy)
-      expect(spy).not.toHaveBeenCalled()
-    })
-
-    it('does not call the handler if the sender was a bot', async () => {
-      const spy = jest.fn()
-
-      toolkit.context.payload.comment = { body: '/action' }
-      toolkit.context.payload.sender = { type: 'Bot' }
-
       await toolkit.command('action', spy)
       expect(spy).not.toHaveBeenCalled()
     })
 
     it('calls the handler multiple times for multiple matches', async () => {
-      const spy = jest.fn()
-      toolkit.context.payload.sender = { type: 'User' }
       toolkit.context.payload.comment = { body: '/action\n/action testing\n/action' }
       await toolkit.command('action', spy)
       expect(spy).toHaveBeenCalledTimes(3)
+    })
+
+    it('does not call the handler if the sender was a bot', async () => {
+      toolkit.context.payload.comment = { body: '/action' }
+      toolkit.context.payload.sender = { type: 'Bot' }
+
+      await toolkit.command('action', spy)
+      expect(spy).not.toHaveBeenCalled()
     })
   })
 
