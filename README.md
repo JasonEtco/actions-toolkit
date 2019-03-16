@@ -132,6 +132,24 @@ In the GitHub Actions output, this is the result:
 
 <br>
 
+### tools.command(command, (args?) => void)
+
+Respond to a slash-command posted in a GitHub issue, comment, pull request, pull request review or commit comment. Arguments to the slash command are parsed by [minimist](https://github.com/substack/minimist). You can use a slash command in a larger comment, but the command must be at the start of the line:
+
+```
+Hey, let's deploy this!
+/deploy --app example --container node:alpine
+```
+
+```js
+tools.command('deploy', args => {
+  console.log(args)
+  // -> { app: 'example', container: 'node:alpine' }
+})
+```
+
+<br>
+
 ### tools.config(filename)
 
 Get the configuration settings for this action in the project workspace. This method can be used in three different ways:
