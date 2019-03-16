@@ -50,6 +50,7 @@ This will create a new folder `my-cool-action` with the following files:
 * [The Toolkit class](#toolkit-options)
 * [Authenticated GitHub API client](#toolsgithub)
 * [Logging](#toolslog)
+* [Slash commands](#toolscommandcommand-args-match--promise)
 * [Parsing arguments](#toolsarguments)
 * [Reading files](#toolsgetfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
