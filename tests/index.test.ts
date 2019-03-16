@@ -126,6 +126,13 @@ describe('Toolkit', () => {
       toolkit.command('action', spy)
       expect(spy).not.toHaveBeenCalled()
     })
+
+    it('calls the handler multiple times for multiple matches', () => {
+      const spy = jest.fn()
+      toolkit.context.payload.comment = { body: '/action\n/action\n/action' }
+      toolkit.command('action', spy)
+      expect(spy).toHaveBeenCalledTimes(3)
+    })
   })
 
   describe('#config', () => {
