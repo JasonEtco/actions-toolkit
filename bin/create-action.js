@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { promisify } = require('util')
 const minimist = require('minimist')
+const { Signale } = require('signale')
 const { prompt } = require('enquirer')
 const colors = require('./colors.json')
 const icons = require('./feather-icons.json')
@@ -9,6 +10,12 @@ const icons = require('./feather-icons.json')
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 const mkdir = promisify(fs.mkdir)
+
+const signale = new Signale({
+  config: {
+    displayLabel: false
+  }
+})
 
 /**
  * Reads a template file from disk.
@@ -121,25 +128,27 @@ module.exports = async function createAction (argv) {
   const args = minimist(argv)
   const directoryName = args._[0]
   if (!directoryName || args.help) {
-    console.log(`\nUsage: npx actions-toolkit <name>`)
+    signale.info(`\nUsage: npx actions-toolkit <name>`)
     return process.exit(1)
   }
+
+  signale.star('Welcome to actions-toolkit! Let\'s get started creating an action.\n')
+
   const base = path.join(process.cwd(), directoryName)
   try {
-    console.log(`Creating folder ${base}...`)
+    signale.info(`Creating folder ${base}...`)
     await mkdir(base)
   } catch (err) {
     if (err.code === 'EEXIST') {
-      throw new Error(`Folder ${base} already exists!`)
-    } else {
-      throw err
+      signale.fatal(`Folder ${base} already exists!`)
     }
+    throw err
   }
-
-  console.log('\nWelcome to actions-toolkit! Let\'s get started creating an action.\n')
 
   // Collect answers
   const metadata = await getActionMetadata()
+
+  signale.log('\n------------------------------------\n')
 
   // Create the templated files
   const dockerfile = await createDockerfile(metadata)
@@ -151,9 +160,11 @@ module.exports = async function createAction (argv) {
     ['Dockerfile', dockerfile],
     ['entrypoint.js', entrypoint]
   ].map(async ([filename, contents]) => {
-    console.log(`Creating ${filename}...`)
+    signale.info(`Creating ${filename}...`)
     await writeFile(path.join(base, filename), contents)
   }))
 
-  console.log(`\n✔ Done! Enjoy building your GitHub Action! Get started with:\n\ncd ${directoryName} && npm install`)
+  signale.log('\n------------------------------------\n')
+  signale.success(`Done! Enjoy building your GitHub Action!`)
+  signale.info(`Get started with:\n\ncd ${directoryName} && npm install`)
 }
