@@ -179,7 +179,7 @@ export class Toolkit {
       'pull_request_review_comment'
     ])
 
-    const reg = new RegExp(`^\/${command}(?:\\s(.*))?`, 'm')
+    const reg = new RegExp(`^\/${command}(?:$|\\s(.*))`, 'm')
 
     const body = getBody(this.context.payload)
     if (!body) return
