@@ -137,10 +137,15 @@ module.exports = async function createAction (argv) {
   }
 
   console.log('\nWelcome to actions-toolkit! Let\'s get started creating an action.\n')
+
+  // Collect answers
   const metadata = await getActionMetadata()
+
+  // Create the templated files
   const dockerfile = await createDockerfile(metadata)
   const packageJson = createPackageJson(directoryName)
   const entrypoint = await readTemplate('entrypoint.js')
+
   await Promise.all([
     ['package.json', JSON.stringify(packageJson, null, 2)],
     ['Dockerfile', dockerfile],
@@ -150,5 +155,5 @@ module.exports = async function createAction (argv) {
     await writeFile(path.join(base, filename), contents)
   }))
 
-  console.log(`\nDone! Enjoy building your GitHub Action! Get started with:\n\ncd ${directoryName} && npm install`)
+  console.log(`\n✔ Done! Enjoy building your GitHub Action! Get started with:\n\ncd ${directoryName} && npm install`)
 }
