@@ -164,7 +164,7 @@ export class Toolkit {
    * @param command - Command to listen for
    * @param handler - Handler to run when the command is used
    */
-  public command (command: string, handler: (args: ParsedArgs | {}, match: RegExpMatchArray) => void) {
+  public async command (command: string, handler: (args: ParsedArgs | {}, match: RegExpExecArray) => Promise<void>) {
     // Don't trigger for bots
     if (this.context.payload.sender && this.context.payload.sender.type === 'Bot') {
       return
@@ -179,18 +179,20 @@ export class Toolkit {
       'pull_request_review_comment'
     ])
 
-    const reg = new RegExp(`^\/${command}(?:$|\\s(.*))`, 'm')
+    const reg = new RegExp(`^\/${command}(?:$|\\s(.*))`, 'gm')
 
     const body = getBody(this.context.payload)
     if (!body) return
 
-    const match = body.match(reg)
-    if (!match) return
+    let match: RegExpExecArray | null
 
-    if (match[1]) {
-      return handler(minimist(match[1].split(' ')), match)
-    } else {
-      return handler({}, match)
+    // tslint:disable-next-line:no-conditional-assignment
+    while (match = reg.exec(body)) {
+      if (match[1]) {
+        await handler(minimist(match[1].split(' ')), match)
+      } else {
+        await handler({}, match)
+      }
     }
   }
 
