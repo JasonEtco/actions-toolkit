@@ -50,6 +50,7 @@ This will create a new folder `my-cool-action` with the following files:
 * [The Toolkit class](#toolkit-options)
 * [Authenticated GitHub API client](#toolsgithub)
 * [Logging](#toolslog)
+* [Slash commands](#toolscommandcommand-args-match--promise)
 * [Parsing arguments](#toolsarguments)
 * [Reading files](#toolsgetfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
@@ -128,6 +129,39 @@ In the GitHub Actions output, this is the result:
 ✖  fatal     Error: Something bad happened! 
     at Object.<anonymous> (/entrypoint.js:5:17)
     at Module._compile (internal/modules/cjs/loader.js:734:30)
+```
+
+<br>
+
+### tools.command(command, (args, match) => Promise<void>)
+
+Respond to a slash-command posted in a GitHub issue, comment, pull request, pull request review or commit comment. Arguments to the slash command are parsed by [minimist](https://github.com/substack/minimist). You can use a slash command in a larger comment, but the command must be at the start of the line:
+
+```
+Hey, let's deploy this!
+/deploy --app example --container node:alpine
+```
+
+```ts
+tools.command('deploy', async (args: ParsedArgs, match: RegExpExecArray) => {
+  console.log(args)
+  // -> { app: 'example', container: 'node:alpine' }
+})
+```
+
+The handler will run multiple times for each match:
+
+```
+/deploy 1
+/deploy 2
+/deploy 3
+```
+
+```ts
+let i = 0
+await tools.command('deploy', () => { i++ })
+console.log(i)
+// -> 3
 ```
 
 <br>
