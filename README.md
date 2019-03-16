@@ -132,7 +132,7 @@ In the GitHub Actions output, this is the result:
 
 <br>
 
-### tools.command(command, (args?) => void)
+### tools.command(command, (args, match) => Promise<void>)
 
 Respond to a slash-command posted in a GitHub issue, comment, pull request, pull request review or commit comment. Arguments to the slash command are parsed by [minimist](https://github.com/substack/minimist). You can use a slash command in a larger comment, but the command must be at the start of the line:
 
