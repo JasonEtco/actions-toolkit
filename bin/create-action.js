@@ -1,5 +1,3 @@
-// @ts-check
-
 const fs = require('fs')
 const path = require('path')
 const { promisify } = require('util')
@@ -18,7 +16,7 @@ const mkdir = promisify(fs.mkdir)
  * @param {string} filename The template filename to read.
  * @returns {Promise<string>} The template file string contents.
  */
-const readTemplate = filename => {
+async function readTemplate (filename) {
   const templateDir = path.join(__dirname, 'template')
   return readFile(path.join(templateDir, filename), 'utf8')
 }
@@ -45,35 +43,37 @@ const isNotEmpty = value => value.length > 0
  *
  * @returns {Promise<PromptAnswers>} An object containing prompt answers.
  */
-const getActionMetadata = () => prompt([
-  {
-    type: 'input',
-    name: 'name',
-    message: 'What is the name of your action?',
-    initial: 'Your action name',
-    validate: isNotEmpty
-  },
-  {
-    type: 'input',
-    name: 'description',
-    message: 'What is a short description of your action?',
-    initial: 'A description of your action',
-    validate: isNotEmpty
-  },
-  {
-    type: 'autocomplete',
-    name: 'icon',
-    message: 'Choose an icon for your action. Visit https://feathericons.com for a visual reference.',
-    choices: icons,
-    limit: 10
-  },
-  {
-    type: 'autocomplete',
-    name: 'color',
-    message: 'Choose a background color background color used in the visual workflow editor for your action.',
-    choices: colors
-  }
-])
+async function getActionMetadata () {
+  return prompt([
+    {
+      type: 'input',
+      name: 'name',
+      message: 'What is the name of your action?',
+      initial: 'Your action name',
+      validate: isNotEmpty
+    },
+    {
+      type: 'input',
+      name: 'description',
+      message: 'What is a short description of your action?',
+      initial: 'A description of your action',
+      validate: isNotEmpty
+    },
+    {
+      type: 'autocomplete',
+      name: 'icon',
+      message: 'Choose an icon for your action. Visit https://feathericons.com for a visual reference.',
+      choices: icons,
+      limit: 10
+    },
+    {
+      type: 'autocomplete',
+      name: 'color',
+      message: 'Choose a background color background color used in the visual workflow editor for your action.',
+      choices: colors
+    }
+  ])
+}
 
 /**
  * Creates a Dockerfile contents string, replacing variables in the Dockerfile template
@@ -82,7 +82,7 @@ const getActionMetadata = () => prompt([
  * @param {PromptAnswers} answers The CLI prompt answers.
  * @returns {Promise<string>} The Dockerfile contents.
  */
-const createDockerfile = async (answers) => {
+async function createDockerfile (answers) {
   const dockerfileTemplate = await readTemplate('Dockerfile')
   return dockerfileTemplate
     .replace(':NAME', answers.name)
@@ -98,7 +98,7 @@ const createDockerfile = async (answers) => {
  * @param {string} name The action package name.
  * @returns {object} The `package.json` contents.
  */
-const createPackageJson = (name) => {
+function createPackageJson (name) {
   const { version } = require('../package.json')
   return {
     name,
@@ -117,7 +117,7 @@ const createPackageJson = (name) => {
  * @param {string[]} argv The command line arguments to parse.
  * @returns {Promise<void>} Nothing.
  */
-const createAction = async (argv) => {
+module.exports = async function createAction (argv) {
   const args = minimist(argv)
   const directoryName = args._[0]
   if (!directoryName || args.help) {
@@ -136,7 +136,7 @@ const createAction = async (argv) => {
     }
   }
 
-  console.log("\nWelcome to actions-toolkit! Let's get started creating an action.\n")
+  console.log('\nWelcome to actions-toolkit! Let\'s get started creating an action.\n')
   const metadata = await getActionMetadata()
   const dockerfile = await createDockerfile(metadata)
   const packageJson = createPackageJson(directoryName)
@@ -152,5 +152,3 @@ const createAction = async (argv) => {
 
   console.log(`\nDone! Enjoy building your GitHub Action! Get started with:\n\ncd ${directoryName} && npm install`)
 }
-
-module.exports = createAction
