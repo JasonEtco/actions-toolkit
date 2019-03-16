@@ -75,6 +75,13 @@ describe('Toolkit', () => {
       expect(spy).not.toHaveBeenCalled()
     })
 
+    it('only matches the exact command', () => {
+      const spy = jest.fn()
+      toolkit.context.payload.comment = { body: '/actionssssssssss' }
+      toolkit.command('action', spy)
+      expect(spy).not.toHaveBeenCalled()
+    })
+
     it('calls the handler with a command at the beginning of a line that is not the first line', () => {
       const spy = jest.fn()
       toolkit.context.payload.comment = { body: 'Hello\n/action' }
