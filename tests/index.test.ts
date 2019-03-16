@@ -124,7 +124,6 @@ describe('Toolkit', () => {
     it('does not call the handler if the sender was a bot', async () => {
       toolkit.context.payload.comment = { body: '/action' }
       toolkit.context.payload.sender = { type: 'Bot' }
-
       await toolkit.command('action', spy)
       expect(spy).not.toHaveBeenCalled()
     })
