@@ -312,23 +312,13 @@ The Git `sha` at which the action was triggered
 
 The name of the workflow that was triggered.
 
-#### tools.context.issue([object])
+#### tools.context.issue
 
-Return the `owner`, `repo`, and `number` params for making API requests against an issue or pull request. The object passed in will be merged with the repo params.
+The `owner`, `repo`, and `number` params for making API requests against an issue or pull request.
 
-```js
-const params = context.issue({body: 'Hello World!'})
-// Returns: {owner: 'username', repo: 'reponame', number: 123, body: 'Hello World!'}
-```
+#### tools.context.repo
 
-#### tools.context.repo([object])
-
-Return the `owner` and `repo` params for making API requests against a repository.
-
-```js
-const params = context.repo({path: '.github/config.yml'})
-// Returns: {owner: 'username', repo: 'reponame', path: '.github/config.yml'}
-```
+The `owner` and `repo` params for making API requests against a repository.
 
 ## Actions using actions-toolkit
 
