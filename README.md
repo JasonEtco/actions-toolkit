@@ -49,11 +49,14 @@ This will create a new folder `my-cool-action` with the following files:
 
 * [The Toolkit class](#toolkit-options)
 * [Authenticated GitHub API client](#toolsgithub)
+* [Logging](#toolslog)
+* [Slash commands](#toolscommandcommand-args-match--promise)
 * [Parsing arguments](#toolsarguments)
 * [Reading files](#toolsgetfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
 * [In-repo configuration](#toolsconfigfilename)
 * [Pass information to another action](#toolsstore)
+* [End the action's process](#toolsexit)
 * [Inspect the webhook event payload](#toolscontext)
 
 ### Toolkit options
@@ -103,6 +106,66 @@ You can also make GraphQL requests:
 
 ```js
 const result = await tools.github.graphql(query, variables)
+```
+
+<br>
+
+### tools.log
+
+This library comes with a slightly-customized instance of [Signale](https://github.com/klaussinani/signale), a great **logging utility**. Check out their docs for [the full list of methods](https://github.com/klaussinani/signale#usage). You can use those methods in your action:
+
+```js
+tools.log('Welcome to this example!')
+tools.log.info('Gonna try this...')
+try {
+  risky()
+  tools.log.success('We did it!')
+} catch (error) {
+  tools.log.fatal(error)
+}
+```
+
+In the GitHub Actions output, this is the result:
+
+```
+ℹ  info      Welcome to this example!
+ℹ  info      Gonna try this...
+✖  fatal     Error: Something bad happened! 
+    at Object.<anonymous> (/entrypoint.js:5:17)
+    at Module._compile (internal/modules/cjs/loader.js:734:30)
+```
+
+<br>
+
+### tools.command(command, (args, match) => Promise<void>)
+
+Respond to a slash-command posted in a GitHub issue, comment, pull request, pull request review or commit comment. Arguments to the slash command are parsed by [minimist](https://github.com/substack/minimist). You can use a slash command in a larger comment, but the command must be at the start of the line:
+
+```
+Hey, let's deploy this!
+/deploy --app example --container node:alpine
+```
+
+```ts
+tools.command('deploy', async (args: ParsedArgs, match: RegExpExecArray) => {
+  console.log(args)
+  // -> { app: 'example', container: 'node:alpine' }
+})
+```
+
+The handler will run multiple times for each match:
+
+```
+/deploy 1
+/deploy 2
+/deploy 3
+```
+
+```ts
+let i = 0
+await tools.command('deploy', () => { i++ })
+console.log(i)
+// -> 3
 ```
 
 <br>
@@ -186,6 +249,18 @@ The GitHub API token being used to authenticate requests.
 ### tools.workspace
 
 A path to a clone of the repository.
+
+<br>
+
+### tools.exit
+
+A collection of methods to end the action's process and tell GitHub what status to set (success, neutral or failure). Internally, these methods call `process.exit` with the [appropriate exit code](https://developer.github.com/actions/creating-github-actions/accessing-the-runtime-environment/#exit-codes-and-statuses). You can pass an optional message to each one to be logged before exiting. This can be used like an early return:
+
+```js
+if (someCheck) tools.exit.neutral('No _action_ necessary!') 
+if (anError) tools.exit.failure('We failed!')
+tools.exit.success('We did it team!')
+```
 
 <br>
 

@@ -8,5 +8,8 @@
   },
   "issue": {
     "number": 1
+  },
+  "sender": {
+    "type": "User"
   }
 }

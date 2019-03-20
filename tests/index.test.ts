@@ -1,18 +1,17 @@
 import nock from 'nock'
 import path from 'path'
+import { Signale } from 'signale'
 import { Toolkit } from '../src'
+import { NeutralCode } from '../src/exit'
 
 describe('Toolkit', () => {
   let toolkit: Toolkit
-  let logger: any
 
   beforeEach(() => {
-    logger = {
-      error: jest.fn(),
-      log: jest.fn(),
-      warn: jest.fn()
-    }
-    toolkit = new Toolkit({ logger })
+    // Mock the `process` event emitter to prevent memory
+    // leaks on repeated calls in tests - used by Store.
+    process.on = jest.fn()
+    toolkit = new Toolkit({ logger: new Signale({ disabled: true }) })
   })
 
   describe('#github', () => {
@@ -61,6 +60,75 @@ describe('Toolkit', () => {
     })
   })
 
+  describe('#command', () => {
+    let spy: jest.Mock<any, any>
+
+    beforeEach(() => {
+      spy = jest.fn()
+    })
+
+    it('calls the handler without any args', async () => {
+      toolkit.context.payload.comment = { body: '/action' }
+      await toolkit.command('action', spy)
+      expect(spy).toHaveBeenCalled()
+    })
+
+    it('ignores commands not at the beginning of the line', async () => {
+      toolkit.context.payload.comment = { body: 'Hello /action' }
+      await toolkit.command('action', spy)
+      expect(spy).not.toHaveBeenCalled()
+    })
+
+    it('only matches the exact command', async () => {
+      toolkit.context.payload.comment = { body: '/actionssssssssss' }
+      await toolkit.command('action', spy)
+      expect(spy).not.toHaveBeenCalled()
+    })
+
+    it('calls the handler with a command at the beginning of a line that is not the first line', async () => {
+      toolkit.context.payload.comment = { body: 'Hello\n/action' }
+      await toolkit.command('action', spy)
+      expect(spy).toHaveBeenCalled()
+    })
+
+    it('calls the handler with parsed args', async () => {
+      toolkit.context.payload.comment = { body: '/action testing another --file index.js' }
+      await toolkit.command('action', spy)
+      expect(spy).toHaveBeenCalled()
+      expect(spy).toHaveBeenCalledWith({
+        _: ['testing', 'another'],
+        file: 'index.js'
+      }, expect.arrayContaining([
+        '/action testing another --file index.js',
+        'testing another --file index.js'
+      ]))
+    })
+
+    it('does not call the handler if the body does not contain the command', async () => {
+      toolkit.context.payload.comment = { body: 'Hello how are you' }
+      await toolkit.command('action', spy)
+      expect(spy).not.toHaveBeenCalled()
+    })
+
+    it('does not call the handler if no body is found', async () => {
+      await toolkit.command('action', spy)
+      expect(spy).not.toHaveBeenCalled()
+    })
+
+    it('calls the handler multiple times for multiple matches', async () => {
+      toolkit.context.payload.comment = { body: '/action\n/action testing\n/action' }
+      await toolkit.command('action', spy)
+      expect(spy).toHaveBeenCalledTimes(3)
+    })
+
+    it('does not call the handler if the sender was a bot', async () => {
+      toolkit.context.payload.comment = { body: '/action' }
+      toolkit.context.payload.sender = { type: 'Bot' }
+      await toolkit.command('action', spy)
+      expect(spy).not.toHaveBeenCalled()
+    })
+  })
+
   describe('#config', () => {
     it('returns a property in the package.json', () => {
       const actual = toolkit.config('action')
@@ -102,15 +170,14 @@ describe('Toolkit', () => {
 })
 
 describe('Toolkit#constructor', () => {
-  let logger: any
+  let logger: jest.Mocked<Signale>
   let exit: (code?: number) => never
 
   beforeEach(() => {
-    logger = {
-      error: jest.fn(),
-      log: jest.fn(),
-      warn: jest.fn()
-    }
+    logger = new Signale() as jest.Mocked<Signale>
+    logger.error = jest.fn()
+    logger.warn = jest.fn()
+
     exit = global.process.exit
     const p = global.process as any
     p.exit = jest.fn()
@@ -119,7 +186,7 @@ describe('Toolkit#constructor', () => {
   it('exits if the event is not allowed with an array of events', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request'] })
-    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect(logger.error.mock.calls).toMatchSnapshot()
   })
 
@@ -133,21 +200,21 @@ describe('Toolkit#constructor', () => {
   it('exits if the event is not allowed with a single event', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: 'pull_request' })
-    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect(logger.error.mock.calls).toMatchSnapshot()
   })
 
   it('exits if the event is not allowed with an array of events with actions', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request.opened'] })
-    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect(logger.error.mock.calls).toMatchSnapshot()
   })
 
   it('exits if the event is not allowed with a single event with an action', () => {
     // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: 'pull_request.opened' })
-    expect(process.exit).toHaveBeenCalledWith(1)
+    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect(logger.error.mock.calls).toMatchSnapshot()
   })
 

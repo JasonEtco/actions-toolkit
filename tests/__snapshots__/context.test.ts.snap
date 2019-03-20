@@ -12,5 +12,8 @@ Object {
       "login": "JasonEtco",
     },
   },
+  "sender": Object {
+    "type": "User",
+  },
 }
 `;

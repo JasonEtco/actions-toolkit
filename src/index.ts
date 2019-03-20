@@ -3,13 +3,16 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
-import Context from './context'
+import { LoggerFunc, Signale } from 'signale'
+import { Context } from './context'
+import { Exit } from './exit'
+import { getBody } from './get-body'
 import { GitHub } from './github'
 import { Store } from './store'
 
 export interface ToolkitOptions {
   event?: string | string[],
-  logger?: Console | any
+  logger?: Signale
 }
 
 export class Toolkit {
@@ -49,22 +52,33 @@ export class Toolkit {
 
   public opts: ToolkitOptions
 
-  public log: Console | any
+  /**
+   * A collection of methods used to stop an action while it's being run
+   */
+  public exit: Exit
+
+  /**
+   * A general-purpose logger. An instance of [Signale](https://github.com/klaussinani/signale)
+   */
+  public log: Signale & LoggerFunc
 
   constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
-    this.log = opts.logger || console
+
+    // Disable the underline to prevent extra white space in the Actions log output
+    this.log = this.wrapLogger(opts.logger)
 
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
 
+    this.exit = new Exit()
     this.context = new Context()
     this.workspace = process.env.GITHUB_WORKSPACE as string
     this.token = process.env.GITHUB_TOKEN as string
     this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
     this.store = new Store(this.context.workflow, this.workspace)
-    this.checkAllowedEvents()
+    this.checkAllowedEvents(this.opts.event)
   }
 
   /**
@@ -145,6 +159,44 @@ export class Toolkit {
   }
 
   /**
+   * Run the handler when someone triggers the `/command` in a comment body.
+   *
+   * @param command - Command to listen for
+   * @param handler - Handler to run when the command is used
+   */
+  public async command (command: string, handler: (args: ParsedArgs | {}, match: RegExpExecArray) => Promise<void>) {
+    // Don't trigger for bots
+    if (this.context.payload.sender && this.context.payload.sender.type === 'Bot') {
+      return
+    }
+
+    this.checkAllowedEvents([
+      'pull_request',
+      'issues',
+      'issue_comment',
+      'commit_comment',
+      'pull_request_review',
+      'pull_request_review_comment'
+    ])
+
+    const reg = new RegExp(`^\/${command}(?:$|\\s(.*))`, 'gm')
+
+    const body = getBody(this.context.payload)
+    if (!body) return
+
+    let match: RegExpExecArray | null
+
+    // tslint:disable-next-line:no-conditional-assignment
+    while (match = reg.exec(body)) {
+      if (match[1]) {
+        await handler(minimist(match[1].split(' ')), match)
+      } else {
+        await handler({}, match)
+      }
+    }
+  }
+
+  /**
    * Returns true if this event is allowed
    */
   private eventIsAllowed (event: string) {
@@ -157,8 +209,7 @@ export class Toolkit {
     return eventName === this.context.event
   }
 
-  private checkAllowedEvents () {
-    const { event } = this.opts
+  private checkAllowedEvents (event: string | string[] | undefined) {
     if (!event) return
 
     const passed = Array.isArray(event)
@@ -168,8 +219,17 @@ export class Toolkit {
     if (!passed) {
       const actionStr = this.context.payload.action ? `.${this.context.payload.action}` : ''
       this.log.error(`Event \`${this.context.event}${actionStr}\` is not supported by this action.`)
-      process.exit(1)
+      this.exit.neutral()
     }
+  }
+
+  /**
+   * Wrap a Signale logger so that its a callable class
+   */
+  private wrapLogger (logger?: Signale) {
+    if (!logger) logger = new Signale({ config: { underlineLabel: false } })
+    const fn = logger.info.bind(logger)
+    return Object.assign(fn, logger)
   }
 
   /**
@@ -186,7 +246,7 @@ export class Toolkit {
       'GITHUB_EVENT_PATH',
       'GITHUB_WORKSPACE',
       'GITHUB_SHA',
-      'GITHUB_REF',
+      'GITHUB_REF'
     ]
 
     const requiredButMissing = requiredEnvVars.filter(key => !process.env.hasOwnProperty(key))
