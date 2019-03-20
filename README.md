@@ -87,6 +87,10 @@ const tools = new Toolkit({
 })
 ```
 
+#### Required environment variables
+
+Instantiating the class without [all of the environment variables that are present in the GitHub Actions runtime](https://developer.github.com/actions/creating-github-actions/accessing-the-runtime-environment/#environment-variables) will throw an error with a list of the missing variables. This is to ensure reliability and predictability. When working locally, you may choose to use [`dotenv`](https://www.npmjs.com/package/dotenv) to simulate the Actions environment.
+
 ### tools.github
 
 Returns an [Octokit SDK](https://octokit.github.io/rest.js) client authenticated for this repository. See [https://octokit.github.io/rest.js](https://octokit.github.io/rest.js) for the API.
