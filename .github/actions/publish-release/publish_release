@@ -25,7 +25,7 @@ printf "//%s/:_authToken=%s\\nregistry=%s\\nstrict-ssl=%s" "$NPM_REGISTRY_URL" "
 
 chmod 0600 "$NPM_CONFIG_USERCONFIG"
 
-FILE=/release-workflow-tag
+FILE=./release-workflow-tag
 if [ ! -f $FILE ]; then
   echo "Publishing to @latest"
   npm publish
