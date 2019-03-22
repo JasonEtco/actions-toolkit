@@ -260,6 +260,21 @@ tools.exit.success('We did it team!')
 
 <br>
 
+### tools.run
+
+A function that wraps an asynchronous function as its argument. If the function throws an error (or returns a rejected promise), `tools.run` will log the error and exit the action with a failure status code.
+
+This reduces the boilerplate necessary in using async/await functions in actions.
+
+
+```js
+tools.run(async () => {
+  // Action code
+})
+```
+
+<br>
+
 ### tools.store
 
 Actions can pass information to each other by writing to a file that is shared across the workflow. `tools.store` is a modified instance of [`flat-cache`](https://www.npmjs.com/package/flat-cache):
