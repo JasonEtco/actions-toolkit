@@ -1,7 +1,15 @@
 import { Exit, FailureCode, NeutralCode, SuccessCode } from '../src/exit'
 
-type methods = 'success' | 'neutral' | 'failure'
-type logs = 'log' | 'error'
+enum methods {
+  Success = 'success',
+  Neutral = 'neutral',
+  Failure = 'failure'
+}
+
+enum logs {
+  Log = 'log',
+  Error = 'error'
+}
 
 describe('Exit', () => {
   let logger: any
