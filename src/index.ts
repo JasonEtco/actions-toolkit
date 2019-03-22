@@ -145,6 +145,26 @@ export class Toolkit {
   }
 
   /**
+   * Run an asynchronous function, and fail the action if an error occurs.
+   *
+   * @param func - Async function to run
+   *
+   * @example This is generally used to run a `main` async function:
+   *
+   * ```js
+   * tools.run(async () => {
+   *   // Action code here.
+   * })
+   * ```
+   */
+  public async run (func: () => Promise<unknown>) {
+    return func().catch(err => {
+      this.log.fatal(err)
+      this.exit.failure()
+    })
+  }
+
+  /**
    * Run a CLI command in the workspace. This runs [execa](https://github.com/sindresorhus/execa)
    * under the hood so check there for the full options.
    *

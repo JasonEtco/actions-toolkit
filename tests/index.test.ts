@@ -159,6 +159,37 @@ describe('Toolkit', () => {
     })
   })
 
+  describe('#run', () => {
+    it('runs the async function passed to it', async () => {
+      let ran = false
+
+      const fn = () => new Promise(res => {
+        ran = true
+        res()
+      })
+
+      await new Toolkit().run(fn)
+      expect(ran).toBeTruthy()
+    })
+
+    it('logs and fails when the function throws an error', async () => {
+      const logger = new Signale() as jest.Mocked<Signale>
+      logger.fatal = jest.fn()
+      const err = new Error('Whoops!')
+      const twolkit = new Toolkit({ logger })
+      twolkit.exit.failure = jest.fn()
+
+      const fn = async () => {
+        throw err
+      }
+
+      await twolkit.run(fn)
+      expect(logger.fatal).toHaveBeenCalledTimes(1)
+      expect(logger.fatal).toHaveBeenCalledWith(err)
+      expect(twolkit.exit.failure).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('#wrapLogger', () => {
     it('wraps the provided logger and allows for a callable class', () => {
       const logger = new Signale() as jest.Mocked<Signale>
