@@ -87,6 +87,19 @@ const tools = new Toolkit({
 })
 ```
 
+### Toolkit.run
+
+Run an asynchronous function that receives an instance of `Toolkit` as its argument. If the function throws an error (or returns a rejected promise), `Toolkit.run` will log the error and exit the action with a failure status code.
+
+The toolkit instance can be configured by passing `Toolkit` options as the second argument to `Toolkit.run`.
+
+```js
+Toolkit.run(async tool => {
+  // Action code
+}, { event: 'push' })
+```
+<br>
+
 ### tools.github
 
 Returns an [Octokit SDK](https://octokit.github.io/rest.js) client authenticated for this repository. See [https://octokit.github.io/rest.js](https://octokit.github.io/rest.js) for the API.
@@ -256,21 +269,6 @@ A collection of methods to end the action's process and tell GitHub what status 
 if (someCheck) tools.exit.neutral('No _action_ necessary!') 
 if (anError) tools.exit.failure('We failed!')
 tools.exit.success('We did it team!')
-```
-
-<br>
-
-### tools.run
-
-A function that wraps an asynchronous function as its argument. If the function throws an error (or returns a rejected promise), `tools.run` will log the error and exit the action with a failure status code.
-
-This reduces the boilerplate necessary in using async/await functions in actions.
-
-
-```js
-tools.run(async () => {
-  // Action code
-})
 ```
 
 <br>

@@ -159,7 +159,7 @@ describe('Toolkit', () => {
     })
   })
 
-  describe('#run', () => {
+  describe('.run', () => {
     it('runs the async function passed to it', async () => {
       let ran = false
 
@@ -168,25 +168,25 @@ describe('Toolkit', () => {
         res()
       })
 
-      await new Toolkit().run(fn)
+      await Toolkit.run(fn)
       expect(ran).toBeTruthy()
     })
 
     it('logs and fails when the function throws an error', async () => {
       const logger = new Signale() as jest.Mocked<Signale>
       logger.fatal = jest.fn()
+
       const err = new Error('Whoops!')
-      const twolkit = new Toolkit({ logger })
-      twolkit.exit.failure = jest.fn()
+      const exitFailure = jest.fn()
 
-      const fn = async () => {
+      await Toolkit.run(async twolkit => {
+        twolkit.exit.failure = exitFailure
         throw err
-      }
+      }, { logger })
 
-      await twolkit.run(fn)
       expect(logger.fatal).toHaveBeenCalledTimes(1)
       expect(logger.fatal).toHaveBeenCalledWith(err)
-      expect(twolkit.exit.failure).toHaveBeenCalledTimes(1)
+      expect(exitFailure).toHaveBeenCalledTimes(1)
     })
   })
 
