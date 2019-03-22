@@ -71,7 +71,7 @@ export class Toolkit {
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
 
-    this.exit = new Exit()
+    this.exit = new Exit(this.log)
     this.context = new Context()
     this.workspace = process.env.GITHUB_WORKSPACE as string
     this.token = process.env.GITHUB_TOKEN as string
