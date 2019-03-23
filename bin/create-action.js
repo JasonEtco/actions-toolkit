@@ -11,12 +11,6 @@ const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 const mkdir = promisify(fs.mkdir)
 
-const signale = new Signale({
-  config: {
-    displayLabel: false
-  }
-})
-
 /**
  * Reads a template file from disk.
  *
@@ -122,9 +116,14 @@ function createPackageJson (name) {
  *
  * @public
  * @param {string[]} argv The command line arguments to parse.
+ * @param {import("signale").Signale} [logger] The Signale logger.
  * @returns {Promise<void>} Nothing.
  */
-module.exports = async function createAction (argv) {
+module.exports = async function createAction (argv, signale = new Signale({
+  config: {
+    displayLabel: false
+  }
+})) {
   const args = minimist(argv)
   const directoryName = args._[0]
   if (!directoryName || args.help) {

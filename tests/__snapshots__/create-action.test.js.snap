@@ -45,7 +45,7 @@ console.log(tools.arguments)
 
 exports[`creates project with labels passed to Dockerfile from questionnaire: package.json 1`] = `
 {
-  "name": "my-project-name",
+  "name": "__tmp/my-project-name",
   "private": true,
   "main": "index.js",
   "dependencies": {

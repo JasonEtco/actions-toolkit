@@ -1,3 +1,9 @@
+const fs = require('fs')
+const path = require('path')
+const rimraf = require('rimraf')
+
+jest.mock('enquirer')
+
 // Remove double quotes around snapshots.
 // This improves snapshot readability for generated file contents.
 expect.addSnapshotSerializer({
@@ -5,35 +11,44 @@ expect.addSnapshotSerializer({
   print: value => value
 })
 
-jest.mock('fs')
-jest.mock('enquirer')
+/** Creates a mock Signale logger instance for use in asserting log function calls. */
+const createLogger = () => ({
+  log: jest.fn(),
+  info: jest.fn(),
+  fatal: jest.fn(),
+  star: jest.fn(),
+  success: jest.fn()
+})
 
-let mockFs
-
-const runCLI = (...args) => {
-  const createAction = require('../bin/create-action')
-  return createAction(args)
-}
+let logger
 
 beforeEach(() => {
   jest.resetModules()
-  mockFs = require('fs')
 
   process.exit = jest.fn()
-  console.log = jest.fn()
-  console.error = jest.fn()
-  process.cwd = jest.fn(() => '.')
+  logger = createLogger()
+
+  // Create temporary directory for writing CLI test output.
+  fs.mkdirSync(path.resolve(__dirname, '../__tmp'))
 })
 
 afterEach(() => {
   jest.restoreAllMocks()
+
+  // Remove temporary directory where CLI test output may have been written.
+  rimraf.sync(path.resolve(__dirname, '../__tmp'))
 })
+
+const runCLI = (...args) => {
+  const createAction = require('../bin/create-action')
+  return createAction(args, logger)
+}
 
 test('prints help when no arguments are passed', async () => {
   await runCLI()
 
   expect(process.exit).toHaveBeenCalledWith(1)
-  expect(console.log).toHaveBeenCalledWith(
+  expect(logger.info).toHaveBeenCalledWith(
     expect.stringMatching(/Usage: npx actions-toolkit <name>/)
   )
 })
@@ -42,31 +57,16 @@ test('prints help when --help is passed', async () => {
   await runCLI('--help')
 
   expect(process.exit).toHaveBeenCalledWith(1)
-  expect(console.log).toHaveBeenCalledWith(
+  expect(logger.info).toHaveBeenCalledWith(
     expect.stringMatching(/Usage: npx actions-toolkit <name>/)
   )
 })
 
 test('fails to start creating project in a directory that already exists', async () => {
-  mockFs.mkdir.mockImplementationOnce((_, cb) => {
-    const error = new Error()
-    error.code = 'EEXIST'
-    cb(error)
-  })
-
-  await expect(runCLI('my-project-name')).rejects.toThrowError(
-    /Folder my-project-name already exists!/
+  await expect(runCLI('tests/fixtures/workspaces/action-already-exists')).rejects.toThrowError()
+  expect(logger.fatal).toHaveBeenCalledWith(
+    expect.stringMatching(/Folder .*tests\/fixtures\/workspaces\/action-already-exists already exists!/)
   )
-})
-
-test('throws unhandled fs.mkdir errors', async () => {
-  mockFs.mkdir.mockImplementationOnce((_, cb) => {
-    const error = new Error("EPERM: operation not permitted, mkdir '/etc'")
-    error.code = 'EPERM'
-    cb(error)
-  })
-
-  await expect(runCLI('my-project-name')).rejects.toThrowError(/EPERM: operation not permitted, mkdir '\/etc'/)
 })
 
 test('exits with a failure message when a user cancels the questionnaire', async () => {
@@ -76,37 +76,40 @@ test('exits with a failure message when a user cancels the questionnaire', async
     throw new Error()
   })
 
-  await expect(runCLI('my-project-name')).rejects.toThrowError()
+  await expect(runCLI('__tmp/my-project-name')).rejects.toThrowError()
 })
 
 test('creates project with labels passed to Dockerfile from questionnaire', async () => {
   jest.mock('../package.json', () => ({ version: '1.0.0-static-version-for-test' }))
+
   require('enquirer').__setAnswers({
     name: 'My Project Name',
     description: 'A cool project',
     icon: 'anchor',
     color: 'blue'
   })
-  mockFs.mkdir.mockImplementationOnce((_, cb) => cb(null))
 
-  await runCLI('my-project-name')
+  const readGeneratedFile = name =>
+    fs.readFileSync(path.resolve(__dirname, '../__tmp/my-project-name', name), 'utf-8')
 
-  expect(console.log).toHaveBeenCalledWith(
-    expect.stringMatching(/Creating folder my-project-name.../)
+  await runCLI('__tmp/my-project-name')
+
+  expect(logger.info).toHaveBeenCalledWith(
+    expect.stringMatching(/Creating folder .*my-project-name.../)
   )
-  expect(console.log).toHaveBeenCalledWith(
+  expect(logger.star).toHaveBeenCalledWith(
     expect.stringMatching(/Welcome to actions-toolkit/)
   )
-  expect(console.log).toHaveBeenCalledWith(
+  expect(logger.info).toHaveBeenCalledWith(
     expect.stringMatching(/Creating package.json/)
   )
-  expect(console.log).toHaveBeenCalledWith(
+  expect(logger.info).toHaveBeenCalledWith(
     expect.stringMatching(/Creating Dockerfile/)
   )
-  expect(console.log).toHaveBeenCalledWith(
+  expect(logger.info).toHaveBeenCalledWith(
     expect.stringMatching(/Creating entrypoint.js/)
   )
-  expect(mockFs.__getContents('my-project-name/package.json')).toMatchSnapshot('package.json')
-  expect(mockFs.__getContents('my-project-name/Dockerfile')).toMatchSnapshot('Dockerfile')
-  expect(mockFs.__getContents('my-project-name/entrypoint.js')).toMatchSnapshot('entrypoint.js')
+  expect(readGeneratedFile('package.json')).toMatchSnapshot('package.json')
+  expect(readGeneratedFile('Dockerfile')).toMatchSnapshot('Dockerfile')
+  expect(readGeneratedFile('entrypoint.js')).toMatchSnapshot('entrypoint.js')
 })
