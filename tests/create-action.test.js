@@ -48,7 +48,7 @@ test('prints help when no arguments are passed', async () => {
   await runCLI()
 
   expect(process.exit).toHaveBeenCalledWith(1)
-  expect(logger.info).toHaveBeenCalledWith(
+  expect(logger.log).toHaveBeenCalledWith(
     expect.stringMatching(/Usage: npx actions-toolkit <name>/)
   )
 })
@@ -57,7 +57,7 @@ test('prints help when --help is passed', async () => {
   await runCLI('--help')
 
   expect(process.exit).toHaveBeenCalledWith(1)
-  expect(logger.info).toHaveBeenCalledWith(
+  expect(logger.log).toHaveBeenCalledWith(
     expect.stringMatching(/Usage: npx actions-toolkit <name>/)
   )
 })
