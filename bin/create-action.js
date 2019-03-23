@@ -127,7 +127,7 @@ module.exports = async function createAction (argv, signale = new Signale({
   const args = minimist(argv)
   const directoryName = args._[0]
   if (!directoryName || args.help) {
-    signale.info(`\nUsage: npx actions-toolkit <name>`)
+    signale.log('\nUsage: npx actions-toolkit <name>')
     return process.exit(1)
   }
 
