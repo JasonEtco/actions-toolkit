@@ -36,7 +36,6 @@ export class Toolkit {
 
     return func(tools).catch(err => {
       tools.exit.failure(err)
-      tools.exit.failure()
     })
   }
 

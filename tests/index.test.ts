@@ -173,19 +173,14 @@ describe('Toolkit', () => {
     })
 
     it('logs and fails when the function throws an error', async () => {
-      const logger = new Signale() as jest.Mocked<Signale>
-      logger.fatal = jest.fn()
-
       const err = new Error('Whoops!')
       const exitFailure = jest.fn()
 
       await Toolkit.run(async twolkit => {
         twolkit.exit.failure = exitFailure
         throw err
-      }, { logger })
+      })
 
-      expect(logger.fatal).toHaveBeenCalledTimes(1)
-      expect(logger.fatal).toHaveBeenCalledWith(err)
       expect(exitFailure).toHaveBeenCalledTimes(1)
     })
   })
