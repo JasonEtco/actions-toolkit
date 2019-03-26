@@ -35,7 +35,7 @@ export class Toolkit {
     const tools = new Toolkit(opts)
 
     return func(tools).catch(err => {
-      tools.log.fatal(err)
+      tools.exit.failure(err)
       tools.exit.failure()
     })
   }
