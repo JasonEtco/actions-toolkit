@@ -94,7 +94,7 @@ Run an asynchronous function that receives an instance of `Toolkit` as its argum
 The toolkit instance can be configured by passing `Toolkit` options as the second argument to `Toolkit.run`.
 
 ```js
-Toolkit.run(async tool => {
+Toolkit.run(async tools => {
   // Action code
 }, { event: 'push' })
 ```
