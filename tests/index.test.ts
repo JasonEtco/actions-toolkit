@@ -255,6 +255,24 @@ describe('Toolkit#constructor', () => {
     expect(logger.warn.mock.calls).toMatchSnapshot()
   })
 
+  describe('secrets', () => {
+    it('does nothing when passed an empty array', () => {
+      logger.fatal = jest.fn()
+      new Toolkit({ logger, secrets: [] }) // tslint:disable-line:no-unused-expression
+      expect(logger.fatal).not.toHaveBeenCalled()
+    })
+
+    it('calls the exit.failure with missing secrets', () => {
+      // Delete this, juuuust in case
+      delete process.env.DO_NOT_EXIST
+
+      logger.fatal = jest.fn()
+      new Toolkit({ logger, secrets: ['DO_NOT_EXIST'] }) // tslint:disable-line:no-unused-expression
+      expect(logger.fatal).toHaveBeenCalled()
+      expect(logger.fatal.mock.calls).toMatchSnapshot()
+    })
+  })
+
   afterEach(() => {
     global.process.exit = exit
   })

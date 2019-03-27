@@ -71,3 +71,12 @@ Array [
   ],
 ]
 `;
+
+exports[`Toolkit#constructor secrets calls the exit.failure with missing secrets 1`] = `
+Array [
+  Array [
+    "The following secrets are required for this GitHub Action to run:
+- DO_NOT_EXIST",
+  ],
+]
+`;
