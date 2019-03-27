@@ -35,7 +35,10 @@ export class Toolkit {
     const tools = new Toolkit(opts)
 
     try {
-      return await func(tools)
+      const ret = func(tools)
+      // If the return value of the provided function is an unresolved Promise
+      // await that Promise before return the value, otherwise return as normal
+      return ret instanceof Promise ? await ret : ret
     } catch (err) {
       tools.exit.failure(err)
     }
