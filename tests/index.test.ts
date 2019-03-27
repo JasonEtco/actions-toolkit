@@ -14,6 +14,31 @@ describe('Toolkit', () => {
     toolkit = new Toolkit({ logger: new Signale({ disabled: true }) })
   })
 
+  describe('.run', () => {
+    it('runs the async function passed to it', async () => {
+      const spy = jest.fn(() => Promise.resolve('hi'))
+      const actual = await Toolkit.run(spy)
+      // Test that the function was called
+      expect(spy).toHaveBeenCalled()
+      // Make sure it was called with a Toolkit instance
+      expect((spy.mock.calls as any)[0][0]).toBeInstanceOf(Toolkit)
+      // Check that it returned a value as an async function
+      expect(actual).toBe('hi')
+    })
+
+    it('logs and fails when the function throws an error', async () => {
+      const err = new Error('Whoops!')
+      const exitFailure = jest.fn()
+
+      await Toolkit.run(async twolkit => {
+        twolkit.exit.failure = exitFailure
+        throw err
+      })
+
+      expect(exitFailure).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('#github', () => {
     it('returns a GitHub client', () => {
       expect(toolkit.github).toBeInstanceOf(Object)
@@ -156,31 +181,6 @@ describe('Toolkit', () => {
     it('runs the command in the workspace with some options', async () => {
       const result = await toolkit.runInWorkspace('throw', undefined, { reject: false })
       expect(result).toMatchSnapshot()
-    })
-  })
-
-  describe('.run', () => {
-    it('runs the async function passed to it', async () => {
-      const spy = jest.fn(() => Promise.resolve('hi'))
-      const actual = await Toolkit.run(spy)
-      // Test that the function was called
-      expect(spy).toHaveBeenCalled()
-      // Make sure it was called with a Toolkit instance
-      expect((spy.mock.calls as any)[0][0]).toBeInstanceOf(Toolkit)
-      // Check that it returned a value as an async function
-      expect(actual).toBe('hi')
-    })
-
-    it('logs and fails when the function throws an error', async () => {
-      const err = new Error('Whoops!')
-      const exitFailure = jest.fn()
-
-      await Toolkit.run(async twolkit => {
-        twolkit.exit.failure = exitFailure
-        throw err
-      })
-
-      expect(exitFailure).toHaveBeenCalledTimes(1)
     })
   })
 
