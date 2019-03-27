@@ -87,6 +87,18 @@ const tools = new Toolkit({
 })
 ```
 
+#### secrets (optional)
+
+You can choose to pass a list of secrets that must be included in the workflow that runs your Action. This ensures that your Action has the secrets it needs to function correctly:
+
+```js
+const tools = new Toolkit({
+  secrets: ['SUPER_SECRET_KEY']
+})
+```
+
+If any of the listed secrets are missing, the Action will fail and log a message.
+
 ### Toolkit.run
 
 Run an asynchronous function that receives an instance of `Toolkit` as its argument. If the function throws an error (or returns a rejected promise), `Toolkit.run` will log the error and exit the action with a failure status code.
