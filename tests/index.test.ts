@@ -161,15 +161,14 @@ describe('Toolkit', () => {
 
   describe('.run', () => {
     it('runs the async function passed to it', async () => {
-      let ran = false
-
-      const fn = () => new Promise(res => {
-        ran = true
-        res()
-      })
-
-      await Toolkit.run(fn)
-      expect(ran).toBeTruthy()
+      const spy = jest.fn(() => Promise.resolve('hi'))
+      const actual = await Toolkit.run(spy)
+      // Test that the function was called
+      expect(spy).toHaveBeenCalled()
+      // Make sure it was called with a Toolkit instance
+      expect((spy.mock.calls as any)[0][0]).toBeInstanceOf(Toolkit)
+      // Check that it returned a value as an async function
+      expect(actual).toBe('hi')
     })
 
     it('logs and fails when the function throws an error', async () => {
