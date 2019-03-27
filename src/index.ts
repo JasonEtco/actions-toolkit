@@ -31,12 +31,14 @@ export class Toolkit {
    * }, { event: 'push' })
    * ```
    */
-  public static async run (func: (tools: Toolkit) => Promise<unknown>, opts?: ToolkitOptions) {
+  public static async run (func: (tools: Toolkit) => unknown, opts?: ToolkitOptions) {
     const tools = new Toolkit(opts)
 
-    return func(tools).catch(err => {
+    try {
+      return await func(tools)
+    } catch (err) {
       tools.exit.failure(err)
-    })
+    }
   }
 
   public context: Context
