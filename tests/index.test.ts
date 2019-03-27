@@ -25,7 +25,7 @@ describe('Toolkit', () => {
       // Check that it returned a value as an async function
       expect(actual).toBe('hi')
     })
-    
+
     it('runs a non-async function passed to it', async () => {
       const spy = jest.fn(() => 'hi')
       const actual = await Toolkit.run(spy)
