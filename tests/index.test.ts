@@ -262,6 +262,13 @@ describe('Toolkit#constructor', () => {
       expect(logger.fatal).not.toHaveBeenCalled()
     })
 
+    it('does nothing when no required secrets are missing', () => {
+      process.env.I_EXIST = 'boo'
+      logger.fatal = jest.fn()
+      new Toolkit({ logger, secrets: ['I_EXIST'] })
+      expect(logger.fatal).not.toHaveBeenCalled()
+    })
+
     it('calls the exit.failure with missing secrets', () => {
       // Delete this, juuuust in case
       delete process.env.DO_NOT_EXIST
