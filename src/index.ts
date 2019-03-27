@@ -40,12 +40,17 @@ export class Toolkit {
    * }, { event: 'push' })
    * ```
    */
-  public static async run (func: (tools: Toolkit) => Promise<unknown>, opts?: ToolkitOptions) {
+  public static async run (func: (tools: Toolkit) => unknown, opts?: ToolkitOptions) {
     const tools = new Toolkit(opts)
 
-    return func(tools).catch(err => {
+    try {
+      const ret = func(tools)
+      // If the return value of the provided function is an unresolved Promise
+      // await that Promise before return the value, otherwise return as normal
+      return ret instanceof Promise ? await ret : ret
+    } catch (err) {
       tools.exit.failure(err)
-    })
+    }
   }
 
   public context: Context
