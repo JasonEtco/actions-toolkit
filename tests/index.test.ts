@@ -215,40 +215,44 @@ describe('Toolkit#constructor', () => {
   })
 
   // tslint:disable:no-unused-expression
-  it('exits if the event is not allowed with an array of events', () => {
-    new Toolkit({ logger, event: ['pull_request'] })
-    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect(logger.error.mock.calls).toMatchSnapshot()
+  describe('missing env vars', () => {
+    it('logs the expected string with missing env vars', () => {
+      delete process.env.HOME
+      new Toolkit({ logger })
+      expect(logger.warn.mock.calls).toMatchSnapshot()
+    })
   })
 
-  it('does not exit if the event is one of the allowed with an array of events', () => {
-    new Toolkit({ logger, event: ['pull_request', 'issues'] })
-    expect(process.exit).not.toHaveBeenCalled()
-    expect(logger.error).not.toHaveBeenCalled()
-  })
+  describe('events', () => {
+    it('exits if the event is not allowed with an array of events', () => {
+      new Toolkit({ logger, event: ['pull_request'] })
+      expect(process.exit).toHaveBeenCalledWith(NeutralCode)
+      expect(logger.error.mock.calls).toMatchSnapshot()
+    })
 
-  it('exits if the event is not allowed with a single event', () => {
-    new Toolkit({ logger, event: 'pull_request' })
-    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect(logger.error.mock.calls).toMatchSnapshot()
-  })
+    it('does not exit if the event is one of the allowed with an array of events', () => {
+      new Toolkit({ logger, event: ['pull_request', 'issues'] })
+      expect(process.exit).not.toHaveBeenCalled()
+      expect(logger.error).not.toHaveBeenCalled()
+    })
 
-  it('exits if the event is not allowed with an array of events with actions', () => {
-    new Toolkit({ logger, event: ['pull_request.opened'] })
-    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect(logger.error.mock.calls).toMatchSnapshot()
-  })
+    it('exits if the event is not allowed with a single event', () => {
+      new Toolkit({ logger, event: 'pull_request' })
+      expect(process.exit).toHaveBeenCalledWith(NeutralCode)
+      expect(logger.error.mock.calls).toMatchSnapshot()
+    })
 
-  it('exits if the event is not allowed with a single event with an action', () => {
-    new Toolkit({ logger, event: 'pull_request.opened' })
-    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect(logger.error.mock.calls).toMatchSnapshot()
-  })
+    it('exits if the event is not allowed with an array of events with actions', () => {
+      new Toolkit({ logger, event: ['pull_request.opened'] })
+      expect(process.exit).toHaveBeenCalledWith(NeutralCode)
+      expect(logger.error.mock.calls).toMatchSnapshot()
+    })
 
-  it('logs the expected string with missing env vars', () => {
-    delete process.env.HOME
-    new Toolkit({ logger })
-    expect(logger.warn.mock.calls).toMatchSnapshot()
+    it('exits if the event is not allowed with a single event with an action', () => {
+      new Toolkit({ logger, event: 'pull_request.opened' })
+      expect(process.exit).toHaveBeenCalledWith(NeutralCode)
+      expect(logger.error.mock.calls).toMatchSnapshot()
+    })
   })
 
   describe('secrets', () => {
