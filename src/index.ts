@@ -290,8 +290,12 @@ export class Toolkit {
    * The Action should fail if there are secrets it needs but does not have
    */
   private checkRequiredSecrets (secrets?: string[]) {
-    if (!secrets) return
+    if (!secrets || secrets.length === 0) return
+    // Filter missing but required secrets
     const requiredButMissing = secrets.filter(key => !process.env.hasOwnProperty(key))
+    // Everything we need is here
+    if (requiredButMissing.length === 0) return
+    // Exit with a failing status
     const list = requiredButMissing.map(key => `- ${key}`).join('\n')
     this.exit.failure(`The following secrets are required for this GitHub Action to run:\n${list}`)
   }
