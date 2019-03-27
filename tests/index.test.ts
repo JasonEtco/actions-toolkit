@@ -214,36 +214,32 @@ describe('Toolkit#constructor', () => {
     p.exit = jest.fn()
   })
 
+  // tslint:disable:no-unused-expression
   it('exits if the event is not allowed with an array of events', () => {
-    // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request'] })
     expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect(logger.error.mock.calls).toMatchSnapshot()
   })
 
   it('does not exit if the event is one of the allowed with an array of events', () => {
-    // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request', 'issues'] })
     expect(process.exit).not.toHaveBeenCalled()
     expect(logger.error).not.toHaveBeenCalled()
   })
 
   it('exits if the event is not allowed with a single event', () => {
-    // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: 'pull_request' })
     expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect(logger.error.mock.calls).toMatchSnapshot()
   })
 
   it('exits if the event is not allowed with an array of events with actions', () => {
-    // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: ['pull_request.opened'] })
     expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect(logger.error.mock.calls).toMatchSnapshot()
   })
 
   it('exits if the event is not allowed with a single event with an action', () => {
-    // tslint:disable-next-line:no-unused-expression
     new Toolkit({ logger, event: 'pull_request.opened' })
     expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect(logger.error.mock.calls).toMatchSnapshot()
@@ -251,14 +247,14 @@ describe('Toolkit#constructor', () => {
 
   it('logs the expected string with missing env vars', () => {
     delete process.env.HOME
-    new Toolkit({ logger }) // tslint:disable-line:no-unused-expression
+    new Toolkit({ logger })
     expect(logger.warn.mock.calls).toMatchSnapshot()
   })
 
   describe('secrets', () => {
     it('does nothing when passed an empty array', () => {
       logger.fatal = jest.fn()
-      new Toolkit({ logger, secrets: [] }) // tslint:disable-line:no-unused-expression
+      new Toolkit({ logger, secrets: [] })
       expect(logger.fatal).not.toHaveBeenCalled()
     })
 
@@ -267,12 +263,13 @@ describe('Toolkit#constructor', () => {
       delete process.env.DO_NOT_EXIST
 
       logger.fatal = jest.fn()
-      new Toolkit({ logger, secrets: ['DO_NOT_EXIST'] }) // tslint:disable-line:no-unused-expression
+      new Toolkit({ logger, secrets: ['DO_NOT_EXIST'] })
       expect(logger.fatal).toHaveBeenCalled()
       expect(logger.fatal.mock.calls).toMatchSnapshot()
     })
   })
 
+  // tslint:enable:no-unused-expression
   afterEach(() => {
     global.process.exit = exit
   })
