@@ -159,6 +159,31 @@ describe('Toolkit', () => {
     })
   })
 
+  describe('.run', () => {
+    it('runs the async function passed to it', async () => {
+      const spy = jest.fn(() => Promise.resolve('hi'))
+      const actual = await Toolkit.run(spy)
+      // Test that the function was called
+      expect(spy).toHaveBeenCalled()
+      // Make sure it was called with a Toolkit instance
+      expect((spy.mock.calls as any)[0][0]).toBeInstanceOf(Toolkit)
+      // Check that it returned a value as an async function
+      expect(actual).toBe('hi')
+    })
+
+    it('logs and fails when the function throws an error', async () => {
+      const err = new Error('Whoops!')
+      const exitFailure = jest.fn()
+
+      await Toolkit.run(async twolkit => {
+        twolkit.exit.failure = exitFailure
+        throw err
+      })
+
+      expect(exitFailure).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('#wrapLogger', () => {
     it('wraps the provided logger and allows for a callable class', () => {
       const logger = new Signale() as jest.Mocked<Signale>

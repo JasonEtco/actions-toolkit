@@ -87,6 +87,19 @@ const tools = new Toolkit({
 })
 ```
 
+### Toolkit.run
+
+Run an asynchronous function that receives an instance of `Toolkit` as its argument. If the function throws an error (or returns a rejected promise), `Toolkit.run` will log the error and exit the action with a failure status code.
+
+The toolkit instance can be configured by passing `Toolkit` options as the second argument to `Toolkit.run`.
+
+```js
+Toolkit.run(async tools => {
+  // Action code
+}, { event: 'push' })
+```
+<br>
+
 ### tools.github
 
 Returns an [Octokit SDK](https://octokit.github.io/rest.js) client authenticated for this repository. See [https://octokit.github.io/rest.js](https://octokit.github.io/rest.js) for the API.

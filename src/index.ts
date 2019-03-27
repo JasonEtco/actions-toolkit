@@ -16,6 +16,29 @@ export interface ToolkitOptions {
 }
 
 export class Toolkit {
+  /**
+   * Run an asynchronous function that accepts a toolkit as its argument, and fail if
+   * an error occurs.
+   *
+   * @param func - Async function to run
+   * @param [opts] - Options to pass to the toolkit
+   *
+   * @example This is generally used to run a `main` async function:
+   *
+   * ```js
+   * Toolkit.run(async tools => {
+   *   // Action code here.
+   * }, { event: 'push' })
+   * ```
+   */
+  public static async run (func: (tools: Toolkit) => Promise<unknown>, opts?: ToolkitOptions) {
+    const tools = new Toolkit(opts)
+
+    return func(tools).catch(err => {
+      tools.exit.failure(err)
+    })
+  }
+
   public context: Context
 
   /**
