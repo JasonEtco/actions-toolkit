@@ -31,7 +31,7 @@ Object {
 
 exports[`Toolkit #runInWorkspace runs the command in the workspace with some options 1`] = `[Error: spawn throw ENOENT]`;
 
-exports[`Toolkit#constructor exits if the event is not allowed with a single event 1`] = `
+exports[`Toolkit#constructor events exits if the event is not allowed with a single event 1`] = `
 Array [
   Array [
     "Event \`issues.opened\` is not supported by this action.",
@@ -39,7 +39,7 @@ Array [
 ]
 `;
 
-exports[`Toolkit#constructor exits if the event is not allowed with a single event with an action 1`] = `
+exports[`Toolkit#constructor events exits if the event is not allowed with a single event with an action 1`] = `
 Array [
   Array [
     "Event \`issues.opened\` is not supported by this action.",
@@ -47,7 +47,7 @@ Array [
 ]
 `;
 
-exports[`Toolkit#constructor exits if the event is not allowed with an array of events 1`] = `
+exports[`Toolkit#constructor events exits if the event is not allowed with an array of events 1`] = `
 Array [
   Array [
     "Event \`issues.opened\` is not supported by this action.",
@@ -55,7 +55,7 @@ Array [
 ]
 `;
 
-exports[`Toolkit#constructor exits if the event is not allowed with an array of events with actions 1`] = `
+exports[`Toolkit#constructor events exits if the event is not allowed with an array of events with actions 1`] = `
 Array [
   Array [
     "Event \`issues.opened\` is not supported by this action.",
@@ -63,11 +63,20 @@ Array [
 ]
 `;
 
-exports[`Toolkit#constructor logs the expected string with missing env vars 1`] = `
+exports[`Toolkit#constructor missing env vars logs the expected string with missing env vars 1`] = `
 Array [
   Array [
     "There are environment variables missing from this runtime, but would be present on GitHub.
 - HOME",
+  ],
+]
+`;
+
+exports[`Toolkit#constructor secrets calls the exit.failure with missing secrets 1`] = `
+Array [
+  Array [
+    "The following secrets are required for this GitHub Action to run:
+- DO_NOT_EXIST",
   ],
 ]
 `;

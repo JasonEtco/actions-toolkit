@@ -14,6 +14,38 @@ describe('Toolkit', () => {
     toolkit = new Toolkit({ logger: new Signale({ disabled: true }) })
   })
 
+  describe('.run', () => {
+    it('runs the async function passed to it', async () => {
+      const spy = jest.fn(() => Promise.resolve('hi'))
+      const actual = await Toolkit.run(spy)
+      // Test that the function was called
+      expect(spy).toHaveBeenCalled()
+      // Make sure it was called with a Toolkit instance
+      expect((spy.mock.calls as any)[0][0]).toBeInstanceOf(Toolkit)
+      // Check that it returned a value as an async function
+      expect(actual).toBe('hi')
+    })
+
+    it('runs a non-async function passed to it', async () => {
+      const spy = jest.fn(() => 'hi')
+      const actual = await Toolkit.run(spy)
+      // Check that it returned a value as an async function
+      expect(actual).toBe('hi')
+    })
+
+    it('logs and fails when the function throws an error', async () => {
+      const err = new Error('Whoops!')
+      const exitFailure = jest.fn()
+
+      await Toolkit.run(async twolkit => {
+        twolkit.exit.failure = exitFailure
+        throw err
+      })
+
+      expect(exitFailure).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('#github', () => {
     it('returns a GitHub client', () => {
       expect(toolkit.github).toBeInstanceOf(Object)
@@ -159,38 +191,6 @@ describe('Toolkit', () => {
     })
   })
 
-  describe('.run', () => {
-    it('runs the async function passed to it', async () => {
-      const spy = jest.fn(() => Promise.resolve('hi'))
-      const actual = await Toolkit.run(spy)
-      // Test that the function was called
-      expect(spy).toHaveBeenCalled()
-      // Make sure it was called with a Toolkit instance
-      expect((spy.mock.calls as any)[0][0]).toBeInstanceOf(Toolkit)
-      // Check that it returned a value as an async function
-      expect(actual).toBe('hi')
-    })
-
-    it('runs a non-async function passed to it', async () => {
-      const spy = jest.fn(() => 'hi')
-      const actual = await Toolkit.run(spy)
-      // Check that it returned a value as an async function
-      expect(actual).toBe('hi')
-    })
-
-    it('logs and fails when the function throws an error', async () => {
-      const err = new Error('Whoops!')
-      const exitFailure = jest.fn()
-
-      await Toolkit.run(async twolkit => {
-        twolkit.exit.failure = exitFailure
-        throw err
-      })
-
-      expect(exitFailure).toHaveBeenCalledTimes(1)
-    })
-  })
-
   describe('#wrapLogger', () => {
     it('wraps the provided logger and allows for a callable class', () => {
       const logger = new Signale() as jest.Mocked<Signale>
@@ -221,47 +221,73 @@ describe('Toolkit#constructor', () => {
     p.exit = jest.fn()
   })
 
-  it('exits if the event is not allowed with an array of events', () => {
-    // tslint:disable-next-line:no-unused-expression
-    new Toolkit({ logger, event: ['pull_request'] })
-    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect(logger.error.mock.calls).toMatchSnapshot()
+  // tslint:disable:no-unused-expression
+  describe('missing env vars', () => {
+    it('logs the expected string with missing env vars', () => {
+      delete process.env.HOME
+      new Toolkit({ logger })
+      expect(logger.warn.mock.calls).toMatchSnapshot()
+    })
   })
 
-  it('does not exit if the event is one of the allowed with an array of events', () => {
-    // tslint:disable-next-line:no-unused-expression
-    new Toolkit({ logger, event: ['pull_request', 'issues'] })
-    expect(process.exit).not.toHaveBeenCalled()
-    expect(logger.error).not.toHaveBeenCalled()
+  describe('events', () => {
+    it('exits if the event is not allowed with an array of events', () => {
+      new Toolkit({ logger, event: ['pull_request'] })
+      expect(process.exit).toHaveBeenCalledWith(NeutralCode)
+      expect(logger.error.mock.calls).toMatchSnapshot()
+    })
+
+    it('does not exit if the event is one of the allowed with an array of events', () => {
+      new Toolkit({ logger, event: ['pull_request', 'issues'] })
+      expect(process.exit).not.toHaveBeenCalled()
+      expect(logger.error).not.toHaveBeenCalled()
+    })
+
+    it('exits if the event is not allowed with a single event', () => {
+      new Toolkit({ logger, event: 'pull_request' })
+      expect(process.exit).toHaveBeenCalledWith(NeutralCode)
+      expect(logger.error.mock.calls).toMatchSnapshot()
+    })
+
+    it('exits if the event is not allowed with an array of events with actions', () => {
+      new Toolkit({ logger, event: ['pull_request.opened'] })
+      expect(process.exit).toHaveBeenCalledWith(NeutralCode)
+      expect(logger.error.mock.calls).toMatchSnapshot()
+    })
+
+    it('exits if the event is not allowed with a single event with an action', () => {
+      new Toolkit({ logger, event: 'pull_request.opened' })
+      expect(process.exit).toHaveBeenCalledWith(NeutralCode)
+      expect(logger.error.mock.calls).toMatchSnapshot()
+    })
   })
 
-  it('exits if the event is not allowed with a single event', () => {
-    // tslint:disable-next-line:no-unused-expression
-    new Toolkit({ logger, event: 'pull_request' })
-    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect(logger.error.mock.calls).toMatchSnapshot()
+  describe('secrets', () => {
+    it('does nothing when passed an empty array', () => {
+      logger.fatal = jest.fn()
+      new Toolkit({ logger, secrets: [] })
+      expect(logger.fatal).not.toHaveBeenCalled()
+    })
+
+    it('does nothing when no required secrets are missing', () => {
+      process.env.I_EXIST = 'boo'
+      logger.fatal = jest.fn()
+      new Toolkit({ logger, secrets: ['I_EXIST'] })
+      expect(logger.fatal).not.toHaveBeenCalled()
+    })
+
+    it('calls the exit.failure with missing secrets', () => {
+      // Delete this, juuuust in case
+      delete process.env.DO_NOT_EXIST
+
+      logger.fatal = jest.fn()
+      new Toolkit({ logger, secrets: ['DO_NOT_EXIST'] })
+      expect(logger.fatal).toHaveBeenCalled()
+      expect(logger.fatal.mock.calls).toMatchSnapshot()
+    })
   })
 
-  it('exits if the event is not allowed with an array of events with actions', () => {
-    // tslint:disable-next-line:no-unused-expression
-    new Toolkit({ logger, event: ['pull_request.opened'] })
-    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect(logger.error.mock.calls).toMatchSnapshot()
-  })
-
-  it('exits if the event is not allowed with a single event with an action', () => {
-    // tslint:disable-next-line:no-unused-expression
-    new Toolkit({ logger, event: 'pull_request.opened' })
-    expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-    expect(logger.error.mock.calls).toMatchSnapshot()
-  })
-
-  it('logs the expected string with missing env vars', () => {
-    delete process.env.HOME
-    new Toolkit({ logger }) // tslint:disable-line:no-unused-expression
-    expect(logger.warn.mock.calls).toMatchSnapshot()
-  })
-
+  // tslint:enable:no-unused-expression
   afterEach(() => {
     global.process.exit = exit
   })

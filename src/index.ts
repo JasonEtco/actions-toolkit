@@ -11,7 +11,16 @@ import { GitHub } from './github'
 import { Store } from './store'
 
 export interface ToolkitOptions {
+  /**
+   * An optional event or list of events that are supported by this Action. If
+   * a different event triggers this Action, it will exit with a neutral status.
+   */
   event?: string | string[],
+  /**
+   * An optional list of secrets that are required for this Action to function. If
+   * any secrets are missing, this Action will exit with a failing status.
+   */
+  secrets?: string[],
   logger?: Signale
 }
 
@@ -106,7 +115,10 @@ export class Toolkit {
     this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
     this.store = new Store(this.context.workflow, this.workspace)
+
+    // Check stuff
     this.checkAllowedEvents(this.opts.event)
+    this.checkRequiredSecrets(this.opts.secrets)
   }
 
   /**
@@ -285,5 +297,19 @@ export class Toolkit {
       const warning = `There are environment variables missing from this runtime, but would be present on GitHub.\n${list}`
       this.log.warn(warning)
     }
+  }
+
+  /**
+   * The Action should fail if there are secrets it needs but does not have
+   */
+  private checkRequiredSecrets (secrets?: string[]) {
+    if (!secrets || secrets.length === 0) return
+    // Filter missing but required secrets
+    const requiredButMissing = secrets.filter(key => !process.env.hasOwnProperty(key))
+    // Everything we need is here
+    if (requiredButMissing.length === 0) return
+    // Exit with a failing status
+    const list = requiredButMissing.map(key => `- ${key}`).join('\n')
+    this.exit.failure(`The following secrets are required for this GitHub Action to run:\n${list}`)
   }
 }
