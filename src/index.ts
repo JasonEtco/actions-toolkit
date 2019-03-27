@@ -11,7 +11,15 @@ import { GitHub } from './github'
 import { Store } from './store'
 
 export interface ToolkitOptions {
+  /**
+   * An optional event or list of events that are supported by this Action. If
+   * a different event triggers this Action, it will exit with a neutral status.
+   */
   event?: string | string[],
+  /**
+   * An optional list of secrets that are required for this Action to function. If
+   * any secrets are missing, this Action will exit with a failing status.
+   */
   secrets?: string[],
   logger?: Signale
 }
