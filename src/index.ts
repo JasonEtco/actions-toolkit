@@ -268,9 +268,12 @@ export class Toolkit {
    */
   private wrapLogger (logger?: Signale) {
     if (!logger) logger = new Signale({ config: { underlineLabel: false } })
+    // Create a callable function
     const fn = logger.info.bind(logger)
+    // Add the log methods onto the function
     const wrapped = Object.assign(fn, logger)
-    Object.setPrototypeOf(wrapped, Signale.prototype)
+    // Clone the prototype
+    Object.setPrototypeOf(wrapped, logger)
     return wrapped
   }
 
