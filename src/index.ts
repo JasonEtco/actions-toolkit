@@ -269,7 +269,9 @@ export class Toolkit {
   private wrapLogger (logger?: Signale) {
     if (!logger) logger = new Signale({ config: { underlineLabel: false } })
     const fn = logger.info.bind(logger)
-    return Object.assign(fn, logger)
+    const wrapped = Object.assign(fn, logger)
+    Object.setPrototypeOf(wrapped, Signale.prototype)
+    return wrapped
   }
 
   /**
