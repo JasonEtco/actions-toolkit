@@ -285,9 +285,7 @@ export class Toolkit {
       'GITHUB_EVENT_NAME',
       'GITHUB_EVENT_PATH',
       'GITHUB_WORKSPACE',
-      'GITHUB_SHA',
-      'GITHUB_REF',
-      'GITHUB_TOKEN'
+      'GITHUB_SHA'
     ]
 
     const requiredButMissing = requiredEnvVars.filter(key => !process.env.hasOwnProperty(key))
