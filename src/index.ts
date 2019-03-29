@@ -11,11 +11,48 @@ import { GitHub } from './github'
 import { Store } from './store'
 
 export interface ToolkitOptions {
+  /**
+   * An optional event or list of events that are supported by this Action. If
+   * a different event triggers this Action, it will exit with a neutral status.
+   */
   event?: string | string[],
+  /**
+   * An optional list of secrets that are required for this Action to function. If
+   * any secrets are missing, this Action will exit with a failing status.
+   */
+  secrets?: string[],
   logger?: Signale
 }
 
 export class Toolkit {
+  /**
+   * Run an asynchronous function that accepts a toolkit as its argument, and fail if
+   * an error occurs.
+   *
+   * @param func - Async function to run
+   * @param [opts] - Options to pass to the toolkit
+   *
+   * @example This is generally used to run a `main` async function:
+   *
+   * ```js
+   * Toolkit.run(async tools => {
+   *   // Action code here.
+   * }, { event: 'push' })
+   * ```
+   */
+  public static async run (func: (tools: Toolkit) => unknown, opts?: ToolkitOptions) {
+    const tools = new Toolkit(opts)
+
+    try {
+      const ret = func(tools)
+      // If the return value of the provided function is an unresolved Promise
+      // await that Promise before return the value, otherwise return as normal
+      return ret instanceof Promise ? await ret : ret
+    } catch (err) {
+      tools.exit.failure(err)
+    }
+  }
+
   public context: Context
 
   /**
@@ -71,14 +108,17 @@ export class Toolkit {
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
 
-    this.exit = new Exit()
+    this.exit = new Exit(this.log)
     this.context = new Context()
     this.workspace = process.env.GITHUB_WORKSPACE as string
     this.token = process.env.GITHUB_TOKEN as string
     this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
     this.store = new Store(this.context.workflow, this.workspace)
+
+    // Check stuff
     this.checkAllowedEvents(this.opts.event)
+    this.checkRequiredSecrets(this.opts.secrets)
   }
 
   /**
@@ -228,8 +268,13 @@ export class Toolkit {
    */
   private wrapLogger (logger?: Signale) {
     if (!logger) logger = new Signale({ config: { underlineLabel: false } })
+    // Create a callable function
     const fn = logger.info.bind(logger)
-    return Object.assign(fn, logger)
+    // Add the log methods onto the function
+    const wrapped = Object.assign(fn, logger)
+    // Clone the prototype
+    Object.setPrototypeOf(wrapped, logger)
+    return wrapped
   }
 
   /**
@@ -245,9 +290,7 @@ export class Toolkit {
       'GITHUB_EVENT_NAME',
       'GITHUB_EVENT_PATH',
       'GITHUB_WORKSPACE',
-      'GITHUB_SHA',
-      'GITHUB_REF',
-      'GITHUB_TOKEN'
+      'GITHUB_SHA'
     ]
 
     const requiredButMissing = requiredEnvVars.filter(key => !process.env.hasOwnProperty(key))
@@ -257,5 +300,19 @@ export class Toolkit {
       const warning = `There are environment variables missing from this runtime, but would be present on GitHub.\n${list}`
       this.log.warn(warning)
     }
+  }
+
+  /**
+   * The Action should fail if there are secrets it needs but does not have
+   */
+  private checkRequiredSecrets (secrets?: string[]) {
+    if (!secrets || secrets.length === 0) return
+    // Filter missing but required secrets
+    const requiredButMissing = secrets.filter(key => !process.env.hasOwnProperty(key))
+    // Everything we need is here
+    if (requiredButMissing.length === 0) return
+    // Exit with a failing status
+    const list = requiredButMissing.map(key => `- ${key}`).join('\n')
+    this.exit.failure(`The following secrets are required for this GitHub Action to run:\n${list}`)
   }
 }
