@@ -159,12 +159,18 @@ describe('Toolkit', () => {
     })
   })
 
-  describe('#warnForMissingEnvVars', () => {
-    it('throws with the expected string', () => {
-      const home = process.env.HOME
-      delete process.env.HOME
-      expect(() => new Toolkit()).toThrowErrorMatchingSnapshot()
-      process.env.HOME = home
+  describe('#wrapLogger', () => {
+    it('wraps the provided logger and allows for a callable class', () => {
+      const logger = new Signale() as jest.Mocked<Signale>
+      logger.info = jest.fn()
+      const twolkit = new Toolkit({ logger })
+
+      twolkit.log('Hello!')
+      twolkit.log.info('Hi!')
+
+      expect(logger.info).toHaveBeenCalledTimes(2)
+      expect(logger.info).toHaveBeenCalledWith('Hello!')
+      expect(logger.info).toHaveBeenCalledWith('Hi!')
     })
   })
 })
@@ -216,6 +222,12 @@ describe('Toolkit#constructor', () => {
     new Toolkit({ logger, event: 'pull_request.opened' })
     expect(process.exit).toHaveBeenCalledWith(NeutralCode)
     expect(logger.error.mock.calls).toMatchSnapshot()
+  })
+
+  it('logs the expected string with missing env vars', () => {
+    delete process.env.HOME
+    new Toolkit({ logger }) // tslint:disable-line:no-unused-expression
+    expect(logger.warn.mock.calls).toMatchSnapshot()
   })
 
   afterEach(() => {

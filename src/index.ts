@@ -246,7 +246,8 @@ export class Toolkit {
       'GITHUB_EVENT_PATH',
       'GITHUB_WORKSPACE',
       'GITHUB_SHA',
-      'GITHUB_REF'
+      'GITHUB_REF',
+      'GITHUB_TOKEN'
     ]
 
     const requiredButMissing = requiredEnvVars.filter(key => !process.env.hasOwnProperty(key))
@@ -254,7 +255,7 @@ export class Toolkit {
       // This isn't being run inside of a GitHub Action environment!
       const list = requiredButMissing.map(key => `- ${key}`).join('\n')
       const warning = `There are environment variables missing from this runtime, but would be present on GitHub.\n${list}`
-      throw new Error(warning)
+      this.log.warn(warning)
     }
   }
 }
