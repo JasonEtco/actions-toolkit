@@ -117,10 +117,11 @@ Toolkit.run(async tools => {
 Returns an [Octokit SDK](https://octokit.github.io/rest.js) client authenticated for this repository. See [https://octokit.github.io/rest.js](https://octokit.github.io/rest.js) for the API.
 
 ```js
-const newIssue = await tools.github.issues.create(tools.context.repo({
+const newIssue = await tools.github.issues.create({
+  ...tools.context.repo,
   title: 'New issue!',
   body: 'Hello Universe!'
-}))
+})
 ```
 
 You can also make GraphQL requests:

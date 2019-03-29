@@ -79,10 +79,11 @@ export class Toolkit {
    * An Octokit SDK client authenticated for this repository. See https://octokit.github.io/rest.js for the API.
    *
    * ```js
-   * const newIssue = await tools.github.issues.create(context.repo({
+   * const newIssue = await tools.github.issues.create({
+   *   ...tools.context.repo,
    *   title: 'New issue!',
    *   body: 'Hello Universe!'
-   * }))
+   * })
    * ```
    */
   public github: GitHub
