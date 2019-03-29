@@ -203,6 +203,10 @@ describe('Toolkit', () => {
       expect(logger.info).toHaveBeenCalledTimes(2)
       expect(logger.info).toHaveBeenCalledWith('Hello!')
       expect(logger.info).toHaveBeenCalledWith('Hi!')
+
+      // Ensure that prototype methods were carried over
+      expect(twolkit.log.disable).toBeInstanceOf(Function)
+      expect(twolkit.log.disable).toEqual(logger.disable)
     })
   })
 })
