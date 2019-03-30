@@ -114,7 +114,11 @@ test('creates project with labels passed to Dockerfile from questionnaire', asyn
   expect(logger.info).toHaveBeenCalledWith(
     expect.stringMatching(/Creating index.js/)
   )
+  expect(logger.info).toHaveBeenCalledWith(
+    expect.stringMatching(/Creating index.test.js/)
+  )
   expect(readGeneratedFile('package.json')).toMatchSnapshot('package.json')
   expect(readGeneratedFile('Dockerfile')).toMatchSnapshot('Dockerfile')
   expect(readGeneratedFile('index.js')).toMatchSnapshot('index.js')
+  expect(readGeneratedFile('index.test.js')).toMatchSnapshot('index.test.js')
 })
