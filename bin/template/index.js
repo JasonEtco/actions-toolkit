@@ -1,4 +1,6 @@
 const { Toolkit } = require('actions-toolkit')
-const tools = new Toolkit()
 
-console.log(tools.arguments)
+// Run your GitHub Action!
+Toolkit.run(async tools => {
+  tools.log.info(tools.arguments)
+})
