@@ -118,6 +118,10 @@ function createPackageJson (name) {
     name,
     private: true,
     main: 'index.js',
+    scripts: {
+      start: 'node ./index.js',
+      test: 'jest'
+    },
     dependencies: {
       'actions-toolkit': `^${version}`
     },

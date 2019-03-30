@@ -74,6 +74,10 @@ exports[`creates project with labels passed to Dockerfile from questionnaire: pa
   "name": "__tmp/my-project-name",
   "private": true,
   "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "test": "jest"
+  },
   "dependencies": {
     "actions-toolkit": "^1.0.0-static-version-for-test"
   },
