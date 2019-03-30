@@ -100,13 +100,17 @@ async function createDockerfile (answers) {
  * @returns {object} The `package.json` contents.
  */
 function createPackageJson (name) {
-  const { version } = require('../package.json')
+  const { version, devDependencies } = require('../package.json')
+  console.log(version, devDependencies)
   return {
     name,
     private: true,
     main: 'index.js',
     dependencies: {
       'actions-toolkit': `^${version}`
+    },
+    devDependencies: {
+      jest: devDependencies.jest
     }
   }
 }
@@ -152,12 +156,12 @@ module.exports = async function createAction (argv, signale = new Signale({
   // Create the templated files
   const dockerfile = await createDockerfile(metadata)
   const packageJson = createPackageJson(directoryName)
-  const entrypoint = await readTemplate('entrypoint.js')
+  const entrypoint = await readTemplate('index.js')
 
   await Promise.all([
     ['package.json', JSON.stringify(packageJson, null, 2)],
     ['Dockerfile', dockerfile],
-    ['entrypoint.js', entrypoint]
+    ['index.js', entrypoint]
   ].map(async ([filename, contents]) => {
     signale.info(`Creating ${filename}...`)
     await writeFile(path.join(base, filename), contents)

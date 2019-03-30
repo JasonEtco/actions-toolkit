@@ -30,16 +30,18 @@ RUN npm ci
 # Copy the rest of your action's code
 COPY . .
 
-# Run \`node /entrypoint.js\`
-ENTRYPOINT ["node", "/entrypoint.js"]
+# Run \`node /index.js\`
+ENTRYPOINT ["node", "/index.js"]
 
 `;
 
-exports[`creates project with labels passed to Dockerfile from questionnaire: entrypoint.js 1`] = `
+exports[`creates project with labels passed to Dockerfile from questionnaire: index.js 1`] = `
 const { Toolkit } = require('actions-toolkit')
-const tools = new Toolkit()
 
-console.log(tools.arguments)
+// Run your GitHub Action!
+Toolkit.run(async tools => {
+  tools.log.info(tools.arguments)
+})
 
 `;
 
@@ -50,6 +52,9 @@ exports[`creates project with labels passed to Dockerfile from questionnaire: pa
   "main": "index.js",
   "dependencies": {
     "actions-toolkit": "^1.0.0-static-version-for-test"
+  },
+  "devDependencies": {
+    "jest": "1.0.0-static-version-for-test"
   }
 }
 `;

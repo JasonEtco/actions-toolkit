@@ -80,7 +80,12 @@ test('exits with a failure message when a user cancels the questionnaire', async
 })
 
 test('creates project with labels passed to Dockerfile from questionnaire', async () => {
-  jest.mock('../package.json', () => ({ version: '1.0.0-static-version-for-test' }))
+  jest.mock('../package.json', () => ({
+    version: '1.0.0-static-version-for-test',
+    devDependencies: {
+      jest: '1.0.0-static-version-for-test'
+    }
+  }))
 
   require('enquirer').__setAnswers({
     name: 'My Project Name',
@@ -107,9 +112,9 @@ test('creates project with labels passed to Dockerfile from questionnaire', asyn
     expect.stringMatching(/Creating Dockerfile/)
   )
   expect(logger.info).toHaveBeenCalledWith(
-    expect.stringMatching(/Creating entrypoint.js/)
+    expect.stringMatching(/Creating index.js/)
   )
   expect(readGeneratedFile('package.json')).toMatchSnapshot('package.json')
   expect(readGeneratedFile('Dockerfile')).toMatchSnapshot('Dockerfile')
-  expect(readGeneratedFile('entrypoint.js')).toMatchSnapshot('entrypoint.js')
+  expect(readGeneratedFile('index.js')).toMatchSnapshot('index.js')
 })
