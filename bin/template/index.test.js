@@ -3,9 +3,12 @@ const { Toolkit } = require('actions-toolkit')
 describe(':NAME', () => {
   let action, tools
 
+  // Mock Toolkit.run to define `action` so we can call it
+  Toolkit.run = jest.fn((actionFn) => { action = actionFn })
+  // Load up our entrypoint file
+  require('.')
+
   beforeEach(() => {
-    // Mock Toolkit.run to define `action` so we can call it
-    Toolkit.run = jest.fn((actionFn) => { action = actionFn })
     // Create a new Toolkit instance
     tools = new Toolkit()
     // Mock methods on it!
