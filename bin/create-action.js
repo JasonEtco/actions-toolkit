@@ -101,7 +101,6 @@ async function createDockerfile (answers) {
  */
 function createPackageJson (name) {
   const { version, devDependencies } = require('../package.json')
-  console.log(version, devDependencies)
   return {
     name,
     private: true,
