@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Context #repo return error for context.repo when repository doesn't exist 1`] = `"context.repo requires a GITHUB_REPOSITORY environment variable like 'owner/repo'"`;
+
 exports[`Context .payload returns the payload object 1`] = `
 Object {
   "action": "opened",

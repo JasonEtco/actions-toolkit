@@ -1,6 +1,6 @@
 {
   "name": "actions-toolkit",
-  "version": "1.10.0",
+  "version": "2.0.0-beta.2",
   "description": "A toolkit for building GitHub Actions in Node.js",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -59,7 +59,7 @@
     "enquirer": "^2.3.0",
     "execa": "^1.0.0",
     "flat-cache": "^2.0.1",
-    "js-yaml": "^3.12.1",
+    "js-yaml": "^3.13.0",
     "minimist": "^1.2.0",
     "signale": "^1.4.0"
   },

@@ -70,47 +70,28 @@ export class Context {
     this.actor = process.env.GITHUB_ACTOR as string
   }
 
-  /**
-   * Return the `owner` and `repo` params for making API requests against a
-   * repository.
-   *
-   * ```js
-   * const params = context.repo({path: '.github/config.yml'})
-   * // Returns: {owner: 'username', repo: 'reponame', path: '.github/config.yml'}
-   * ```
-   *
-   * @param object - Params to be merged with the repo params.
-   *
-   */
-  public repo<T> (object?: T) {
-    const repo = this.payload.repository
+  public get issue () {
+    const payload = this.payload
 
-    if (!repo) {
-      throw new Error('context.repo() is not supported for this webhook event.')
+    return {
+      ...this.repo,
+      number: (payload.issue || payload.pull_request || payload).number
     }
-
-    return Object.assign({
-      owner: repo.owner.login,
-      repo: repo.name
-    }, object)
   }
 
-  /**
-   * Return the `owner`, `repo`, and `number` params for making API requests
-   * against an issue or pull request. The object passed in will be merged with
-   * the repo params.
-   *
-   * ```js
-   * const params = context.issue({body: 'Hello World!'})
-   * // Returns: {owner: 'username', repo: 'reponame', number: 123, body: 'Hello World!'}
-   * ```
-   *
-   * @param object - Params to be merged with the issue params.
-   */
-  public issue<T> (object?: T) {
-    const payload = this.payload
-    return Object.assign({
-      number: (payload.issue || payload.pull_request || payload).number
-    }, this.repo(object))
+  public get repo () {
+    if (process.env.GITHUB_REPOSITORY) {
+      const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
+      return { owner, repo }
+    }
+
+    if (this.payload.repository) {
+      return {
+        owner: this.payload.repository.owner.login,
+        repo: this.payload.repository.name
+      }
+    }
+
+    throw new Error('context.repo requires a GITHUB_REPOSITORY environment variable like \'owner/repo\'')
   }
 }

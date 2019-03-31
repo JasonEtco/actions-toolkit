@@ -118,10 +118,11 @@ Toolkit.run(async tools => {
 Returns an [Octokit SDK](https://octokit.github.io/rest.js) client authenticated for this repository. See [https://octokit.github.io/rest.js](https://octokit.github.io/rest.js) for the API.
 
 ```js
-const newIssue = await tools.github.issues.create(tools.context.repo({
+const newIssue = await tools.github.issues.create({
+  ...tools.context.repo,
   title: 'New issue!',
   body: 'Hello Universe!'
-}))
+})
 ```
 
 You can also make GraphQL requests:
@@ -338,23 +339,13 @@ The Git `sha` at which the action was triggered
 
 The name of the workflow that was triggered.
 
-#### tools.context.issue([object])
+#### tools.context.issue
 
-Return the `owner`, `repo`, and `number` params for making API requests against an issue or pull request. The object passed in will be merged with the repo params.
+The `owner`, `repo`, and `number` params for making API requests against an issue or pull request.
 
-```js
-const params = context.issue({body: 'Hello World!'})
-// Returns: {owner: 'username', repo: 'reponame', number: 123, body: 'Hello World!'}
-```
+#### tools.context.repo
 
-#### tools.context.repo([object])
-
-Return the `owner` and `repo` params for making API requests against a repository.
-
-```js
-const params = context.repo({path: '.github/config.yml'})
-// Returns: {owner: 'username', repo: 'reponame', path: '.github/config.yml'}
-```
+The `owner` and `repo` params for making API requests against a repository. This uses the `GITHUB_REPOSITORY` environment variable under the hood.
 
 ## Actions using actions-toolkit
 
