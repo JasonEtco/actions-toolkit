@@ -81,7 +81,7 @@ export class Context {
 
   public get repo () {
     if (!process.env.GITHUB_REPOSITORY) {
-      throw new Error('To use context.repo, you must have a GITHUB_REPOSITORY environment variable.')
+      throw new Error('context.repo requires a GITHUB_REPOSITORY environment variable like \'owner/repo\'')
     }
 
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
