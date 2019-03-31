@@ -41,7 +41,8 @@ This will create a new folder `my-cool-action` with the following files:
 
 ```
 ├── Dockerfile
-├── entrypoint.js
+├── index.js
+├── index.test.js
 └── package.json
 ```
 
@@ -153,7 +154,7 @@ In the GitHub Actions output, this is the result:
 ℹ  info      Welcome to this example!
 ℹ  info      Gonna try this...
 ✖  fatal     Error: Something bad happened! 
-    at Object.<anonymous> (/entrypoint.js:5:17)
+    at Object.<anonymous> (/index.js:5:17)
     at Module._compile (internal/modules/cjs/loader.js:734:30)
 ```
 
