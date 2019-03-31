@@ -93,6 +93,19 @@ async function createDockerfile (answers) {
 }
 
 /**
+ * Creates an index.test.js contents string, replacing variables in the index.test.js template
+ * with values passed in by the user from the CLI prompt.
+ *
+ * @param {PromptAnswers} answers The CLI prompt answers.
+ * @returns {Promise<string>} The index.test.js contents.
+ */
+async function createIndexTest (answers) {
+  const indexTest = await readTemplate('index.test.js')
+  return indexTest
+    .replace(':NAME', answers.name)
+}
+
+/**
  * Creates a `package.json` object with the latest version
  * of `actions-toolkit` ready to be installed.
  *
@@ -100,13 +113,20 @@ async function createDockerfile (answers) {
  * @returns {object} The `package.json` contents.
  */
 function createPackageJson (name) {
-  const { version } = require('../package.json')
+  const { version, devDependencies } = require('../package.json')
   return {
     name,
     private: true,
     main: 'index.js',
+    scripts: {
+      start: 'node ./index.js',
+      test: 'jest'
+    },
     dependencies: {
       'actions-toolkit': `^${version}`
+    },
+    devDependencies: {
+      jest: devDependencies.jest
     }
   }
 }
@@ -151,13 +171,15 @@ module.exports = async function createAction (argv, signale = new Signale({
 
   // Create the templated files
   const dockerfile = await createDockerfile(metadata)
+  const indexTest = await createIndexTest(metadata)
   const packageJson = createPackageJson(directoryName)
-  const entrypoint = await readTemplate('entrypoint.js')
+  const entrypoint = await readTemplate('index.js')
 
   await Promise.all([
     ['package.json', JSON.stringify(packageJson, null, 2)],
     ['Dockerfile', dockerfile],
-    ['entrypoint.js', entrypoint]
+    ['index.js', entrypoint],
+    ['index.test.js', indexTest]
   ].map(async ([filename, contents]) => {
     signale.info(`Creating ${filename}...`)
     await writeFile(path.join(base, filename), contents)

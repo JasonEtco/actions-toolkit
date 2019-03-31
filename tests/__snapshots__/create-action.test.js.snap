@@ -30,16 +30,45 @@ RUN npm ci
 # Copy the rest of your action's code
 COPY . .
 
-# Run \`node /entrypoint.js\`
-ENTRYPOINT ["node", "/entrypoint.js"]
+# Run \`node /index.js\`
+ENTRYPOINT ["node", "/index.js"]
 
 `;
 
-exports[`creates project with labels passed to Dockerfile from questionnaire: entrypoint.js 1`] = `
+exports[`creates project with labels passed to Dockerfile from questionnaire: index.js 1`] = `
 const { Toolkit } = require('actions-toolkit')
-const tools = new Toolkit()
 
-console.log(tools.arguments)
+// Run your GitHub Action!
+Toolkit.run(async tools => {
+  tools.exit.success('We did it!')
+})
+
+`;
+
+exports[`creates project with labels passed to Dockerfile from questionnaire: index.test.js 1`] = `
+const { Toolkit } = require('actions-toolkit')
+
+describe('My Project Name', () => {
+  let action, tools
+
+  // Mock Toolkit.run to define \`action\` so we can call it
+  Toolkit.run = jest.fn((actionFn) => { action = actionFn })
+  // Load up our entrypoint file
+  require('.')
+
+  beforeEach(() => {
+    // Create a new Toolkit instance
+    tools = new Toolkit()
+    // Mock methods on it!
+    tools.exit.success = jest.fn()
+  })
+
+  it('exits successfully', () => {
+    action(tools)
+    expect(tools.exit.success).toHaveBeenCalled()
+    expect(tools.exit.success).toHaveBeenCalledWith('We did it!')
+  })
+})
 
 `;
 
@@ -48,8 +77,15 @@ exports[`creates project with labels passed to Dockerfile from questionnaire: pa
   "name": "__tmp/my-project-name",
   "private": true,
   "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "test": "jest"
+  },
   "dependencies": {
     "actions-toolkit": "^1.0.0-static-version-for-test"
+  },
+  "devDependencies": {
+    "jest": "1.0.0-static-version-for-test"
   }
 }
 `;
