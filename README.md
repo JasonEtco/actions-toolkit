@@ -344,7 +344,7 @@ The `owner`, `repo`, and `number` params for making API requests against an issu
 
 #### tools.context.repo
 
-The `owner` and `repo` params for making API requests against a repository.
+The `owner` and `repo` params for making API requests against a repository. This uses the `GITHUB_REPOSITORY` environment variable under the hood.
 
 ## Actions using actions-toolkit
 
