@@ -31,13 +31,10 @@ describe('Context', () => {
     })
 
     it('return error for context.repo when repository doesn\'t exist', () => {
-      context.payload = {}
-      try {
-        // tslint:disable-next-line no-unused-expression
-        context.repo
-      } catch (e) {
-        expect(e.message).toMatch('context.repo is not supported')
-      }
+      const before = process.env.GITHUB_REPOSITORY
+      delete process.env.GITHUB_REPOSITORY
+      expect(() => context.repo).toThrowErrorMatchingSnapshot()
+      process.env.GITHUB_REPOSITORY = before
     })
   })
 
