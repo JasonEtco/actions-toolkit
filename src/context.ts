@@ -80,11 +80,18 @@ export class Context {
   }
 
   public get repo () {
-    if (!process.env.GITHUB_REPOSITORY) {
-      throw new Error('context.repo requires a GITHUB_REPOSITORY environment variable like \'owner/repo\'')
+    if (process.env.GITHUB_REPOSITORY) {
+      const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
+      return { owner, repo }
     }
 
-    const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
-    return { owner, repo }
+    if (this.payload.repository) {
+      return {
+        owner: this.payload.repository.owner.login,
+        repo: this.payload.repository.name
+      }
+    }
+
+    throw new Error('context.repo requires a GITHUB_REPOSITORY environment variable like \'owner/repo\'')
   }
 }

@@ -26,11 +26,24 @@ describe('Context', () => {
   })
 
   describe('#repo', () => {
-    it('returns attributes from repository payload', () => {
+    it('returns attributes from the GITHUB_REPOSITORY', () => {
       expect(context.repo).toEqual({ owner: 'JasonEtco', repo: 'test' })
     })
 
+    it('returns attributes from the repository payload', () => {
+      context.payload.repository = {
+        name: 'you',
+        owner: { login: 'github' }
+      }
+
+      const before = process.env.GITHUB_REPOSITORY
+      delete process.env.GITHUB_REPOSITORY
+      expect(context.repo).toEqual({ owner: 'github', repo: 'you' })
+      process.env.GITHUB_REPOSITORY = before
+    })
+
     it('return error for context.repo when repository doesn\'t exist', () => {
+      delete context.payload.repository
       const before = process.env.GITHUB_REPOSITORY
       delete process.env.GITHUB_REPOSITORY
       expect(() => context.repo).toThrowErrorMatchingSnapshot()
