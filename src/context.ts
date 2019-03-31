@@ -80,16 +80,11 @@ export class Context {
   }
 
   public get repo () {
-    const repo = this.payload.repository
-
-    if (!repo) {
-      throw new Error('context.repo is not supported for this webhook event.')
+    if (!process.env.GITHUB_REPOSITORY) {
+      throw new Error('context.repo requires a GITHUB_REPOSITORY environment variable like \'owner/repo\'')
     }
 
-    return {
-      owner: repo.owner.login,
-      repo: repo.name
-    }
+    const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
+    return { owner, repo }
   }
-
 }
