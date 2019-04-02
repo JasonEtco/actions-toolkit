@@ -145,7 +145,7 @@ export class Toolkit {
    * const pkg = toolkit.getPackageJSON()
    * ```
    */
-  public getPackageJSON (): object {
+  public getPackageJSON <T = object> (): T {
     const pathToPackage = path.join(this.workspace, 'package.json')
     if (!fs.existsSync(pathToPackage)) throw new Error('package.json could not be found in your project\'s root.')
     return require(pathToPackage)
@@ -171,7 +171,7 @@ export class Toolkit {
    * const cfg = toolkit.config('myaction')
    * ```
    */
-  public config (key: string): object {
+  public config <T = object> (key: string): T {
     if (/\..+rc/.test(key)) {
       // It's a file like .npmrc or .eslintrc!
       return JSON.parse(this.getFile(key))
