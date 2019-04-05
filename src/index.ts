@@ -171,7 +171,7 @@ export class Toolkit {
    * const cfg = toolkit.config('myaction')
    * ```
    */
-  public config <T = object> (key: string): T {
+  public config <T = any> (key: string): T {
     if (/\..+rc/.test(key)) {
       // It's a file like .npmrc or .eslintrc!
       return JSON.parse(this.getFile(key))
@@ -180,7 +180,7 @@ export class Toolkit {
       return yaml.safeLoad(this.getFile(key))
     } else {
       // It's a regular object key in the package.json
-      const pkg = this.getPackageJSON() as any
+      const pkg = this.getPackageJSON<T>() as any
       return pkg[key]
     }
   }
