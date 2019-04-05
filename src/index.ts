@@ -185,7 +185,7 @@ export class Toolkit {
       return yaml.safeLoad(this.getFile(key))
     } else {
       // It's a regular object key in the package.json
-      const pkg = this.getPackageJSON<T>() as any
+      const pkg = this.getPackageJSON<any>()
       return pkg[key]
     }
   }
