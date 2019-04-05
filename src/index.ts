@@ -103,7 +103,7 @@ export class Toolkit {
   constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
 
-    // Disable the underline to prevent extra white space in the Actions log output
+    // Create the logging instance
     this.log = this.wrapLogger(
       opts.logger || new Signale({ config: { underlineLabel: false } })
     )
@@ -111,12 +111,15 @@ export class Toolkit {
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
 
-    this.exit = new Exit(this.log)
-    this.context = new Context()
+    // Memoize environment variables and arguments
     this.workspace = process.env.GITHUB_WORKSPACE as string
     this.token = process.env.GITHUB_TOKEN as string
-    this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
+
+    // Setup nested objects
+    this.exit = new Exit(this.log)
+    this.context = new Context()
+    this.github = new GitHub(this.token)
     this.store = new Store(this.context.workflow, this.workspace)
 
     // Check stuff
