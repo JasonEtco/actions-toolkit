@@ -104,7 +104,9 @@ export class Toolkit {
     this.opts = opts
 
     // Disable the underline to prevent extra white space in the Actions log output
-    this.log = this.wrapLogger(opts.logger)
+    this.log = this.wrapLogger(
+      opts.logger || new Signale({ config: { underlineLabel: false } })
+    )
 
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
@@ -267,8 +269,7 @@ export class Toolkit {
   /**
    * Wrap a Signale logger so that its a callable class
    */
-  private wrapLogger (logger?: Signale) {
-    if (!logger) logger = new Signale({ config: { underlineLabel: false } })
+  private wrapLogger (logger: Signale) {
     // Create a callable function
     const fn = logger.info.bind(logger)
     // Add the log methods onto the function
