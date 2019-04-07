@@ -349,7 +349,7 @@ The `owner` and `repo` params for making API requests against a repository. This
 
 ## How to test your GitHub Actions
 
-Similar to building CLIs, GitHub Actions usually work by running a file with `node <file>`; this means that writing a complete test suite can be tricky. Here's a pattern for writing tests using actions-toolkit, by mocking `Toolkit.run`:
+Similar to building CLIs, GitHub Actions usually works by running a file with `node <file>`; this means that writing a complete test suite can be tricky. Here's a pattern for writing tests using actions-toolkit, by mocking `Toolkit.run`:
 
 <details>
 <summary>index.js</summary>
