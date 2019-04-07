@@ -103,18 +103,23 @@ export class Toolkit {
   constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
 
-    // Disable the underline to prevent extra white space in the Actions log output
-    this.log = this.wrapLogger(opts.logger)
+    // Create the logging instance
+    this.log = this.wrapLogger(
+      opts.logger || new Signale({ config: { underlineLabel: false } })
+    )
 
     // Print a console warning for missing environment variables
     this.warnForMissingEnvVars()
 
-    this.exit = new Exit(this.log)
-    this.context = new Context()
+    // Memoize environment variables and arguments
     this.workspace = process.env.GITHUB_WORKSPACE as string
     this.token = process.env.GITHUB_TOKEN as string
-    this.github = new GitHub(this.token)
     this.arguments = minimist(process.argv.slice(2))
+
+    // Setup nested objects
+    this.exit = new Exit(this.log)
+    this.context = new Context()
+    this.github = new GitHub(this.token)
     this.store = new Store(this.context.workflow, this.workspace)
 
     // Check stuff
@@ -145,7 +150,7 @@ export class Toolkit {
    * const pkg = toolkit.getPackageJSON()
    * ```
    */
-  public getPackageJSON (): object {
+  public getPackageJSON <T = object> (): T {
     const pathToPackage = path.join(this.workspace, 'package.json')
     if (!fs.existsSync(pathToPackage)) throw new Error('package.json could not be found in your project\'s root.')
     return require(pathToPackage)
@@ -171,7 +176,7 @@ export class Toolkit {
    * const cfg = toolkit.config('myaction')
    * ```
    */
-  public config (key: string): object {
+  public config <T = any> (key: string): T {
     if (/\..+rc/.test(key)) {
       // It's a file like .npmrc or .eslintrc!
       return JSON.parse(this.getFile(key))
@@ -180,7 +185,7 @@ export class Toolkit {
       return yaml.safeLoad(this.getFile(key))
     } else {
       // It's a regular object key in the package.json
-      const pkg = this.getPackageJSON() as any
+      const pkg = this.getPackageJSON<any>()
       return pkg[key]
     }
   }
@@ -267,8 +272,7 @@ export class Toolkit {
   /**
    * Wrap a Signale logger so that its a callable class
    */
-  private wrapLogger (logger?: Signale) {
-    if (!logger) logger = new Signale({ config: { underlineLabel: false } })
+  private wrapLogger (logger: Signale) {
     // Create a callable function
     const fn = logger.info.bind(logger)
     // Add the log methods onto the function
