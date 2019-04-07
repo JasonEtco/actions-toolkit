@@ -4,7 +4,7 @@
   A toolkit for building GitHub Actions in Node.js<br>
   <a href="#usage">Usage</a> •
   <a href="#api">API</a> •
-  <a href="#how-to-test-github-actions">How to test your Action</a> •
+  <a href="#how-to-test-your-github-actions">How to test your Action</a> •
   <a href="#faq">FAQ</a>
 </p>
 
