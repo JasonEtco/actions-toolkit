@@ -4,7 +4,7 @@
   A toolkit for building GitHub Actions in Node.js<br>
   <a href="#usage">Usage</a> •
   <a href="#api">API</a> •
-  <a href="#actions-using-actions-toolkit">Actions using actions-toolkit</a> •
+  <a href="#how-to-test-your-github-actions">How to test your Action</a> •
   <a href="#faq">FAQ</a>
 </p>
 
@@ -347,12 +347,50 @@ The `owner`, `repo`, and `number` params for making API requests against an issu
 
 The `owner` and `repo` params for making API requests against a repository. This uses the `GITHUB_REPOSITORY` environment variable under the hood.
 
-## Actions using actions-toolkit
+## How to test your GitHub Actions
 
-- [create-an-issue](https://github.com/JasonEtco/create-an-issue)
-- [deploy-lambda-action](https://github.com/lannonbr/deploy-lambda-action)
-- [repo-permission-check-action](https://github.com/lannonbr/repo-permission-check-action)
-- [add-an-issue-reference-action](https://github.com/kentaro-m/add-an-issue-reference-action)
+Similar to building CLIs, GitHub Actions usually works by running a file with `node <file>`; this means that writing a complete test suite can be tricky. Here's a pattern for writing tests using actions-toolkit, by mocking `Toolkit.run`:
+
+<details>
+<summary>index.js</summary>
+
+```js
+const { Toolkit } = require('actions-toolkit')
+Toolkit.run(async tools => {
+  tools.log.success('Yay!')
+})
+```
+</details>
+
+
+<details>
+<summary>index.test.js</summary>
+
+```js
+const { Toolkit } = require('actions-toolkit')
+describe('tests', () => {
+  let action
+
+  beforeAll(() => {
+    // Mock `Toolkit.run` to redefine `action` when its called
+    Toolkit.run = fn => { action = fn }
+    // Require the index.js file, after we've mocked `Toolkit.run`
+    require('./index.js')
+  })
+
+  it('logs successfully', async () => {
+    // Create a fake instance of `Toolkit`
+    const fakeTools = new Toolkit()
+    // Mock the logger, or whatever else you need
+    fakeTools.log.success = jest.fn()
+    await action(fakeTools)
+    expect(fakeTools.log.success).toHaveBeenCalled()
+  })
+})
+```
+</details>
+
+You can then mock things by tweaking environment variables and redefining `tools.context.payload`. You can check out [this repo's tests](https://github.com/JasonEtco/create-an-issue/blob/master/tests/) as an example.
 
 ## FAQ
 
