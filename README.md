@@ -355,7 +355,6 @@ Similar to building CLIs, GitHub Actions usually work by running a file with `no
 <summary>index.js</summary>
 
 ```js
-// index.js
 const { Toolkit } = require('actions-toolkit')
 Toolkit.run(async tools => {
   tools.log.success('Yay!')
@@ -368,7 +367,6 @@ Toolkit.run(async tools => {
 <summary>index.test.js</summary>
 
 ```js
-// index.test.js`
 const { Toolkit } = require('actions-toolkit')
 describe('tests', () => {
   let action
