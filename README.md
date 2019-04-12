@@ -84,7 +84,7 @@ And/or strings that include an action (what actually happened to trigger this ev
 
 ```js
 const tools = new Toolkit({
-  event: ['issues.created']
+  event: ['issues.opened']
 })
 ```
 
