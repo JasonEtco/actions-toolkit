@@ -261,6 +261,17 @@ console.log(tools.arguments)
 // => { _: ['container:release'], app: 'web' }
 ```
 
+There is currently a known bug with strings with multiple word arguments being parsed incorrectly. Arguments that contain strings with multiple words need to currently pass the arguments in an array:
+```workflow
+args = [ "To do", "100" ]
+```
+
+Or have a different [action entrypoint file](https://github.com/actions/npm/blob/master/entrypoint.sh):
+```
+#!/bin/sh
+sh -c "npm $*"
+```
+
 <br>
 
 ### tools.token
