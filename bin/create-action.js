@@ -63,7 +63,7 @@ async function getActionMetadata () {
     {
       type: 'autocomplete',
       name: 'icon',
-      message: 'Choose an icon for your action. Visit https://feathericons.com for a visual reference.',
+      message: 'Choose an icon for your action. Visit https://developer.github.com/actions/creating-github-actions/creating-a-docker-container/#supported-feather-icons for a visual reference.',
       choices: icons,
       limit: 10
     },
