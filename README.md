@@ -14,9 +14,11 @@
 
 ## Motivation
 
+**actions-toolkit** is a wrapper around some fantastic open source libraries, and provides some helper methods for dealing with the GitHub Actions runtime. Actios all run in Docker containers, so this library aims to help you focus on your code and not the runtime. You can learn more about [building Actions in Node.js](https://jasonet.co/posts/building-github-actions-in-node/) to get started!
+
 After building a GitHub Action in Node.js, it was clear to me that I was writing code that other actions will want to use. Reading files from the repository, making requests to the GitHub API, or running arbitrary executables on the project, etc.
 
-So, I thought it'd be useful to build those out into library to help you build actions in Node.js :tada:
+So, I thought it'd be useful to build those out into a library to help you build actions in Node.js :tada:
 
 ## Usage
 
