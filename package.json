@@ -7,6 +7,10 @@
   "bin": {
     "actions-toolkit": "./bin/cli.js"
   },
+  "files": [
+    "/bin",
+    "/lib"
+  ],
   "scripts": {
     "build": "rimraf lib && tsc -p tsconfig.json",
     "lint": "tslint --project tests",
