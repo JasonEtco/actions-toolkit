@@ -132,6 +132,7 @@ You can also make GraphQL requests:
 ```js
 const result = await tools.github.graphql(query, variables)
 ```
+See [https://github.com/octokit/graphql.js](https://github.com/octokit/graphql.js) for more details on how to leverage the GraphQL API.
 
 <br>
 
