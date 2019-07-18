@@ -14,6 +14,25 @@ describe('Toolkit', () => {
     toolkit = new Toolkit({ logger: new Signale({ disabled: true }) })
   })
 
+  describe('constructor', () => {
+    it('different GitHub token', async () => {
+      toolkit = new Toolkit({
+        logger: new Signale({ disabled: true }),
+        token: 'customtoken'
+      })
+
+      const scoped = nock('https://api.github.com', {
+        reqheaders: {
+          authorization: 'token customtoken'
+        }
+      })
+        .get('/issues').reply(200, [])
+
+      await toolkit.github.issues.list()
+      expect(scoped.isDone()).toBe(true)
+    })
+  })
+
   describe('.run', () => {
     it('runs the async function passed to it', async () => {
       const spy = jest.fn(() => Promise.resolve('hi'))
