@@ -92,6 +92,13 @@ async function createDockerfile (answers) {
     .replace(':COLOR', answers.color)
 }
 
+/**
+ * Creates a action.yml contents string, replacing variables in the action.yml template
+ * with values passed in by the user from the CLI prompt.
+ *
+ * @param {PromptAnswers} answers The CLI prompt answers.
+ * @returns {Promise<string>} The action.yml contents.
+ */
 async function createActionYaml (answers) {
   const template = await readTemplate('actions.yml')
   return template
