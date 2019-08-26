@@ -100,7 +100,7 @@ async function createDockerfile (answers) {
  * @returns {Promise<string>} The action.yml contents.
  */
 async function createActionYaml (answers) {
-  const template = await readTemplate('actions.yml')
+  const template = await readTemplate('action.yml')
   return template
     .replace(':NAME', answers.name)
     .replace(':DESCRIPTION', answers.description)
