@@ -24,3 +24,5 @@ jobs:
         npm test
       env:
         CI: true
+    - name: codecov
+      run: npx codecov
