@@ -43,6 +43,7 @@ This will create a new folder `my-cool-action` with the following files:
 
 ```
 ├── Dockerfile
+├── action.yml
 ├── index.js
 ├── index.test.js
 └── package.json
