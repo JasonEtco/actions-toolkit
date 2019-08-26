@@ -104,6 +104,8 @@ async function createActionYaml (answers) {
   return template
     .replace(':NAME', answers.name)
     .replace(':DESCRIPTION', answers.description)
+    .replace(':ICON', answers.icon)
+    .replace(':COLOR', answers.color)
 }
 
 /**
