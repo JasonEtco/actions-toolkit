@@ -1,0 +1,6 @@
+name: :NAME
+description: :DESCRIPTION
+author: You!
+runs:
+  using: docker
+  image: Dockerfile
