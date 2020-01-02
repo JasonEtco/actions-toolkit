@@ -1,9 +1,9 @@
-import { GraphQlQueryResponse, Variables } from '@octokit/graphql'
+import { graphql } from '@octokit/graphql'
 import Octokit from '@octokit/rest'
 import { withDefaults } from './graphql'
 
 export class GitHub extends Octokit {
-  public graphql: (query: string, variables?: Variables) => Promise<GraphQlQueryResponse>
+  public graphql: typeof graphql
 
   constructor (token: string) {
     super({ auth: `token ${token}` })
