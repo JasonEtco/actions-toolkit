@@ -1,7 +1,7 @@
 <h3 align="center">GitHub Actions Toolkit</h3>
 
 <p align="center">
-  A toolkit for building GitHub Actions in Node.js<br>
+  An opinionated toolkit for building GitHub Actions in Node.js<br>
   <a href="#usage">Usage</a> •
   <a href="#api">API</a> •
   <a href="#how-to-test-your-github-actions">How to test your Action</a> •
@@ -10,15 +10,7 @@
 
 <p align="center"><a href="https://github.com/JasonEtco/actions-toolkit"><img alt="GitHub Actions status" src="https://github.com/JasonEtco/actions-toolkit/workflows/Node%20CI/badge.svg"></a> <a href="https://codecov.io/gh/JasonEtco/actions-toolkit/"><img src="https://badgen.now.sh/codecov/c/github/JasonEtco/actions-toolkit" alt="Codecov"></a></p>
 
-**Heads up!** This toolkit was built to work with Actions v1. There is [an official toolkit](https://github.com/actions/toolkit) for [Actions v2](https://github.blog/2019-08-08-github-actions-now-supports-ci-cd/) that you should check out. This one _may_ work for v2, but is not guaranteed, and will likely be deprecated in the near future.
-
-## Motivation
-
-**actions-toolkit** is a wrapper around some fantastic open source libraries, and provides some helper methods for dealing with the GitHub Actions runtime. Actions all run in Docker containers, so this library aims to help you focus on your code and not the runtime. You can learn more about [building Actions in Node.js](https://jasonet.co/posts/building-github-actions-in-node/) to get started!
-
-After building a GitHub Action in Node.js, it was clear to me that I was writing code that other actions will want to use. Reading files from the repository, making requests to the GitHub API, or running arbitrary executables on the project, etc.
-
-So, I thought it'd be useful to build those out into a library to help you build actions in Node.js :tada:
+This toolkit is an opinionated alternative to (and wrapper around) the [official toolkit](https://github.com/actions/toolkit). `actions/toolkit` makes many features optional in the interest of performance, so you may prefer to use it instead of this library.
 
 ## Usage
 
@@ -387,12 +379,20 @@ describe('tests', () => {
 
 You can then mock things by tweaking environment variables and redefining `tools.context.payload`. You can check out [this repo's tests](https://github.com/JasonEtco/create-an-issue/blob/master/tests/) as an example.
 
+## Motivation
+
+**actions-toolkit** is a wrapper around some fantastic open source libraries, and provides some helper methods for dealing with the GitHub Actions runtime. Actions all run in Docker containers, so this library aims to help you focus on your code and not the runtime. You can learn more about [building Actions in Node.js](https://jasonet.co/posts/building-github-actions-in-node/) to get started!
+
+After building a GitHub Action in Node.js, it was clear to me that I was writing code that other actions will want to use. Reading files from the repository, making requests to the GitHub API, or running arbitrary executables on the project, etc.
+
+So, I thought it'd be useful to build those out into a library to help you build actions in Node.js :tada:
+
 ## FAQ
-
-**Can you get me into the GitHub Actions beta?**
-
-I'm sorry, but I cannot.
 
 **Aren't these just wrappers around existing functions?**
 
 Yep! I just didn't want to rewrite them for my next Action, so here we are.
+
+**What's the difference between this and [actions/toolkit](https://github.com/actions/toolkit)?
+
+This library was the inspiration for the official toolkit. Nowadays, it's an opinionated alternative. My goal for the library is to make building simple actions easy, while the official toolkit needs to support more complicated use-cases (like performance and scaling concerns).
