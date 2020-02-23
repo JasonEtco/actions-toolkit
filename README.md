@@ -58,7 +58,6 @@ This will create a new folder `my-cool-action` with the following files:
 * [Parsing arguments](#toolsarguments)
 * [Reading files](#toolsgetfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
-* [In-repo configuration](#toolsconfigfilename)
 * [Pass information to another action](#toolsstore)
 * [End the action's process](#toolsexit)
 * [Inspect the webhook event payload](#toolscontext)
@@ -194,25 +193,6 @@ await tools.command('deploy', () => { i++ })
 console.log(i)
 // -> 3
 ```
-
-<br>
-
-### tools.config(filename)
-
-Get the configuration settings for this action in the project workspace. This method can be used in three different ways:
-
-```js
-// Get the .rc file, parsed as JSON
-const cfg = tools.config('.myactionrc')
-
-// Get the YAML file, parsed as JSON
-const cfg = tools.config('myaction.yml')
-
-// Get the property in package.json
-const cfg = tools.config('myaction')
-```
-
-If the filename looks like `.myfilerc` it will look for that file. If it's a YAML file, it will parse that file as a JSON object. Otherwise, it will return the value of the property in the `package.json` file of the project.
 
 <br>
 

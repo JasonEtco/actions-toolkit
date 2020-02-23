@@ -1,6 +1,5 @@
 import execa, { Options as ExecaOptions } from 'execa'
 import fs from 'fs'
-import yaml from 'js-yaml'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
 import * as core from '@actions/core'
@@ -172,40 +171,6 @@ export class Toolkit<I extends InputType = InputType> {
     const pathToPackage = path.join(this.workspace, 'package.json')
     if (!fs.existsSync(pathToPackage)) throw new Error('package.json could not be found in your project\'s root.')
     return require(pathToPackage)
-  }
-
-  /**
-   * Get the configuration settings for this action in the project workspace.
-   *
-   * @param key - If this is a string like `.myfilerc` it will look for that file.
-   * If it's a YAML file, it will parse that file as a JSON object. Otherwise, it will
-   * return the value of the property in the `package.json` file of the project.
-   *
-   * @example This method can be used in three different ways:
-   *
-   * ```js
-   * // Get the .rc file
-   * const cfg = toolkit.config('.myactionrc')
-   *
-   * // Get the YAML file
-   * const cfg = toolkit.config('myaction.yml')
-   *
-   * // Get the property in package.json
-   * const cfg = toolkit.config('myaction')
-   * ```
-   */
-  public config <T = any> (key: string): T {
-    if (/\..+rc/.test(key)) {
-      // It's a file like .npmrc or .eslintrc!
-      return JSON.parse(this.getFile(key))
-    } else if (key.endsWith('.yml') || key.endsWith('.yaml')) {
-      // It's a YAML file! Gotta serialize it!
-      return yaml.safeLoad(this.getFile(key))
-    } else {
-      // It's a regular object key in the package.json
-      const pkg = this.getPackageJSON<any>()
-      return pkg[key]
-    }
   }
 
   /**
