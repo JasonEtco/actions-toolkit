@@ -1,14 +1,15 @@
+import * as core from '@actions/core'
 import execa, { Options as ExecaOptions } from 'execa'
 import fs from 'fs'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
-import * as core from '@actions/core'
 import { LoggerFunc, Signale } from 'signale'
 import { Context } from './context'
 import { Exit } from './exit'
 import { getBody } from './get-body'
 import { GitHub } from './github'
 import { Store } from './store'
+import { createInputProxy, InputType } from './inputs'
 
 export interface ToolkitOptions {
   /**
@@ -23,8 +24,6 @@ export interface ToolkitOptions {
   secrets?: string[],
   logger?: Signale
 }
-
-export interface InputType { [key: string]: string | undefined }
 
 export class Toolkit<I extends InputType = InputType> {
   /**
@@ -131,13 +130,7 @@ export class Toolkit<I extends InputType = InputType> {
     this.store = new Store(this.context.workflow, this.workspace)
 
     // Memoize our Proxy instance
-    this.inputs = new Proxy<I>({} as I, {
-      get (_, name: string) {
-        // When we attempt to get `inputs.___`, instead
-        // we call `core.getInput`.
-        return core.getInput(name)
-      }
-    })
+    this.inputs = createInputProxy<I>()
 
     // Check stuff
     this.checkAllowedEvents(this.opts.event)

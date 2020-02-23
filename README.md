@@ -176,9 +176,10 @@ with:
 You can access those using `tools.inputs`:
 
 ```js
-console.log(tools.inputs) // -> { foo: 'bar' }
 console.log(tools.inputs.foo) // -> 'bar'
 ```
+
+_Note!_ This is not a plain object, it's an instance of [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), so be aware that there may be some differences.
 
 <br>
 

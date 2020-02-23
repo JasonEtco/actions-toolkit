@@ -46,27 +46,6 @@ describe('Toolkit', () => {
     })
   })
 
-  describe('#inputs', () => {
-    beforeEach(() => {
-      process.env.INPUT_EXAMPLE = 'pizza'
-    })
-  
-    afterEach(() => {
-      delete process.env.INPUT_EXAMPLE
-    })
-  
-    it('returns the expected value', () => {
-      const result = toolkit.inputs.example
-      expect(result).toBe('pizza')
-    })
-  
-    it('accepts the correct types', () => {
-      const twolkit = new Toolkit<{ example: string }>()
-      const result = twolkit.inputs.example
-      expect(result).toBe('pizza')
-    })
-  })
-
   describe('#github', () => {
     it('returns a GitHub client', () => {
       expect(toolkit.github).toBeInstanceOf(Object)
