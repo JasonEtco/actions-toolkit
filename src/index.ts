@@ -3,6 +3,7 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
+import * as core from '@actions/core'
 import { LoggerFunc, Signale } from 'signale'
 import { Context } from './context'
 import { Exit } from './exit'
@@ -49,6 +50,7 @@ export class Toolkit {
       // await that Promise before return the value, otherwise return as normal
       return ret instanceof Promise ? await ret : ret
     } catch (err) {
+      core.setFailed(err.message)
       tools.exit.failure(err)
     }
   }
