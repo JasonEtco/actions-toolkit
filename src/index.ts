@@ -25,7 +25,9 @@ export interface ToolkitOptions {
   logger?: Signale
 }
 
-export class Toolkit {
+export interface InputType { [key: string]: string | undefined }
+
+export class Toolkit<I extends InputType = InputType> {
   /**
    * Run an asynchronous function that accepts a toolkit as its argument, and fail if
    * an error occurs.
@@ -41,8 +43,8 @@ export class Toolkit {
    * }, { event: 'push' })
    * ```
    */
-  public static async run (func: (tools: Toolkit) => unknown, opts?: ToolkitOptions) {
-    const tools = new Toolkit(opts)
+  public static async run <I extends InputType = InputType> (func: (tools: Toolkit<I>) => unknown, opts?: ToolkitOptions) {
+    const tools = new Toolkit<I>(opts)
 
     try {
       const ret = func(tools)
@@ -102,6 +104,11 @@ export class Toolkit {
    */
   public log: Signale & LoggerFunc
 
+  /**
+   * An object of the inputs provided to your action. These can all be `undefined`!
+   */
+  public inputs: I
+
   constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
 
@@ -123,6 +130,15 @@ export class Toolkit {
     this.context = new Context()
     this.github = new GitHub(this.token)
     this.store = new Store(this.context.workflow, this.workspace)
+
+    // Memoize our Proxy instance
+    this.inputs = new Proxy<I>({} as I, {
+      get (_, name: string) {
+        // When we attempt to get `inputs.___`, instead
+        // we call `core.getInput`.
+        return core.getInput(name)
+      }
+    })
 
     // Check stuff
     this.checkAllowedEvents(this.opts.event)
