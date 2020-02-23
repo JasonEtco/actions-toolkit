@@ -18,18 +18,19 @@ exports[`Toolkit #getPackageJSON throws if the package.json file could not be fo
 
 exports[`Toolkit #runInWorkspace runs the command in the workspace 1`] = `
 Object {
-  "cmd": "echo hello",
-  "code": 0,
+  "all": undefined,
+  "command": "echo hello",
+  "exitCode": 0,
   "failed": false,
+  "isCanceled": false,
   "killed": false,
-  "signal": null,
   "stderr": "",
   "stdout": "hello",
   "timedOut": false,
 }
 `;
 
-exports[`Toolkit #runInWorkspace runs the command in the workspace with some options 1`] = `[Error: spawn throw ENOENT]`;
+exports[`Toolkit #runInWorkspace runs the command in the workspace with some options 1`] = `[Error: Command failed with ENOENT: throw]`;
 
 exports[`Toolkit#constructor events exits if the event is not allowed with a single event 1`] = `
 Array [

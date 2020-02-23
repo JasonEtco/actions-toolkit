@@ -17,7 +17,7 @@ describe('Toolkit', () => {
   describe('.run', () => {
     it('runs the async function passed to it', async () => {
       const spy = jest.fn(() => Promise.resolve('hi'))
-      const actual = await Toolkit.run(spy)
+      const actual = await Toolkit.run(spy, { logger: new Signale({ disabled: true }) })
       // Test that the function was called
       expect(spy).toHaveBeenCalled()
       // Make sure it was called with a Toolkit instance
@@ -28,7 +28,7 @@ describe('Toolkit', () => {
 
     it('runs a non-async function passed to it', async () => {
       const spy = jest.fn(() => 'hi')
-      const actual = await Toolkit.run(spy)
+      const actual = await Toolkit.run(spy, { logger: new Signale({ disabled: true }) })
       // Check that it returned a value as an async function
       expect(actual).toBe('hi')
     })
@@ -40,7 +40,7 @@ describe('Toolkit', () => {
       await Toolkit.run(async twolkit => {
         twolkit.exit.failure = exitFailure
         throw err
-      })
+      }, { logger: new Signale({ disabled: true }) })
 
       expect(exitFailure).toHaveBeenCalledTimes(1)
     })
@@ -193,7 +193,7 @@ describe('Toolkit', () => {
 
   describe('#wrapLogger', () => {
     it('wraps the provided logger and allows for a callable class', () => {
-      const logger = new Signale() as jest.Mocked<Signale>
+      const logger = new Signale({ disabled: true }) as jest.Mocked<Signale>
       logger.info = jest.fn()
       const twolkit = new Toolkit({ logger })
 
@@ -216,7 +216,7 @@ describe('Toolkit#constructor', () => {
   let exit: (code?: number) => never
 
   beforeEach(() => {
-    logger = new Signale() as jest.Mocked<Signale>
+    logger = new Signale({ disabled: true }) as jest.Mocked<Signale>
     logger.error = jest.fn()
     logger.warn = jest.fn()
 
@@ -225,7 +225,6 @@ describe('Toolkit#constructor', () => {
     p.exit = jest.fn()
   })
 
-  // tslint:disable:no-unused-expression
   describe('missing env vars', () => {
     it('logs the expected string with missing env vars', () => {
       delete process.env.HOME

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 const enquirer = jest.genMockFromModule('enquirer')
 
 let answers
