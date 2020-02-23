@@ -225,14 +225,14 @@ export class Toolkit {
       'pull_request_review_comment'
     ])
 
-    const reg = new RegExp(`^\/${command}(?:$|\\s(.*))`, 'gm')
+    const reg = new RegExp(`^/${command}(?:$|\\s(.*))`, 'gm')
 
     const body = getBody(this.context.payload)
     if (!body) return
 
     let match: RegExpExecArray | null
 
-    // tslint:disable-next-line:no-conditional-assignment
+    // eslint-disable-next-line no-cond-assign
     while (match = reg.exec(body)) {
       if (match[1]) {
         await handler(minimist(match[1].split(' ')), match)
@@ -298,7 +298,7 @@ export class Toolkit {
       'GITHUB_SHA'
     ]
 
-    const requiredButMissing = requiredEnvVars.filter(key => !process.env.hasOwnProperty(key))
+    const requiredButMissing = requiredEnvVars.filter(key => !Object.prototype.isPrototypeOf.call(process.env, key))
     if (requiredButMissing.length > 0) {
       // This isn't being run inside of a GitHub Action environment!
       const list = requiredButMissing.map(key => `- ${key}`).join('\n')
@@ -313,7 +313,7 @@ export class Toolkit {
   private checkRequiredSecrets (secrets?: string[]) {
     if (!secrets || secrets.length === 0) return
     // Filter missing but required secrets
-    const requiredButMissing = secrets.filter(key => !process.env.hasOwnProperty(key))
+    const requiredButMissing = secrets.filter(key => !Object.prototype.isPrototypeOf.call(process.env, key))
     // Everything we need is here
     if (requiredButMissing.length === 0) return
     // Exit with a failing status

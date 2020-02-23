@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "build": "rimraf lib && tsc -p tsconfig.json",
-    "lint": "eslint .",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "tsc --noEmit -p tests && jest --coverage && npm run lint",
     "test:update": "tsc --noEmit -p tests && jest --coverage -u && npm run lint"
   },

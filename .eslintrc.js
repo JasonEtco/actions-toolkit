@@ -14,5 +14,10 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
-  ]
+  ],
+  rules: {
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/camelcase': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off'
+  }
 }
