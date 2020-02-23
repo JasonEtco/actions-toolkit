@@ -104,7 +104,7 @@ If any of the listed secrets are missing, the Action will fail and log a message
 
 #### token (optional)
 
-You can choose to pass a custom token used for authenticating with the github API.
+You can pass a custom token used for authenticating with the GitHub API:
 
 ```js
 const tools = new Toolkit({
@@ -112,7 +112,7 @@ const tools = new Toolkit({
 })
 ```
 
-By default the token will be taken from `process.env.GITHUB_TOKEN`.
+By default the token look for `process.env.GITHUB_TOKEN`.
 
 ### Toolkit.run
 
