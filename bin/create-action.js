@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 const fs = require('fs')
 const path = require('path')
 const { promisify } = require('util')
