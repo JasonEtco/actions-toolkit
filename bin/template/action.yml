@@ -1,0 +1,8 @@
+name: :NAME
+description: :DESCRIPTION
+runs:
+  using: docker
+  image: Dockerfile
+branding:
+  icon: :ICON
+  color: :COLOR

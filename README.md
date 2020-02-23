@@ -8,9 +8,9 @@
   <a href="#faq">FAQ</a>
 </p>
 
-<p align="center"><a href="https://npmjs.com/package/actions-toolkit"><img src="https://img.shields.io/npm/v/actions-toolkit/latest.svg" alt="NPM"></a> <a href="https://travis-ci.com/JasonEtco/actions-toolkit"><img src="https://badgen.now.sh/travis/JasonEtco/actions-toolkit" alt="Build Status"></a> <a href="https://codecov.io/gh/JasonEtco/actions-toolkit/"><img src="https://badgen.now.sh/codecov/c/github/JasonEtco/actions-toolkit" alt="Codecov"></a></p>
+<p align="center"><a href="https://github.com/JasonEtco/actions-toolkit"><img alt="GitHub Actions status" src="https://github.com/JasonEtco/actions-toolkit/workflows/Node%20CI/badge.svg"></a> <a href="https://codecov.io/gh/JasonEtco/actions-toolkit/"><img src="https://badgen.now.sh/codecov/c/github/JasonEtco/actions-toolkit" alt="Codecov"></a></p>
 
-
+**Heads up!** This toolkit was built to work with Actions v1. There is [an official toolkit](https://github.com/actions/toolkit) for [Actions v2](https://github.blog/2019-08-08-github-actions-now-supports-ci-cd/) that you should check out. This one _may_ work for v2, but is not guaranteed, and will likely be deprecated in the near future.
 
 ## Motivation
 
@@ -43,6 +43,7 @@ This will create a new folder `my-cool-action` with the following files:
 
 ```
 ├── Dockerfile
+├── action.yml
 ├── index.js
 ├── index.test.js
 └── package.json

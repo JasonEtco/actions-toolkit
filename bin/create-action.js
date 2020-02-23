@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 const fs = require('fs')
 const path = require('path')
 const { promisify } = require('util')
@@ -93,6 +96,22 @@ async function createDockerfile (answers) {
 }
 
 /**
+ * Creates a action.yml contents string, replacing variables in the action.yml template
+ * with values passed in by the user from the CLI prompt.
+ *
+ * @param {PromptAnswers} answers The CLI prompt answers.
+ * @returns {Promise<string>} The action.yml contents.
+ */
+async function createActionYaml (answers) {
+  const template = await readTemplate('action.yml')
+  return template
+    .replace(':NAME', answers.name)
+    .replace(':DESCRIPTION', answers.description)
+    .replace(':ICON', answers.icon)
+    .replace(':COLOR', answers.color)
+}
+
+/**
  * Creates an index.test.js contents string, replacing variables in the index.test.js template
  * with values passed in by the user from the CLI prompt.
  *
@@ -170,6 +189,7 @@ module.exports = async function createAction (argv, signale = new Signale({
   signale.log('\n------------------------------------\n')
 
   // Create the templated files
+  const actionYaml = await createActionYaml(metadata)
   const dockerfile = await createDockerfile(metadata)
   const indexTest = await createIndexTest(metadata)
   const packageJson = createPackageJson(directoryName)
@@ -178,6 +198,7 @@ module.exports = async function createAction (argv, signale = new Signale({
   await Promise.all([
     ['package.json', JSON.stringify(packageJson, null, 2)],
     ['Dockerfile', dockerfile],
+    ['action.yml', actionYaml],
     ['index.js', entrypoint],
     ['index.test.js', indexTest]
   ].map(async ([filename, contents]) => {
