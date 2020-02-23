@@ -4,10 +4,10 @@ import fs from 'fs'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
 import { LoggerFunc, Signale } from 'signale'
+import { Octokit } from '@octokit/rest'
 import { Context } from './context'
 import { Exit } from './exit'
 import { getBody } from './get-body'
-import { GitHub } from './github'
 import { Store } from './store'
 import { createInputProxy, InputType } from './inputs'
 
@@ -88,7 +88,7 @@ export class Toolkit<I extends InputType = InputType> {
    * })
    * ```
    */
-  public github: GitHub
+  public github: Octokit
 
   public opts: ToolkitOptions
 
@@ -125,7 +125,7 @@ export class Toolkit<I extends InputType = InputType> {
     // Setup nested objects
     this.exit = new Exit(this.log)
     this.context = new Context()
-    this.github = new GitHub(this.token)
+    this.github = new Octokit({ auth: `token ${this.token}` })
     this.store = new Store(this.context.workflow, this.workspace)
 
     // Memoize our Proxy instance
