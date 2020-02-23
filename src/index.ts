@@ -22,7 +22,12 @@ export interface ToolkitOptions {
    * any secrets are missing, this Action will exit with a failing status.
    */
   secrets?: string[],
-  logger?: Signale
+  logger?: Signale,
+  /**
+   * GitHub token to use for authentication.
+   * Uses `process.env.GITHUB_TOKEN` by default.
+   */
+  token?: string
 }
 
 export class Toolkit<I extends InputType = InputType> {
@@ -115,7 +120,7 @@ export class Toolkit<I extends InputType = InputType> {
 
     // Memoize environment variables and arguments
     this.workspace = process.env.GITHUB_WORKSPACE as string
-    this.token = process.env.GITHUB_TOKEN as string
+    this.token = opts.token || process.env.GITHUB_TOKEN as string
 
     // Setup nested objects
     this.exit = new Exit(this.log)

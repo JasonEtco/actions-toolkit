@@ -273,6 +273,25 @@ describe('Toolkit#constructor', () => {
     })
   })
 
+  describe('token', () => {
+    it('uses a different GitHub token', async () => {
+      const toolkit = new Toolkit({
+        logger: new Signale({ disabled: true }),
+        token: 'customtoken'
+      })
+
+      const scoped = nock('https://api.github.com', {
+        reqheaders: {
+          authorization: 'token customtoken'
+        }
+      })
+        .get('/issues').reply(200, [])
+
+      await toolkit.github.issues.list()
+      expect(scoped.isDone()).toBe(true)
+    })
+  })
+
   // tslint:enable:no-unused-expression
   afterEach(() => {
     global.process.exit = exit

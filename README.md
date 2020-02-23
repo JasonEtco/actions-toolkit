@@ -102,6 +102,18 @@ const tools = new Toolkit({
 
 If any of the listed secrets are missing, the Action will fail and log a message.
 
+#### token (optional)
+
+You can pass a custom token used for authenticating with the GitHub API:
+
+```js
+const tools = new Toolkit({
+  token: '1234567890abcdefghi'
+})
+```
+
+`process.env.GITHUB_TOKEN` will be used if no `token` was passed.
+
 ### Toolkit.run
 
 Run an asynchronous function that receives an instance of `Toolkit` as its argument. If the function throws an error (or returns a rejected promise), `Toolkit.run` will log the error and exit the action with a failure status code.
@@ -156,7 +168,7 @@ In the GitHub Actions output, this is the result:
 ```
 ℹ  info      Welcome to this example!
 ℹ  info      Gonna try this...
-✖  fatal     Error: Something bad happened! 
+✖  fatal     Error: Something bad happened!
     at Object.<anonymous> (/index.js:5:17)
     at Module._compile (internal/modules/cjs/loader.js:734:30)
 ```
@@ -263,7 +275,7 @@ A path to a clone of the repository.
 A collection of methods to end the action's process and tell GitHub what status to set (success, neutral or failure). Internally, these methods call `process.exit` with the [appropriate exit code](https://developer.github.com/actions/creating-github-actions/accessing-the-runtime-environment/#exit-codes-and-statuses). You can pass an optional message to each one to be logged before exiting. This can be used like an early return:
 
 ```js
-if (someCheck) tools.exit.neutral('No _action_ necessary!') 
+if (someCheck) tools.exit.neutral('No _action_ necessary!')
 if (anError) tools.exit.failure('We failed!')
 tools.exit.success('We did it team!')
 ```
