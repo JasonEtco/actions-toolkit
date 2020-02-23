@@ -1,6 +1,6 @@
+import * as core from '@actions/core'
 import execa, { Options as ExecaOptions } from 'execa'
 import fs from 'fs'
-import yaml from 'js-yaml'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
 import { LoggerFunc, Signale } from 'signale'
@@ -9,6 +9,7 @@ import { Exit } from './exit'
 import { getBody } from './get-body'
 import { GitHub } from './github'
 import { Store } from './store'
+import { createInputProxy, InputType } from './inputs'
 
 export interface ToolkitOptions {
   /**
@@ -24,7 +25,7 @@ export interface ToolkitOptions {
   logger?: Signale
 }
 
-export class Toolkit {
+export class Toolkit<I extends InputType = InputType> {
   /**
    * Run an asynchronous function that accepts a toolkit as its argument, and fail if
    * an error occurs.
@@ -40,8 +41,8 @@ export class Toolkit {
    * }, { event: 'push' })
    * ```
    */
-  public static async run (func: (tools: Toolkit) => unknown, opts?: ToolkitOptions) {
-    const tools = new Toolkit(opts)
+  public static async run <I extends InputType = InputType> (func: (tools: Toolkit<I>) => unknown, opts?: ToolkitOptions) {
+    const tools = new Toolkit<I>(opts)
 
     try {
       const ret = func(tools)
@@ -49,6 +50,7 @@ export class Toolkit {
       // await that Promise before return the value, otherwise return as normal
       return ret instanceof Promise ? await ret : ret
     } catch (err) {
+      core.setFailed(err.message)
       tools.exit.failure(err)
     }
   }
@@ -69,11 +71,6 @@ export class Toolkit {
    * GitHub API token
    */
   public token: string
-
-  /**
-   * An object of the parsed arguments passed to your action
-   */
-  public arguments: ParsedArgs
 
   /**
    * An Octokit SDK client authenticated for this repository. See https://octokit.github.io/rest.js for the API.
@@ -100,6 +97,11 @@ export class Toolkit {
    */
   public log: Signale & LoggerFunc
 
+  /**
+   * An object of the inputs provided to your action. These can all be `undefined`!
+   */
+  public inputs: I
+
   constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
 
@@ -114,13 +116,15 @@ export class Toolkit {
     // Memoize environment variables and arguments
     this.workspace = process.env.GITHUB_WORKSPACE as string
     this.token = process.env.GITHUB_TOKEN as string
-    this.arguments = minimist(process.argv.slice(2))
 
     // Setup nested objects
     this.exit = new Exit(this.log)
     this.context = new Context()
     this.github = new GitHub(this.token)
     this.store = new Store(this.context.workflow, this.workspace)
+
+    // Memoize our Proxy instance
+    this.inputs = createInputProxy<I>()
 
     // Check stuff
     this.checkAllowedEvents(this.opts.event)
@@ -154,40 +158,6 @@ export class Toolkit {
     const pathToPackage = path.join(this.workspace, 'package.json')
     if (!fs.existsSync(pathToPackage)) throw new Error('package.json could not be found in your project\'s root.')
     return require(pathToPackage)
-  }
-
-  /**
-   * Get the configuration settings for this action in the project workspace.
-   *
-   * @param key - If this is a string like `.myfilerc` it will look for that file.
-   * If it's a YAML file, it will parse that file as a JSON object. Otherwise, it will
-   * return the value of the property in the `package.json` file of the project.
-   *
-   * @example This method can be used in three different ways:
-   *
-   * ```js
-   * // Get the .rc file
-   * const cfg = toolkit.config('.myactionrc')
-   *
-   * // Get the YAML file
-   * const cfg = toolkit.config('myaction.yml')
-   *
-   * // Get the property in package.json
-   * const cfg = toolkit.config('myaction')
-   * ```
-   */
-  public config <T = any> (key: string): T {
-    if (/\..+rc/.test(key)) {
-      // It's a file like .npmrc or .eslintrc!
-      return JSON.parse(this.getFile(key))
-    } else if (key.endsWith('.yml') || key.endsWith('.yaml')) {
-      // It's a YAML file! Gotta serialize it!
-      return yaml.safeLoad(this.getFile(key))
-    } else {
-      // It's a regular object key in the package.json
-      const pkg = this.getPackageJSON<any>()
-      return pkg[key]
-    }
   }
 
   /**
