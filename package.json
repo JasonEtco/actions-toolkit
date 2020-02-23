@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@octokit/graphql": "^4.3.1",
-    "@octokit/rest": "^17.0.0",
+    "@octokit/rest": "^16.43.1",
     "@types/flat-cache": "^2.0.0",
     "@types/minimist": "^1.2.0",
     "@types/signale": "^1.2.1",
