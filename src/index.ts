@@ -24,7 +24,8 @@ export interface ToolkitOptions {
   secrets?: string[],
   logger?: Signale,
   /**
-   * Github token to use for authentication. Default: taken from GITHUB_TOKEN
+   * GitHub token to use for authentication.
+   * Uses `process.env.GITHUB_TOKEN` by default.
    */
   token?: string
 }
