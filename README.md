@@ -54,11 +54,10 @@ This will create a new folder `my-cool-action` with the following files:
 * [The Toolkit class](#toolkit-options)
 * [Authenticated GitHub API client](#toolsgithub)
 * [Logging](#toolslog)
+* [Getting workflows' inputs](#toolsinputs)
 * [Slash commands](#toolscommandcommand-args-match--promise)
-* [Parsing arguments](#toolsarguments)
 * [Reading files](#toolsgetfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
-* [In-repo configuration](#toolsconfigfilename)
 * [Pass information to another action](#toolsstore)
 * [End the action's process](#toolsexit)
 * [Inspect the webhook event payload](#toolscontext)
@@ -176,6 +175,26 @@ In the GitHub Actions output, this is the result:
 
 <br>
 
+### tools.inputs
+
+GitHub Actions workflows can define some "inputs" - options that can be passed to the action:
+
+```yaml
+uses: JasonEtco/example-action@master
+with:
+  foo: bar
+```
+
+You can access those using `tools.inputs`:
+
+```js
+console.log(tools.inputs.foo) // -> 'bar'
+```
+
+_Note!_ This is not a plain object, it's an instance of [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), so be aware that there may be some differences.
+
+<br>
+
 ### tools.command(command, (args, match) => Promise<void>)
 
 Respond to a slash-command posted in a GitHub issue, comment, pull request, pull request review or commit comment. Arguments to the slash command are parsed by [minimist](https://github.com/substack/minimist). You can use a slash command in a larger comment, but the command must be at the start of the line:
@@ -209,25 +228,6 @@ console.log(i)
 
 <br>
 
-### tools.config(filename)
-
-Get the configuration settings for this action in the project workspace. This method can be used in three different ways:
-
-```js
-// Get the .rc file, parsed as JSON
-const cfg = tools.config('.myactionrc')
-
-// Get the YAML file, parsed as JSON
-const cfg = tools.config('myaction.yml')
-
-// Get the property in package.json
-const cfg = tools.config('myaction')
-```
-
-If the filename looks like `.myfilerc` it will look for that file. If it's a YAML file, it will parse that file as a JSON object. Otherwise, it will return the value of the property in the `package.json` file of the project.
-
-<br>
-
 ### tools.getPackageJSON()
 
 Get the package.json file in the project root and returns it as an object.
@@ -254,38 +254,6 @@ Run a CLI command in the workspace. This uses [execa](https://github.com/sindres
 
 ```js
 const result = await tools.runInWorkspace('npm', ['audit'])
-```
-
-<br>
-
-### tools.arguments
-
-An object of the parsed arguments passed to your action. This uses [`minimist`](https://github.com/substack/minimist) under the hood.
-
-When inputting arguments into your workflow file (like `main.workflow`) in an action as shown in the [Actions Docs](https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#action-blocks), you can enter them as an array of strings or as a single string:
-
-```workflow
-args = ["container:release", "--app", "web"]
-# or
-args = "container:release --app web"
-```
-
-In `actions-toolkit`, `tools.arguments` will be an object:
-
-```js
-console.log(tools.arguments)
-// => { _: ['container:release'], app: 'web' }
-```
-
-There is currently a known bug with strings with multiple word arguments being parsed incorrectly. Arguments that contain strings with multiple words need to currently pass the arguments in an array:
-```workflow
-args = [ "To do", "100" ]
-```
-
-Or have a different [action entrypoint file](https://github.com/actions/npm/blob/master/entrypoint.sh):
-```
-#!/bin/sh
-sh -c "npm $*"
 ```
 
 <br>
