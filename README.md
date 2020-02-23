@@ -112,7 +112,7 @@ const tools = new Toolkit({
 })
 ```
 
-By default the token look for `process.env.GITHUB_TOKEN`.
+`process.env.GITHUB_TOKEN` will be used if no `token` was passed.
 
 ### Toolkit.run
 
