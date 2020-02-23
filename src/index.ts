@@ -73,11 +73,6 @@ export class Toolkit<I extends InputType = InputType> {
   public token: string
 
   /**
-   * An object of the parsed arguments passed to your action
-   */
-  public arguments: ParsedArgs
-
-  /**
    * An Octokit SDK client authenticated for this repository. See https://octokit.github.io/rest.js for the API.
    *
    * ```js
@@ -121,7 +116,6 @@ export class Toolkit<I extends InputType = InputType> {
     // Memoize environment variables and arguments
     this.workspace = process.env.GITHUB_WORKSPACE as string
     this.token = process.env.GITHUB_TOKEN as string
-    this.arguments = minimist(process.argv.slice(2))
 
     // Setup nested objects
     this.exit = new Exit(this.log)

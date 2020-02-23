@@ -55,7 +55,6 @@ This will create a new folder `my-cool-action` with the following files:
 * [Authenticated GitHub API client](#toolsgithub)
 * [Logging](#toolslog)
 * [Slash commands](#toolscommandcommand-args-match--promise)
-* [Parsing arguments](#toolsarguments)
 * [Reading files](#toolsgetfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
 * [Pass information to another action](#toolsstore)
@@ -242,38 +241,6 @@ Run a CLI command in the workspace. This uses [execa](https://github.com/sindres
 
 ```js
 const result = await tools.runInWorkspace('npm', ['audit'])
-```
-
-<br>
-
-### tools.arguments
-
-An object of the parsed arguments passed to your action. This uses [`minimist`](https://github.com/substack/minimist) under the hood.
-
-When inputting arguments into your workflow file (like `main.workflow`) in an action as shown in the [Actions Docs](https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#action-blocks), you can enter them as an array of strings or as a single string:
-
-```workflow
-args = ["container:release", "--app", "web"]
-# or
-args = "container:release --app web"
-```
-
-In `actions-toolkit`, `tools.arguments` will be an object:
-
-```js
-console.log(tools.arguments)
-// => { _: ['container:release'], app: 'web' }
-```
-
-There is currently a known bug with strings with multiple word arguments being parsed incorrectly. Arguments that contain strings with multiple words need to currently pass the arguments in an array:
-```workflow
-args = [ "To do", "100" ]
-```
-
-Or have a different [action entrypoint file](https://github.com/actions/npm/blob/master/entrypoint.sh):
-```
-#!/bin/sh
-sh -c "npm $*"
 ```
 
 <br>
