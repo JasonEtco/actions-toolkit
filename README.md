@@ -58,7 +58,7 @@ This will create a new folder `my-cool-action` with the following files:
 
 #### event (optional)
 
-An optional list of [events that this action works with](https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#events-supported-in-workflow-files). If omitted, the action will run for any event - if present, the action will exit with a failing status code for any event that is not allowed.
+An optional list of [events that this action works with](https://help.github.com/en/actions/reference/events-that-trigger-workflows). If omitted, the action will run for any event - if present, the action will exit with a failing status code for any event that is not allowed.
 
 ```js
 const tools = new Toolkit({
