@@ -13,7 +13,6 @@ describe('Toolkit', () => {
     // leaks on repeated calls in tests - used by Store.
     process.on = jest.fn()
 
-
     // Mock core.setFailed to a noop
     jest.spyOn(core, 'setFailed')
       .mockImplementationOnce(f => f)

@@ -16,7 +16,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "tsc --noEmit -p tests && jest --coverage && npm run lint",
     "test:update": "tsc --noEmit -p tests && jest --coverage -u && npm run lint",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
