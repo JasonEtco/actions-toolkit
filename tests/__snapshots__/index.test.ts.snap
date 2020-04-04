@@ -4,7 +4,7 @@ exports[`Toolkit #getFile gets the contents of a file 1`] = `"I'm writing this o
 
 exports[`Toolkit #getFile gets the contents of a file with custom encoding 1`] = `"SSdtIHdyaXRpbmcgdGhpcyBvbiBhIHBsYW5lIOKciO+4jw=="`;
 
-exports[`Toolkit #getFile throws if the file could not be found 1`] = `"File DONTREADME.md could not be found in your project's workspace."`;
+exports[`Toolkit #getFile throws if the file could not be found 1`] = `"File DONTREADME.md could not be found in your project's workspace. You may need the actions/checkout action to clone the repository first."`;
 
 exports[`Toolkit #getPackageJSON returns the package.json file as a JSON object 1`] = `
 Object {
