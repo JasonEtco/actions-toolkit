@@ -148,7 +148,7 @@ export class Toolkit<I extends InputType = InputType> {
    */
   public getFile (filename: string, encoding = 'utf8') {
     const pathToFile = path.join(this.workspace, filename)
-    if (!fs.existsSync(pathToFile)) throw new Error(`File ${filename} could not be found in your project's workspace.`)
+    if (!fs.existsSync(pathToFile)) throw new Error(`File ${filename} could not be found in your project's workspace. You may need the actions/checkout action to clone the repository first.`)
     return fs.readFileSync(pathToFile, encoding)
   }
 
