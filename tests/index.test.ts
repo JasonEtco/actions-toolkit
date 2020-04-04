@@ -1,5 +1,6 @@
 import nock from 'nock'
 import path from 'path'
+import * as core from '@actions/core'
 import { Signale } from 'signale'
 import { Toolkit } from '../src'
 import { NeutralCode } from '../src/exit'
@@ -11,6 +12,11 @@ describe('Toolkit', () => {
     // Mock the `process` event emitter to prevent memory
     // leaks on repeated calls in tests - used by Store.
     process.on = jest.fn()
+
+    // Mock core.setFailed to a noop
+    jest.spyOn(core, 'setFailed')
+      .mockImplementationOnce(f => f)
+
     toolkit = new Toolkit({ logger: new Signale({ disabled: true }) })
   })
 
