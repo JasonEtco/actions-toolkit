@@ -73,10 +73,23 @@ export class Context {
   public get issue () {
     const payload = this.payload
 
-    return {
-      ...this.repo,
-      number: (payload.issue || payload.pull_request || payload).number
+    const data: { [k: string]: any } = {
+      ...this.repo
     }
+
+    if (payload.issue) {
+      // If it's an issue, the API expects issue_number
+      data.issue_number = payload.issue.number
+    } else if (payload.pull_request) {
+      // If it's a PR, the API expects pull_number
+      data.pull_number = payload.pull_request.number
+    } else {
+      // Otherwise default to the old behaviour for BC reasons
+      // Long term, this should be data.number = payload.number
+      data.number = (payload.issue || payload.pull_request || payload).number
+    }
+
+    return data
   }
 
   public get repo () {

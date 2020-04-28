@@ -53,7 +53,7 @@ describe('Context', () => {
 
   describe('#issue', () => {
     it('returns attributes from the repository payload', () => {
-      expect(context.issue).toEqual({ owner: 'JasonEtco', repo: 'test', number: 1 })
+      expect(context.issue).toEqual({ owner: 'JasonEtco', repo: 'test', issue_number: 1 })
     })
 
     it('works with pull_request payloads', () => {
@@ -62,7 +62,7 @@ describe('Context', () => {
         repository: { owner: { login: 'JasonEtco' }, name: 'test' }
       }
       expect(context.issue).toEqual({
-        number: 2, owner: 'JasonEtco', repo: 'test'
+        pull_number: 2, owner: 'JasonEtco', repo: 'test'
       })
     })
 
