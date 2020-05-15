@@ -48,7 +48,7 @@ This will create a new folder `my-cool-action` with the following files:
 * [Logging](#toolslog)
 * [Getting workflows' inputs](#toolsinputs)
 * [Slash commands](#toolscommandcommand-args-match--promise)
-* [Reading files](#toolsgetfilepath-encoding--utf8)
+* [Reading files](#toolsreadfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
 * [Pass information to another action](#toolsstore)
 * [End the action's process](#toolsexit)
@@ -230,12 +230,12 @@ const pkg = tools.getPackageJSON()
 
 <br>
 
-### tools.getFile(path, [encoding = 'utf8'])
+### tools.readFile(path, [encoding = 'utf8'])
 
 Get the contents of a file in the repository.
 
 ```js
-const contents = tools.getFile('example.md')
+const contents = tools.readFile('example.md')
 ```
 
 <br>

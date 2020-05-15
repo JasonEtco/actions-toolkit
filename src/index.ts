@@ -140,7 +140,7 @@ export class Toolkit<I extends InputType = InputType> {
    * Gets the contents of a file in your project's workspace
    *
    * ```js
-   * const myFile = tools.getFile('README.md')
+   * const myFile = tools.readFile('README.md')
    * ```
    *
    * @param filename - Name of the file
