@@ -68,20 +68,21 @@ describe('Toolkit', () => {
     })
   })
 
-  describe('#getFile', () => {
-    it('gets the contents of a file', () => {
-      const actual = toolkit.getFile('README.md')
+  describe('#readFile', () => {
+    it('gets the contents of a file', async () => {
+      const actual = await toolkit.readFile('README.md')
       expect(actual).toMatchSnapshot()
     })
 
-    it('gets the contents of a file with custom encoding', () => {
-      const actual = toolkit.getFile('README.md', 'base64')
+    it('gets the contents of a file with custom encoding', async () => {
+      const actual = await toolkit.readFile('README.md', 'base64')
       expect(actual).toMatchSnapshot()
     })
 
-    it('throws if the file could not be found', () => {
-      const actual = () => toolkit.getFile('DONTREADME.md')
-      expect(actual).toThrowErrorMatchingSnapshot()
+    it('throws if the file could not be found', async () => {
+      await expect(toolkit.readFile('DONTREADME.md'))
+        .rejects
+        .toThrowErrorMatchingSnapshot()
     })
   })
 
