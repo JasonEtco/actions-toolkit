@@ -30,7 +30,10 @@ Object {
 }
 `;
 
-exports[`Toolkit #runInWorkspace runs the command in the workspace with some options 1`] = `[Error: Command failed with ENOENT: throw]`;
+exports[`Toolkit #runInWorkspace runs the command in the workspace with some options 1`] = `
+[Error: Command failed with ENOENT: throw
+spawn throw ENOENT]
+`;
 
 exports[`Toolkit#constructor events exits if the event is not allowed with a single event 1`] = `
 Array [
