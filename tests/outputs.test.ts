@@ -1,26 +1,24 @@
-import { createOutputProxy, OutputType } from "../src/outputs"
+import * as core from '@actions/core'
+import { createOutputProxy, OutputType } from '../src/outputs'
+
+jest.mock('@actions/core')
 
 describe('createOutputProxy', () => {
   let outputs: OutputType
 
-  beforeEach(() => {
-    outputs = createOutputProxy()
-    outputs.test = 'TEST'
-  })
-
-
   describe('#set', () => {
-    it('reject not expected type value', () => {
+    it('calls `core.setOutput`', () => {
+      const spy = jest.spyOn(core, 'setOutput')
       outputs = createOutputProxy<{ example: string }>()
-      
-      expect(() => { outputs.example = undefined }).not.toThrowError()
+      outputs.example = 'pizza'
+      expect(spy).toHaveBeenCalled()
+      expect(spy).toHaveBeenCalledWith('example', 'pizza')
     })
-  
-    it('accepts the correct types', () => {
+
+    it('can get after setting', () => {
       outputs = createOutputProxy<{ example: string }>()
-      
-      expect(() => { outputs.example = 'pizza' }).not.toThrowError()
+      outputs.example = 'yep'
+      expect(outputs.example).toBe('yep')
     })
   })
-
 })
