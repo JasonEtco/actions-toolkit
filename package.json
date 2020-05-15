@@ -60,7 +60,6 @@
     "@types/minimist": "^1.2.0",
     "@types/signale": "^1.4.1",
     "enquirer": "^2.3.5",
-    "execa": "^4.0.1",
     "flat-cache": "^2.0.1",
     "minimist": "^1.2.5",
     "signale": "^1.4.0"
