@@ -232,10 +232,10 @@ const pkg = tools.getPackageJSON()
 
 ### tools.readFile(path, [encoding = 'utf8'])
 
-Get the contents of a file in the repository.
+Get the contents of a file in the repository. Should be used with [actions/checkout](https://github.com/actions/checkout) to clone the repository in the actions workflow.
 
 ```js
-const contents = tools.readFile('example.md')
+const contents = await tools.readFile('example.md')
 ```
 
 <br>
