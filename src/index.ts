@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import execa, { Options as ExecaOptions } from 'execa'
-import fs from 'fs'
+import fs, { BaseEncodingOptions } from 'fs'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
 import { LoggerFunc, Signale } from 'signale'
@@ -153,7 +153,7 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
    * @param filename - Name of the file
    * @param encoding - Encoding (usually utf8)
    */
-  public getFile (filename: string, encoding = 'utf8') {
+  public getFile (filename: string, encoding: BaseEncodingOptions['encoding'] = 'utf8') {
     const pathToFile = path.join(this.workspace, filename)
     if (!fs.existsSync(pathToFile)) throw new Error(`File ${filename} could not be found in your project's workspace. You may need the actions/checkout action to clone the repository first.`)
     return fs.readFileSync(pathToFile, encoding)
