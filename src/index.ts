@@ -137,19 +137,23 @@ export class Toolkit<I extends InputType = InputType> {
   }
 
   /**
-   * Gets the contents file in your project's workspace
+   * Gets the contents of a file in your project's workspace
    *
    * ```js
-   * const myFile = tools.getFile('README.md')
+   * const myFile = tools.readFile('README.md')
    * ```
    *
    * @param filename - Name of the file
    * @param encoding - Encoding (usually utf8)
    */
-  public getFile (filename: string, encoding: BaseEncodingOptions['encoding'] = 'utf8') {
+  public async readFile (filename: string, encoding: BaseEncodingOptions['encoding'] = 'utf8') {
     const pathToFile = path.join(this.workspace, filename)
-    if (!fs.existsSync(pathToFile)) throw new Error(`File ${filename} could not be found in your project's workspace. You may need the actions/checkout action to clone the repository first.`)
-    return fs.readFileSync(pathToFile, encoding)
+
+    if (!fs.existsSync(pathToFile)) {
+      throw new Error(`File ${filename} could not be found in your project's workspace. You may need the actions/checkout action to clone the repository first.`)
+    }
+
+    return fs.promises.readFile(pathToFile, encoding)
   }
 
   /**
