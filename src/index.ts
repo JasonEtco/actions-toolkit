@@ -10,6 +10,7 @@ import { Exit } from './exit'
 import { getBody } from './get-body'
 import { Store } from './store'
 import { createInputProxy, InputType } from './inputs'
+import { createOutputProxy, OutputType } from './outputs'
 
 export interface ToolkitOptions {
   /**
@@ -30,7 +31,7 @@ export interface ToolkitOptions {
   token?: string
 }
 
-export class Toolkit<I extends InputType = InputType> {
+export class Toolkit<I extends InputType = InputType, O extends OutputType = OutputType> {
   /**
    * Run an asynchronous function that accepts a toolkit as its argument, and fail if
    * an error occurs.
@@ -46,8 +47,8 @@ export class Toolkit<I extends InputType = InputType> {
    * }, { event: 'push' })
    * ```
    */
-  public static async run <I extends InputType = InputType> (func: (tools: Toolkit<I>) => unknown, opts?: ToolkitOptions) {
-    const tools = new Toolkit<I>(opts)
+  public static async run <I extends InputType = InputType, O extends OutputType = OutputType> (func: (tools: Toolkit<I, O>) => unknown, opts?: ToolkitOptions) {
+    const tools = new Toolkit<I, O>(opts)
 
     try {
       const ret = func(tools)
@@ -112,6 +113,11 @@ export class Toolkit<I extends InputType = InputType> {
    */
   public inputs: I
 
+  /**
+   * An object of the outputs provided by your action.
+   */
+  public outputs: O
+
   constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
 
@@ -138,6 +144,7 @@ export class Toolkit<I extends InputType = InputType> {
 
     // Memoize our Proxy instance
     this.inputs = createInputProxy<I>()
+    this.outputs = createOutputProxy<O>()
 
     // Check stuff
     this.checkAllowedEvents(this.opts.event)

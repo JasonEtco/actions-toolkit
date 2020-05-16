@@ -187,6 +187,18 @@ _Note!_ This is not a plain object, it's an instance of [Proxy](https://develope
 
 <br>
 
+### tools.outputs
+
+GitHub Actions workflows can define some "outputs" - options that can be passed to the next actions. You can access those using `tools.outputs`:
+
+```js
+tools.outputs.foo = 'bar'
+```
+
+_Note!_ This is not a plain object, it's an instance of [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), so be aware that there may be some differences.
+
+<br>
+
 ### tools.command(command, (args, match) => Promise<void>)
 
 Respond to a slash-command posted in a GitHub issue, comment, pull request, pull request review or commit comment. Arguments to the slash command are parsed by [minimist](https://github.com/substack/minimist). You can use a slash command in a larger comment, but the command must be at the start of the line:
