@@ -126,17 +126,19 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
 
     // Memoize environment variables and arguments
     this.workspace = process.env.GITHUB_WORKSPACE as string
-    this.token = opts.token || process.env.GITHUB_TOKEN as string
+
+    // Memoize our Proxy instance
+    this.inputs = createInputProxy<I>()
+    this.outputs = createOutputProxy<O>()
+
+    // Memoize the GitHub API token
+    this.token = opts.token || this.inputs.github_token || process.env.GITHUB_TOKEN as string
 
     // Setup nested objects
     this.exit = new Exit(this.log)
     this.context = new Context()
     this.github = new Octokit({ auth: `token ${this.token}` })
     this.store = new Store(this.context.workflow, this.workspace)
-
-    // Memoize our Proxy instance
-    this.inputs = createInputProxy<I>()
-    this.outputs = createOutputProxy<O>()
 
     // Check stuff
     this.checkAllowedEvents(this.opts.event)
