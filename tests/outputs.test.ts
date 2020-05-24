@@ -21,4 +21,14 @@ describe('createOutputProxy', () => {
       expect(outputs.example).toBe('yep')
     })
   })
+
+  describe('#getOwnPropertyDescriptor', () => {
+    outputs = createOutputProxy<{ example: string }>()
+    const result = Object.getOwnPropertyDescriptor(outputs, 'example')
+    expect(result).toEqual({
+      enumerable: false,
+      configurable: true,
+      writable: true
+    })
+  })
 })

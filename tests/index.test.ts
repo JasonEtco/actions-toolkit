@@ -236,6 +236,11 @@ describe('Toolkit#constructor', () => {
       expect(process.exit).toHaveBeenCalledWith(NeutralCode)
       expect(logger.error.mock.calls).toMatchSnapshot()
     })
+
+    it('does not exit if the event is allowed with a single event with an action', () => {
+      new Toolkit({ logger, event: 'issues.opened' })
+      expect(process.exit).not.toHaveBeenCalledWith()
+    })
   })
 
   describe('secrets', () => {
