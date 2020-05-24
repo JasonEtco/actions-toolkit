@@ -16,25 +16,6 @@ exports[`Toolkit #readFile gets the contents of a file with custom encoding 1`] 
 
 exports[`Toolkit #readFile throws if the file could not be found 1`] = `"File DONTREADME.md could not be found in your project's workspace. You may need the actions/checkout action to clone the repository first."`;
 
-exports[`Toolkit #runInWorkspace runs the command in the workspace 1`] = `
-Object {
-  "all": undefined,
-  "command": "echo hello",
-  "exitCode": 0,
-  "failed": false,
-  "isCanceled": false,
-  "killed": false,
-  "stderr": "",
-  "stdout": "hello",
-  "timedOut": false,
-}
-`;
-
-exports[`Toolkit #runInWorkspace runs the command in the workspace with some options 1`] = `
-[Error: Command failed with ENOENT: throw
-spawn throw ENOENT]
-`;
-
 exports[`Toolkit#constructor events exits if the event is not allowed with a single event 1`] = `
 Array [
   Array [
