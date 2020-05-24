@@ -47,6 +47,7 @@ This will create a new folder `my-cool-action` with the following files:
 * [Authenticated GitHub API client](#toolsgithub)
 * [Logging](#toolslog)
 * [Getting workflows' inputs](#toolsinputs)
+* [Output information from your action](#toolsoutputs)
 * [Slash commands](#toolscommandcommand-args-match--promise)
 * [Reading files](#toolsreadfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
