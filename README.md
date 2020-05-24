@@ -104,7 +104,7 @@ const tools = new Toolkit({
 })
 ```
 
-`process.env.GITHUB_TOKEN` will be used if no `token` was passed.
+The `github_token` input or `process.env.GITHUB_TOKEN` will be used if no `token` was passed.
 
 ### Toolkit.run
 
