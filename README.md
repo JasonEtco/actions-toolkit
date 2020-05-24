@@ -136,7 +136,18 @@ You can also make GraphQL requests:
 ```js
 const result = await tools.github.graphql(query, variables)
 ```
+
 See [https://github.com/octokit/graphql.js](https://github.com/octokit/graphql.js) for more details on how to leverage the GraphQL API.
+
+**Note:** To make this function, you must pass a GitHub API token to your action. You can do this in the workflow - both of these are automatically used if they exist:
+
+```yaml
+uses: your/action@v1
+with:
+  github_token: ${{ github.token }}
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
 
 <br>
 
