@@ -222,6 +222,7 @@ describe('Toolkit#constructor', () => {
     it('exits if the event is not allowed with a single event', () => {
       new Toolkit({ logger, event: 'pull_request' })
       expect(process.exit).toHaveBeenCalledWith(NeutralCode)
+      console.log(logger.error.mock.calls)
       expect(logger.error.mock.calls).toMatchSnapshot()
     })
 
@@ -239,8 +240,7 @@ describe('Toolkit#constructor', () => {
 
     it('does not exit if the event is allowed with a single event with an action', () => {
       new Toolkit({ logger, event: 'issues.opened' })
-      expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-      expect(logger.error.mock.calls).toMatchSnapshot()
+      expect(process.exit).not.toHaveBeenCalledWith()
     })
   })
 
