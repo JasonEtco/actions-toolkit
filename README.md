@@ -50,7 +50,7 @@ This will create a new folder `my-cool-action` with the following files:
 * [Output information from your action](#toolsoutputs)
 * [Slash commands](#toolscommandcommand-args-match--promise)
 * [Reading files](#toolsreadfilepath-encoding--utf8)
-* [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
+* [Run a CLI command](#toolsexec)
 * [End the action's process](#toolsexit)
 * [Inspect the webhook event payload](#toolscontext)
 
@@ -263,12 +263,12 @@ const contents = await tools.readFile('example.md')
 
 <br>
 
-### tools.runInWorkspace(command, [args], [ExecaOptions])
+### tools.exec
 
-Run a CLI command in the workspace. This uses [execa](https://github.com/sindresorhus/execa) under the hood so check there for the [full options](https://github.com/sindresorhus/execa#options). For convenience, `args` can be a `string` or an array of `string`s.
+Run a CLI command in the workspace. This uses [@actions/exec](https://github.com/actions/toolkit/tree/master/packages/exec) under the hood so check there for the full usage.
 
 ```js
-const result = await tools.runInWorkspace('npm', ['audit'])
+const result = await tools.exec('npm audit')
 ```
 
 <br>

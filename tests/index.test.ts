@@ -164,19 +164,6 @@ describe('Toolkit', () => {
     })
   })
 
-  describe('#runInWorkspace', () => {
-    it('runs the command in the workspace', async () => {
-      const result = await toolkit.runInWorkspace('echo', 'hello')
-      expect(result).toMatchSnapshot()
-      expect(result.stdout).toBe('hello')
-    })
-
-    it('runs the command in the workspace with some options', async () => {
-      const result = await toolkit.runInWorkspace('throw', undefined, { reject: false })
-      expect(result).toMatchSnapshot()
-    })
-  })
-
   describe('#wrapLogger', () => {
     it('wraps the provided logger and allows for a callable class', () => {
       const logger = new Signale({ disabled: true }) as jest.Mocked<Signale>

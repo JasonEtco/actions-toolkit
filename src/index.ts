@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import execa, { Options as ExecaOptions } from 'execa'
+import * as exec from '@actions/exec'
 import fs, { BaseEncodingOptions } from 'fs'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
@@ -73,6 +73,11 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
   public token: string
 
   /**
+   * The @actions/exec library as a function on Toolkit
+   */
+  public exec: typeof exec['exec']
+
+  /**
    * An Octokit SDK client authenticated for this repository. See https://octokit.github.io/rest.js for the API.
    *
    * ```js
@@ -128,6 +133,9 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
     // Memoize the GitHub API token
     this.token = opts.token || this.inputs.github_token || process.env.GITHUB_TOKEN as string
 
+    // Directly expose some other libraries
+    this.exec = exec.exec.bind(this)
+
     // Setup nested objects
     this.exit = new Exit(this.log)
     this.context = new Context()
@@ -169,20 +177,6 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
     const pathToPackage = path.join(this.workspace, 'package.json')
     if (!fs.existsSync(pathToPackage)) throw new Error('package.json could not be found in your project\'s root.')
     return require(pathToPackage)
-  }
-
-  /**
-   * Run a CLI command in the workspace. This runs [execa](https://github.com/sindresorhus/execa)
-   * under the hood so check there for the full options.
-   *
-   * @param command - Command to run
-   * @param args - Argument (this can be a string or multiple arguments in an array)
-   * @param cwd - Directory to run the command in
-   * @param [opts] - Options to pass to the execa function
-   */
-  public async runInWorkspace (command: string, args?: string[] | string, opts?: ExecaOptions) {
-    if (typeof args === 'string') args = [args]
-    return execa(command, args, { cwd: this.workspace, ...opts })
   }
 
   /**
