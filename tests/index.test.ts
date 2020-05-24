@@ -222,7 +222,6 @@ describe('Toolkit#constructor', () => {
     it('exits if the event is not allowed with a single event', () => {
       new Toolkit({ logger, event: 'pull_request' })
       expect(process.exit).toHaveBeenCalledWith(NeutralCode)
-      console.log(logger.error.mock.calls)
       expect(logger.error.mock.calls).toMatchSnapshot()
     })
 
