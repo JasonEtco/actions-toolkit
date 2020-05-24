@@ -50,7 +50,6 @@ This will create a new folder `my-cool-action` with the following files:
 * [Slash commands](#toolscommandcommand-args-match--promise)
 * [Reading files](#toolsreadfilepath-encoding--utf8)
 * [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
-* [Pass information to another action](#toolsstore)
 * [End the action's process](#toolsexit)
 * [Inspect the webhook event payload](#toolscontext)
 
@@ -283,28 +282,6 @@ if (someCheck) tools.exit.neutral('No _action_ necessary!')
 if (anError) tools.exit.failure('We failed!')
 tools.exit.success('We did it team!')
 ```
-
-<br>
-
-### tools.store
-
-Actions can pass information to each other by writing to a file that is shared across the workflow. `tools.store` is a modified instance of [`flat-cache`](https://www.npmjs.com/package/flat-cache):
-
-Store a value:
-
-```js
-tools.store.set('foo', true)
-```
-
-Then, in a later action (or even the same action):
-
-```js
-const foo = tools.store.get('foo')
-console.log(foo)
-// -> true
-```
-
-**Note**: the file is only saved to disk when the process ends and your action completes. This is to prevent conflicts while writing to file. It will only write to a file if at least one key/value pair has been set. If you need to write to disk, you can do so with `tools.store.save()`.
 
 <br>
 
