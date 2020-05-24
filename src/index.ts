@@ -8,7 +8,6 @@ import { Octokit } from '@octokit/rest'
 import { Context } from './context'
 import { Exit } from './exit'
 import { getBody } from './get-body'
-import { Store } from './store'
 import { createInputProxy, InputType } from './inputs'
 import { createOutputProxy, OutputType } from './outputs'
 
@@ -62,11 +61,6 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
   }
 
   public context: Context
-
-  /**
-   * A key/value store for arbitrary data that can be accessed across actions in a workflow
-   */
-  public store: Store
 
   /**
    * Path to a clone of the repository
@@ -138,7 +132,6 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
     this.exit = new Exit(this.log)
     this.context = new Context()
     this.github = new Octokit({ auth: `token ${this.token}` })
-    this.store = new Store(this.context.workflow, this.workspace)
 
     // Check stuff
     this.checkAllowedEvents(this.opts.event)
