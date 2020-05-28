@@ -394,6 +394,6 @@ So, I thought it'd be useful to build those out into a library to help you build
 
 Yep! I just didn't want to rewrite them for my next Action, so here we are.
 
-**What's the difference between this and [actions/toolkit](https://github.com/actions/toolkit)?
+**What's the difference between this and [actions/toolkit](https://github.com/actions/toolkit)?**
 
 This library was the inspiration for the official toolkit. Nowadays, it's an opinionated alternative. My goal for the library is to make building simple actions easy, while the official toolkit needs to support more complicated use-cases (like performance and scaling concerns).
