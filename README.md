@@ -329,7 +329,11 @@ The name of the workflow that was triggered.
 
 #### tools.context.issue
 
-The `owner`, `repo`, and `issue_number/pull_number` params for making API requests against an issue or pull request.
+The `owner`, `repo`, and `issue_number` params for making API requests against an issue or pull request.
+
+#### tools.context.pullRequest
+
+The `owner`, `repo`, and `pull_number` params for making API requests against a pull request.
 
 #### tools.context.repo
 
