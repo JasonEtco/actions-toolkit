@@ -78,10 +78,10 @@ export class Context {
     }
 
     if (payload.issue) {
-      // If it's an issue, the API expects issue_number
+      // If it's an issue
       data.issue_number = payload.issue.number
     } else if (payload.pull_request) {
-      // If it's a PR, the API expects pull_number
+      // If it's a PR
       data.issue_number = payload.pull_request.number
     } else {
       // Otherwise default to the old behaviour for BC reasons
@@ -102,6 +102,8 @@ export class Context {
     if (payload.pull_request) {
       // If it's a PR, the API expects pull_number
       data.pull_number = payload.pull_request.number
+    } else {
+      throw new Error('tools.context.pullRequest cannot be used with this event, there is no pull request object.')
     }
 
     return data
