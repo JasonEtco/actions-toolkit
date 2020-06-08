@@ -72,6 +72,14 @@ test('fails to start creating project in a directory that already exists', async
   )
 })
 
+test('fails to start when mkdir fails for an unknown reason', async () => {
+  jest.spyOn(fs, 'mkdir')
+    .mockImplementationOnce(() => { throw new Error('KABOOM') })
+  await expect(runCLI('__tmp/my-project-name'))
+    .rejects
+    .toThrowError('KABOOM')
+})
+
 test('exits with a failure message when a user cancels the questionnaire', async () => {
   // Mock enquirer to throw an error as if a user presses ctrl+c to cancel the questionnaire.
   const mockEnquirer = require('enquirer')

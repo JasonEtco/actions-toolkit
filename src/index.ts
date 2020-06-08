@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
-import execa, { Options as ExecaOptions } from 'execa'
-import fs from 'fs'
+import * as exec from '@actions/exec'
+import fs, { BaseEncodingOptions } from 'fs'
 import minimist, { ParsedArgs } from 'minimist'
 import path from 'path'
 import { LoggerFunc, Signale } from 'signale'
@@ -8,8 +8,8 @@ import { Octokit } from '@octokit/rest'
 import { Context } from './context'
 import { Exit } from './exit'
 import { getBody } from './get-body'
-import { Store } from './store'
 import { createInputProxy, InputType } from './inputs'
+import { createOutputProxy, OutputType } from './outputs'
 
 export interface ToolkitOptions {
   /**
@@ -30,7 +30,7 @@ export interface ToolkitOptions {
   token?: string
 }
 
-export class Toolkit<I extends InputType = InputType> {
+export class Toolkit<I extends InputType = InputType, O extends OutputType = OutputType> {
   /**
    * Run an asynchronous function that accepts a toolkit as its argument, and fail if
    * an error occurs.
@@ -46,8 +46,8 @@ export class Toolkit<I extends InputType = InputType> {
    * }, { event: 'push' })
    * ```
    */
-  public static async run <I extends InputType = InputType> (func: (tools: Toolkit<I>) => unknown, opts?: ToolkitOptions) {
-    const tools = new Toolkit<I>(opts)
+  public static async run <I extends InputType = InputType, O extends OutputType = OutputType> (func: (tools: Toolkit<I, O>) => unknown, opts?: ToolkitOptions) {
+    const tools = new Toolkit<I, O>(opts)
 
     try {
       const ret = func(tools)
@@ -63,11 +63,6 @@ export class Toolkit<I extends InputType = InputType> {
   public context: Context
 
   /**
-   * A key/value store for arbitrary data that can be accessed across actions in a workflow
-   */
-  public store: Store
-
-  /**
    * Path to a clone of the repository
    */
   public workspace: string
@@ -76,6 +71,11 @@ export class Toolkit<I extends InputType = InputType> {
    * GitHub API token
    */
   public token: string
+
+  /**
+   * The @actions/exec library as a function on Toolkit
+   */
+  public exec: typeof exec['exec']
 
   /**
    * An Octokit SDK client authenticated for this repository. See https://octokit.github.io/rest.js for the API.
@@ -107,6 +107,11 @@ export class Toolkit<I extends InputType = InputType> {
    */
   public inputs: I
 
+  /**
+   * An object of the outputs provided by your action.
+   */
+  public outputs: O
+
   constructor (opts: ToolkitOptions = {}) {
     this.opts = opts
 
@@ -120,16 +125,21 @@ export class Toolkit<I extends InputType = InputType> {
 
     // Memoize environment variables and arguments
     this.workspace = process.env.GITHUB_WORKSPACE as string
-    this.token = opts.token || process.env.GITHUB_TOKEN as string
+
+    // Memoize our Proxy instance
+    this.inputs = createInputProxy<I>()
+    this.outputs = createOutputProxy<O>()
+
+    // Memoize the GitHub API token
+    this.token = opts.token || this.inputs.github_token || process.env.GITHUB_TOKEN as string
+
+    // Directly expose some other libraries
+    this.exec = exec.exec.bind(this)
 
     // Setup nested objects
     this.exit = new Exit(this.log)
     this.context = new Context()
     this.github = new Octokit({ auth: `token ${this.token}` })
-    this.store = new Store(this.context.workflow, this.workspace)
-
-    // Memoize our Proxy instance
-    this.inputs = createInputProxy<I>()
 
     // Check stuff
     this.checkAllowedEvents(this.opts.event)
@@ -137,19 +147,23 @@ export class Toolkit<I extends InputType = InputType> {
   }
 
   /**
-   * Gets the contents file in your project's workspace
+   * Gets the contents of a file in your project's workspace
    *
    * ```js
-   * const myFile = tools.getFile('README.md')
+   * const myFile = tools.readFile('README.md')
    * ```
    *
    * @param filename - Name of the file
    * @param encoding - Encoding (usually utf8)
    */
-  public getFile (filename: string, encoding = 'utf8') {
+  public async readFile (filename: string, encoding: BaseEncodingOptions['encoding'] = 'utf8') {
     const pathToFile = path.join(this.workspace, filename)
-    if (!fs.existsSync(pathToFile)) throw new Error(`File ${filename} could not be found in your project's workspace. You may need the actions/checkout action to clone the repository first.`)
-    return fs.readFileSync(pathToFile, encoding)
+
+    if (!fs.existsSync(pathToFile)) {
+      throw new Error(`File ${filename} could not be found in your project's workspace. You may need the actions/checkout action to clone the repository first.`)
+    }
+
+    return fs.promises.readFile(pathToFile, encoding)
   }
 
   /**
@@ -163,20 +177,6 @@ export class Toolkit<I extends InputType = InputType> {
     const pathToPackage = path.join(this.workspace, 'package.json')
     if (!fs.existsSync(pathToPackage)) throw new Error('package.json could not be found in your project\'s root.')
     return require(pathToPackage)
-  }
-
-  /**
-   * Run a CLI command in the workspace. This runs [execa](https://github.com/sindresorhus/execa)
-   * under the hood so check there for the full options.
-   *
-   * @param command - Command to run
-   * @param args - Argument (this can be a string or multiple arguments in an array)
-   * @param cwd - Directory to run the command in
-   * @param [opts] - Options to pass to the execa function
-   */
-  public async runInWorkspace (command: string, args?: string[] | string, opts?: ExecaOptions) {
-    if (typeof args === 'string') args = [args]
-    return execa(command, args, { cwd: this.workspace, ...opts })
   }
 
   /**

@@ -9,10 +9,6 @@ describe('Toolkit', () => {
   let toolkit: Toolkit
 
   beforeEach(() => {
-    // Mock the `process` event emitter to prevent memory
-    // leaks on repeated calls in tests - used by Store.
-    process.on = jest.fn()
-
     // Mock core.setFailed to a noop
     jest.spyOn(core, 'setFailed')
       .mockImplementationOnce(f => f)
@@ -68,20 +64,21 @@ describe('Toolkit', () => {
     })
   })
 
-  describe('#getFile', () => {
-    it('gets the contents of a file', () => {
-      const actual = toolkit.getFile('README.md')
+  describe('#readFile', () => {
+    it('gets the contents of a file', async () => {
+      const actual = await toolkit.readFile('README.md')
       expect(actual).toMatchSnapshot()
     })
 
-    it('gets the contents of a file with custom encoding', () => {
-      const actual = toolkit.getFile('README.md', 'base64')
+    it('gets the contents of a file with custom encoding', async () => {
+      const actual = await toolkit.readFile('README.md', 'base64')
       expect(actual).toMatchSnapshot()
     })
 
-    it('throws if the file could not be found', () => {
-      const actual = () => toolkit.getFile('DONTREADME.md')
-      expect(actual).toThrowErrorMatchingSnapshot()
+    it('throws if the file could not be found', async () => {
+      await expect(toolkit.readFile('DONTREADME.md'))
+        .rejects
+        .toThrowErrorMatchingSnapshot()
     })
   })
 
@@ -167,19 +164,6 @@ describe('Toolkit', () => {
     })
   })
 
-  describe('#runInWorkspace', () => {
-    it('runs the command in the workspace', async () => {
-      const result = await toolkit.runInWorkspace('echo', 'hello')
-      expect(result).toMatchSnapshot()
-      expect(result.stdout).toBe('hello')
-    })
-
-    it('runs the command in the workspace with some options', async () => {
-      const result = await toolkit.runInWorkspace('throw', undefined, { reject: false })
-      expect(result).toMatchSnapshot()
-    })
-  })
-
   describe('#wrapLogger', () => {
     it('wraps the provided logger and allows for a callable class', () => {
       const logger = new Signale({ disabled: true }) as jest.Mocked<Signale>
@@ -251,6 +235,11 @@ describe('Toolkit#constructor', () => {
       new Toolkit({ logger, event: 'pull_request.opened' })
       expect(process.exit).toHaveBeenCalledWith(NeutralCode)
       expect(logger.error.mock.calls).toMatchSnapshot()
+    })
+
+    it('does not exit if the event is allowed with a single event with an action', () => {
+      new Toolkit({ logger, event: 'issues.opened' })
+      expect(process.exit).not.toHaveBeenCalledWith()
     })
   })
 

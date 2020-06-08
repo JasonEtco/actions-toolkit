@@ -47,10 +47,10 @@ This will create a new folder `my-cool-action` with the following files:
 * [Authenticated GitHub API client](#toolsgithub)
 * [Logging](#toolslog)
 * [Getting workflows' inputs](#toolsinputs)
+* [Output information from your action](#toolsoutputs)
 * [Slash commands](#toolscommandcommand-args-match--promise)
-* [Reading files](#toolsgetfilepath-encoding--utf8)
-* [Run a CLI command](#toolsruninworkspacecommand-args-execaoptions)
-* [Pass information to another action](#toolsstore)
+* [Reading files](#toolsreadfilepath-encoding--utf8)
+* [Run a CLI command](#toolsexec)
 * [End the action's process](#toolsexit)
 * [Inspect the webhook event payload](#toolscontext)
 
@@ -104,7 +104,7 @@ const tools = new Toolkit({
 })
 ```
 
-`process.env.GITHUB_TOKEN` will be used if no `token` was passed.
+The `github_token` input or `process.env.GITHUB_TOKEN` will be used if no `token` was passed.
 
 ### Toolkit.run
 
@@ -136,7 +136,18 @@ You can also make GraphQL requests:
 ```js
 const result = await tools.github.graphql(query, variables)
 ```
+
 See [https://github.com/octokit/graphql.js](https://github.com/octokit/graphql.js) for more details on how to leverage the GraphQL API.
+
+**Note:** To make this function, you must pass a GitHub API token to your action. You can do this in the workflow - both of these are automatically used if they exist:
+
+```yaml
+uses: your/action@v1
+with:
+  github_token: ${{ github.token }}
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
 
 <br>
 
@@ -187,6 +198,18 @@ _Note!_ This is not a plain object, it's an instance of [Proxy](https://develope
 
 <br>
 
+### tools.outputs
+
+GitHub Actions workflows can define some "outputs" - options that can be passed to the next actions. You can access those using `tools.outputs`:
+
+```js
+tools.outputs.foo = 'bar'
+```
+
+_Note!_ This is not a plain object, it's an instance of [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), so be aware that there may be some differences.
+
+<br>
+
 ### tools.command(command, (args, match) => Promise<void>)
 
 Respond to a slash-command posted in a GitHub issue, comment, pull request, pull request review or commit comment. Arguments to the slash command are parsed by [minimist](https://github.com/substack/minimist). You can use a slash command in a larger comment, but the command must be at the start of the line:
@@ -230,22 +253,22 @@ const pkg = tools.getPackageJSON()
 
 <br>
 
-### tools.getFile(path, [encoding = 'utf8'])
+### tools.readFile(path, [encoding = 'utf8'])
 
-Get the contents of a file in the repository.
+Get the contents of a file in the repository. Should be used with [actions/checkout](https://github.com/actions/checkout) to clone the repository in the actions workflow.
 
 ```js
-const contents = tools.getFile('example.md')
+const contents = await tools.readFile('example.md')
 ```
 
 <br>
 
-### tools.runInWorkspace(command, [args], [ExecaOptions])
+### tools.exec
 
-Run a CLI command in the workspace. This uses [execa](https://github.com/sindresorhus/execa) under the hood so check there for the [full options](https://github.com/sindresorhus/execa#options). For convenience, `args` can be a `string` or an array of `string`s.
+Run a CLI command in the workspace. This uses [@actions/exec](https://github.com/actions/toolkit/tree/master/packages/exec) under the hood so check there for the full usage.
 
 ```js
-const result = await tools.runInWorkspace('npm', ['audit'])
+const result = await tools.exec('npm audit')
 ```
 
 <br>
@@ -271,28 +294,6 @@ if (someCheck) tools.exit.neutral('No _action_ necessary!')
 if (anError) tools.exit.failure('We failed!')
 tools.exit.success('We did it team!')
 ```
-
-<br>
-
-### tools.store
-
-Actions can pass information to each other by writing to a file that is shared across the workflow. `tools.store` is a modified instance of [`flat-cache`](https://www.npmjs.com/package/flat-cache):
-
-Store a value:
-
-```js
-tools.store.set('foo', true)
-```
-
-Then, in a later action (or even the same action):
-
-```js
-const foo = tools.store.get('foo')
-console.log(foo)
-// -> true
-```
-
-**Note**: the file is only saved to disk when the process ends and your action completes. This is to prevent conflicts while writing to file. It will only write to a file if at least one key/value pair has been set. If you need to write to disk, you can do so with `tools.store.save()`.
 
 <br>
 
@@ -393,6 +394,6 @@ So, I thought it'd be useful to build those out into a library to help you build
 
 Yep! I just didn't want to rewrite them for my next Action, so here we are.
 
-**What's the difference between this and [actions/toolkit](https://github.com/actions/toolkit)?
+**What's the difference between this and [actions/toolkit](https://github.com/actions/toolkit)?**
 
 This library was the inspiration for the official toolkit. Nowadays, it's an opinionated alternative. My goal for the library is to make building simple actions easy, while the official toolkit needs to support more complicated use-cases (like performance and scaling concerns).

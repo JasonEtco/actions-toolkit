@@ -1,4 +1,4 @@
-import { createInputProxy, InputType } from "../src/inputs"
+import { createInputProxy, InputType } from '../src/inputs'
 
 describe('createInputProxy', () => {
   let inputs: InputType
@@ -6,12 +6,14 @@ describe('createInputProxy', () => {
   beforeEach(() => {
     process.env.INPUT_EXAMPLE = 'pizza'
     process.env.INPUT_FOO = 'bar'
+    process.env['INPUT_EXAMPLE-NAME'] = 'pizza'
     inputs = createInputProxy()
   })
 
   afterEach(() => {
     delete process.env.INPUT_EXAMPLE
     delete process.env.INPUT_FOO
+    delete process.env.INPUT_EXAMPLE_NAME
   })
 
   describe('#get', () => {
@@ -25,6 +27,12 @@ describe('createInputProxy', () => {
       const result = inputs.example
       expect(result).toBe('pizza')
     })
+  
+    it('gets a property with a - in it', () => {
+      inputs = createInputProxy<{ 'example-name': string }>()
+      const result = inputs['example-name']
+      expect(result).toBe('pizza')
+    })
   })
 
   describe('#set', () => {
@@ -36,7 +44,7 @@ describe('createInputProxy', () => {
   describe('#ownKeys', () => {
     it('returns the filtered keys', () => {
       const keys = Object.keys(inputs)
-      expect(keys).toEqual(['INPUT_EXAMPLE', 'INPUT_FOO'])
+      expect(keys).toEqual(['INPUT_EXAMPLE-NAME', 'INPUT_EXAMPLE', 'INPUT_FOO'])
     })
   })
 })
