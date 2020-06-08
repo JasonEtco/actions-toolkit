@@ -82,11 +82,26 @@ export class Context {
       data.issue_number = payload.issue.number
     } else if (payload.pull_request) {
       // If it's a PR, the API expects pull_number
-      data.pull_number = payload.pull_request.number
+      data.issue_number = payload.pull_request.number
     } else {
       // Otherwise default to the old behaviour for BC reasons
       // Long term, this should be data.number = payload.number
       data.number = (payload.issue || payload.pull_request || payload).number
+    }
+
+    return data
+  }
+
+  public get pullRequest () {
+    const payload = this.payload
+
+    const data: { [k: string]: any } = {
+      ...this.repo
+    }
+
+    if (payload.pull_request) {
+      // If it's a PR, the API expects pull_number
+      data.pull_number = payload.pull_request.number
     }
 
     return data
