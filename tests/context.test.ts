@@ -62,7 +62,7 @@ describe('Context', () => {
         repository: { owner: { login: 'JasonEtco' }, name: 'test' }
       }
       expect(context.issue).toEqual({
-        pull_number: 2, owner: 'JasonEtco', repo: 'test'
+        issue_number: 2, owner: 'JasonEtco', repo: 'test'
       })
     })
 
@@ -71,6 +71,29 @@ describe('Context', () => {
       expect(context.issue).toEqual({
         number: 2, owner: 'JasonEtco', repo: 'test'
       })
+    })
+  })
+
+  describe('#pullRequest', () => {
+    it('returns attributes from the repository payload', () => {
+      context.payload = {
+        pull_request: { number: 2 },
+        repository: { owner: { login: 'JasonEtco' }, name: 'test' }
+      }
+
+      expect(context.pullRequest).toEqual({
+        owner: 'JasonEtco',
+        repo: 'test',
+        pull_number: 2
+      })
+    })
+
+    it('throws if no pull_request object was found', () => {
+      context.payload = {
+        repository: { owner: { login: 'JasonEtco' }, name: 'test' }
+      }
+
+      expect(() => context.pullRequest).toThrow()
     })
   })
 })
