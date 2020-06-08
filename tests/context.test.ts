@@ -53,7 +53,7 @@ describe('Context', () => {
 
   describe('#issue', () => {
     it('returns attributes from the repository payload', () => {
-      expect(context.issue).toEqual({ owner: 'JasonEtco', repo: 'test', number: 1 })
+      expect(context.issue).toEqual({ owner: 'JasonEtco', repo: 'test', issue_number: 1 })
     })
 
     it('works with pull_request payloads', () => {
@@ -62,15 +62,46 @@ describe('Context', () => {
         repository: { owner: { login: 'JasonEtco' }, name: 'test' }
       }
       expect(context.issue).toEqual({
-        number: 2, owner: 'JasonEtco', repo: 'test'
+        issue_number: 2, owner: 'JasonEtco', repo: 'test'
       })
     })
 
     it('works with payload.number payloads', () => {
       context.payload = { number: 2, repository: { owner: { login: 'JasonEtco' }, name: 'test' } }
       expect(context.issue).toEqual({
-        number: 2, owner: 'JasonEtco', repo: 'test'
+        issue_number: 2, owner: 'JasonEtco', repo: 'test'
       })
+    })
+
+    it('throws if no number was found', () => {
+      context.payload = {
+        repository: { owner: { login: 'JasonEtco' }, name: 'test' }
+      }
+
+      expect(() => context.issue).toThrow()
+    })
+  })
+
+  describe('#pullRequest', () => {
+    it('returns attributes from the repository payload', () => {
+      context.payload = {
+        pull_request: { number: 2 },
+        repository: { owner: { login: 'JasonEtco' }, name: 'test' }
+      }
+
+      expect(context.pullRequest).toEqual({
+        owner: 'JasonEtco',
+        repo: 'test',
+        pull_number: 2
+      })
+    })
+
+    it('throws if no pull_request object was found', () => {
+      context.payload = {
+        repository: { owner: { login: 'JasonEtco' }, name: 'test' }
+      }
+
+      expect(() => context.pullRequest).toThrow()
     })
   })
 })
