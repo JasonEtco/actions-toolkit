@@ -69,8 +69,16 @@ describe('Context', () => {
     it('works with payload.number payloads', () => {
       context.payload = { number: 2, repository: { owner: { login: 'JasonEtco' }, name: 'test' } }
       expect(context.issue).toEqual({
-        number: 2, owner: 'JasonEtco', repo: 'test'
+        issue_number: 2, owner: 'JasonEtco', repo: 'test'
       })
+    })
+
+    it('throws if no number was found', () => {
+      context.payload = {
+        repository: { owner: { login: 'JasonEtco' }, name: 'test' }
+      }
+
+      expect(() => context.issue).toThrow()
     })
   })
 

@@ -83,10 +83,11 @@ export class Context {
     } else if (payload.pull_request) {
       // If it's a PR
       data.issue_number = payload.pull_request.number
+    } else if (payload.number) {
+      // Just sittin' there on the payload
+      data.issue_number = payload.number
     } else {
-      // Otherwise default to the old behaviour for BC reasons
-      // Long term, this should be data.number = payload.number
-      data.number = (payload.issue || payload.pull_request || payload).number
+      throw new Error('tools.context.issue cannot be used with this event, there is no issue or pull_request object.')
     }
 
     return data
@@ -103,7 +104,7 @@ export class Context {
       // If it's a PR, the API expects pull_number
       data.pull_number = payload.pull_request.number
     } else {
-      throw new Error('tools.context.pullRequest cannot be used with this event, there is no pull request object.')
+      throw new Error('tools.context.pullRequest cannot be used with this event, there is no pull_request object.')
     }
 
     return data
