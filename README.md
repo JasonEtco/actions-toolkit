@@ -183,7 +183,7 @@ In the GitHub Actions output, this is the result:
 GitHub Actions workflows can define some "inputs" - options that can be passed to the action:
 
 ```yaml
-uses: JasonEtco/example-action@master
+uses: JasonEtco/example-action@v1
 with:
   foo: bar
 ```
@@ -265,7 +265,7 @@ const contents = await tools.readFile('example.md')
 
 ### tools.exec
 
-Run a CLI command in the workspace. This uses [@actions/exec](https://github.com/actions/toolkit/tree/master/packages/exec) under the hood so check there for the full usage.
+Run a CLI command in the workspace. This uses [@actions/exec](https://github.com/actions/toolkit/tree/HEAD/packages/exec) under the hood so check there for the full usage.
 
 ```js
 const result = await tools.exec('npm audit')
@@ -382,7 +382,7 @@ describe('tests', () => {
 ```
 </details>
 
-You can then mock things by tweaking environment variables and redefining `tools.context.payload`. You can check out [this repo's tests](https://github.com/JasonEtco/create-an-issue/blob/master/tests/) as an example.
+You can then mock things by tweaking environment variables and redefining `tools.context.payload`. You can check out [this repo's tests](https://github.com/JasonEtco/create-an-issue/blob/HEAD/tests/) as an example.
 
 ## Motivation
 
