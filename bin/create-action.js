@@ -73,7 +73,7 @@ async function getActionMetadata () {
     {
       type: 'autocomplete',
       name: 'color',
-      message: 'Choose a background color background color used in the visual workflow editor for your action.',
+      message: 'Choose a background color used in the visual workflow editor for your action.',
       choices: colors
     }
   ])
