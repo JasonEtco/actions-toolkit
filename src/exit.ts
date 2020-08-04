@@ -23,7 +23,7 @@ export class Exit {
   /**
    * Stop the action with a "success" status
    */
-  public success (message?: string) {
+  public success (message?: string): never {
     if (message) this.logger.success(message)
     process.exit(SuccessCode)
   }
@@ -31,7 +31,7 @@ export class Exit {
   /**
    * Stop the action with a "neutral" status
    */
-  public neutral (message?: string) {
+  public neutral (message?: string): never {
     if (message) this.logger.info(message)
     process.exit(NeutralCode)
   }
@@ -39,7 +39,7 @@ export class Exit {
   /**
    * Stop the action with a "failed" status
    */
-  public failure (message?: string) {
+  public failure (message?: string): never {
     if (message) this.logger.fatal(message)
     process.exit(FailureCode)
   }
