@@ -1,7 +1,7 @@
 import { Exit } from './exit'
 
 export class Assert {
-  public exit: Exit
+  private exit: Exit
 
   constructor (exit: Exit) {
     this.exit = exit
