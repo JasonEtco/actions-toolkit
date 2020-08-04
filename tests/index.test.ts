@@ -37,7 +37,7 @@ describe('Toolkit', () => {
 
     it('logs and fails when the function throws an error', async () => {
       const err = new Error('Whoops!')
-      const exitFailure = jest.fn()
+      const exitFailure = jest.fn<never, any>()
 
       await Toolkit.run(async twolkit => {
         twolkit.exit.failure = exitFailure
