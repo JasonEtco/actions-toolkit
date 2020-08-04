@@ -7,6 +7,7 @@ import { LoggerFunc, Signale } from 'signale'
 import { Octokit } from '@octokit/rest'
 import { Context } from './context'
 import { Exit } from './exit'
+import { Assert } from './assert'
 import { getBody } from './get-body'
 import { createInputProxy, InputType } from './inputs'
 import { createOutputProxy, OutputType } from './outputs'
@@ -98,6 +99,11 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
   public exit: Exit
 
   /**
+   * A collection of methods used to stop an action while it's being run
+   */
+  public assert: Assert
+
+  /**
    * A general-purpose logger. An instance of [Signale](https://github.com/klaussinani/signale)
    */
   public log: Signale & LoggerFunc
@@ -138,6 +144,7 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
 
     // Setup nested objects
     this.exit = new Exit(this.log)
+    this.assert = new Assert(this.exit);
     this.context = new Context()
     this.github = new Octokit({ auth: `token ${this.token}` })
 
