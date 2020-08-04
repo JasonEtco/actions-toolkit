@@ -7,23 +7,12 @@ export class Assert {
     this.exit = exit
   }
 
-  public assert = this.isTrue
-
   /**
-   * Assert condition and exit with "failed" status if it's met
+   * Assert condition is truthy and exit with "failed" status if not
    */
-  public isTrue(condition: any, msg?: string): asserts condition {
-    if (condition) {
-      this.exit.failure(msg ?? `Assertion for value ${condition} is true`)
-    }
-  }
-
-  /**
-   * Assert condition and exit with "failed" status if it's not met
-   */
-  public isFalse(condition: any, msg?: string): asserts condition {
+  public isTruthy(condition: any, msg?: string): asserts condition {
     if (!condition) {
-      this.exit.failure(msg ?? `Assertion for value ${condition} is false`)
+      this.exit.failure(msg ?? `Assertion for value ${condition} is not truthy`)
     }
   }
 }
