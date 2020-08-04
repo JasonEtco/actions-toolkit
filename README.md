@@ -297,6 +297,23 @@ tools.exit.success('We did it team!')
 
 <br>
 
+### tools.assert.isTruthy
+
+A type-aware assertion to check conditions. If condition is falsy `isTruthy` will end the action's process and set `failure` GitHub status. You can pass an optional message to be logged before exiting. This can be used like an early return:
+
+```js
+tools.assert.isTruthy(someCheck, 'We failed!');
+```
+
+```ts
+const version: string | undefined = 'Some string!'
+tools.assert.isTruthy(version !== undefined);
+// Here TypeScript understands that verson has type string
+const str: string = version;
+```
+
+<br>
+
 ### tools.context
 
 #### tools.context.action
