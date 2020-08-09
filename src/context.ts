@@ -73,41 +73,41 @@ export class Context {
   public get issue () {
     const payload = this.payload
 
-    const data: { [k: string]: any } = {
-      ...this.repo
-    }
-
+    let issue_number: number
     if (payload.issue) {
       // If it's an issue
-      data.issue_number = payload.issue.number
+      issue_number = payload.issue.number
     } else if (payload.pull_request) {
       // If it's a PR
-      data.issue_number = payload.pull_request.number
+      issue_number = payload.pull_request.number
     } else if (payload.number) {
       // Just sittin' there on the payload
-      data.issue_number = payload.number
+      issue_number = payload.number
     } else {
       throw new Error('tools.context.issue cannot be used with this event, there is no issue or pull_request object.')
     }
 
-    return data
+    return {
+      ...this.repo,
+      issue_number
+    }
   }
 
   public get pullRequest () {
     const payload = this.payload
 
-    const data: { [k: string]: any } = {
-      ...this.repo
-    }
-
+    let pull_number: number
     if (payload.pull_request) {
       // If it's a PR, the API expects pull_number
-      data.pull_number = payload.pull_request.number
+      pull_number = payload.pull_request.number
     } else {
       throw new Error('tools.context.pullRequest cannot be used with this event, there is no pull_request object.')
     }
 
-    return data
+    return {
+      ...this.repo,
+      pull_number
+    }
   }
 
   public get repo () {
