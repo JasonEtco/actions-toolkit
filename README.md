@@ -43,16 +43,16 @@ This will create a new folder `my-cool-action` with the following files:
 
 ## API
 
-* [The Toolkit class](#toolkit-options)
-* [Authenticated GitHub API client](#toolsgithub)
-* [Logging](#toolslog)
-* [Getting workflows' inputs](#toolsinputs)
-* [Output information from your action](#toolsoutputs)
-* [Slash commands](#toolscommandcommand-args-match--promise)
-* [Reading files](#toolsreadfilepath-encoding--utf8)
-* [Run a CLI command](#toolsexec)
-* [End the action's process](#toolsexit)
-* [Inspect the webhook event payload](#toolscontext)
+- [The Toolkit class](#toolkit-options)
+- [Authenticated GitHub API client](#toolsgithub)
+- [Logging](#toolslog)
+- [Getting workflows' inputs](#toolsinputs)
+- [Output information from your action](#toolsoutputs)
+- [Slash commands](#toolscommandcommand-args-match--promise)
+- [Reading files](#toolsreadfilepath-encoding--utf8)
+- [Run a CLI command](#toolsexec)
+- [End the action's process](#toolsexit)
+- [Inspect the webhook event payload](#toolscontext)
 
 ### Toolkit options
 
@@ -113,10 +113,14 @@ Run an asynchronous function that receives an instance of `Toolkit` as its argum
 The toolkit instance can be configured by passing `Toolkit` options as the second argument to `Toolkit.run`.
 
 ```js
-Toolkit.run(async tools => {
-  // Action code
-}, { event: 'push' })
+Toolkit.run(
+  async (tools) => {
+    // Action code
+  },
+  { event: 'push' }
+)
 ```
+
 <br>
 
 ### tools.github
@@ -174,6 +178,25 @@ In the GitHub Actions output, this is the result:
 ✖  fatal     Error: Something bad happened!
     at Object.<anonymous> (/index.js:5:17)
     at Module._compile (internal/modules/cjs/loader.js:734:30)
+```
+
+This library adds some utilities to Singale, so that it can better interact with the workflow logs:
+
+```js
+tools.log.startGroup('Title') // Creates a log group named 'Title'
+tools.log.endGroup() // Closes the last log group
+
+tools.log.error('Some error') // Marked as an error in the report
+tools.log.fatal(new Error('It works with errors too!')) // Marked as an error in the report
+tools.log.warn({ message: 'Your warning' }) // Marked as a warning in the report
+tools.log.debug('Your debug message') // Visible only in debug mode
+```
+
+If you want to use one of these Signale methods without the custom workflow log, you can either create your own instance of Signale or suppress the command using the `noIssue` option:
+
+```js
+tools.log.error('Some error', { noIssue: true }) // Won't show up in the report
+tools.log.debug({ message: 'Your debug message', noIssue: true }) // Will show up in the logs even if not in debug mode
 ```
 
 <br>
@@ -236,7 +259,9 @@ The handler will run multiple times for each match:
 
 ```ts
 let i = 0
-await tools.command('deploy', () => { i++ })
+await tools.command('deploy', () => {
+  i++
+})
 console.log(i)
 // -> 3
 ```
@@ -348,12 +373,12 @@ Similar to building CLIs, GitHub Actions usually works by running a file with `n
 
 ```js
 const { Toolkit } = require('actions-toolkit')
-Toolkit.run(async tools => {
+Toolkit.run(async (tools) => {
   tools.log.success('Yay!')
 })
 ```
-</details>
 
+</details>
 
 <details>
 <summary>index.test.js</summary>
@@ -365,7 +390,9 @@ describe('tests', () => {
 
   beforeAll(() => {
     // Mock `Toolkit.run` to redefine `action` when its called
-    Toolkit.run = fn => { action = fn }
+    Toolkit.run = (fn) => {
+      action = fn
+    }
     // Require the index.js file, after we've mocked `Toolkit.run`
     require('./index.js')
   })
@@ -380,6 +407,7 @@ describe('tests', () => {
   })
 })
 ```
+
 </details>
 
 You can then mock things by tweaking environment variables and redefining `tools.context.payload`. You can check out [this repo's tests](https://github.com/JasonEtco/create-an-issue/blob/HEAD/tests/) as an example.
