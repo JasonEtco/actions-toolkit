@@ -85,5 +85,13 @@ describe('CustomSignale', () => {
         expect.not.stringMatching(new RegExp(`^${prefix}`, 'g'))
       )
     })
+
+    it('should work with errors', () => {
+      logger[key](new Error('asd'), { noIssue: true })
+      expect(spy).toHaveBeenCalledTimes(1)
+      expect(spy).toHaveBeenLastCalledWith(
+        expect.not.stringMatching(new RegExp(`^${prefix}`, 'g'))
+      )
+    })
   })
 })
