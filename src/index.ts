@@ -10,6 +10,7 @@ import { Exit } from './exit'
 import { getBody } from './get-body'
 import { createInputProxy, InputType } from './inputs'
 import { createOutputProxy, OutputType } from './outputs'
+import { CustomSignale } from './logger'
 
 export interface ToolkitOptions {
   /**
@@ -117,7 +118,7 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
 
     // Create the logging instance
     this.log = this.wrapLogger(
-      opts.logger || new Signale({ config: { underlineLabel: false } })
+      opts.logger || new CustomSignale()
     )
 
     // Print a console warning for missing environment variables
