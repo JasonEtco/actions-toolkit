@@ -189,13 +189,13 @@ tools.log.endGroup() // Closes the last log group
 tools.log.error('Some error') // Marked as an error in the report
 tools.log.fatal(new Error('It works with errors too!')) // Marked as an error in the report
 tools.log.warn({ message: 'Your warning' }) // Marked as a warning in the report
-tools.log.debug('Your debug message') // Visible only in debug mode
+tools.log.debug('Your debug message: %s', 'a variable') // Visible only in debug mode
 ```
 
 If you want to use one of these Signale methods without the custom workflow log, you can either create your own instance of Signale or suppress the command using the `noIssue` option:
 
 ```js
-tools.log.error('Some error', { noIssue: true }) // Won't show up in the report
+tools.log.error({ message: 'Some error', noIssue: true }) // Won't show up in the report
 tools.log.debug({ message: 'Your debug message', noIssue: true }) // Will show up in the logs even if not in debug mode
 ```
 
