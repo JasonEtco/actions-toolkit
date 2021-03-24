@@ -31,7 +31,7 @@ export class CustomSignale extends Signale {
     const method = this[key]
 
     this[key] = (...args: any[]) => {
-      let message, options
+      let options
 
       if (
         args.length == 1 &&
@@ -43,15 +43,21 @@ export class CustomSignale extends Signale {
         // logger.error({ message: 'abc', ... })
         options = args[0]
       } else {
-        // The method has been called using message + options
-        // logger.error('abc', { ... })
-        message = args[0]
-        options = args[1]
+        // The method has been called using message + arguments
+        // logger.error('abc %s', 'def', ...)
       }
 
-      if (!options) options = {}
-      if (message) options = { ...options, message }
-      return options.noIssue ? method(...args) : method({ prefix, ...options })
+      // Unless the user wants to use the original method...
+      if (!options?.noIssue) {
+        // Write the prefix to stdout
+        process.stdout.write(options?.prefix || prefix)
+
+        // Remove the custom prefix from the options
+        if (options?.prefix) delete options.prefix
+      }
+
+      // Run the original method
+      return method(...args)
     }
   }
 }
