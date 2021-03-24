@@ -17,11 +17,11 @@ export class CustomSignale extends Signale {
   }
 
   public startGroup(title: string) {
-    process.stdout.write(`::group::${title}`)
+    process.stdout.write(`::group::${title}\n`)
   }
 
   public endGroup() {
-    process.stdout.write('::endgroup::')
+    process.stdout.write('::endgroup::\n')
   }
 
   private addPrefix(key: DefaultMethods, prefix: string): void {
