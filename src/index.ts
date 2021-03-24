@@ -101,7 +101,7 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
   /**
    * A general-purpose logger. An instance of [Signale](https://github.com/klaussinani/signale)
    */
-  public log: Signale & LoggerFunc
+  public log: Signale & CustomSignale & LoggerFunc
 
   /**
    * An object of the inputs provided to your action. These can all be `undefined`!
@@ -248,14 +248,14 @@ export class Toolkit<I extends InputType = InputType, O extends OutputType = Out
   /**
    * Wrap a Signale logger so that its a callable class
    */
-  private wrapLogger (logger: Signale) {
+  private wrapLogger (logger: Signale | CustomSignale) {
     // Create a callable function
     const fn = logger.info.bind(logger)
     // Add the log methods onto the function
     const wrapped = Object.assign(fn, logger)
     // Clone the prototype
     Object.setPrototypeOf(wrapped, logger)
-    return wrapped
+    return wrapped as LoggerFunc & CustomSignale
   }
 
   /**
