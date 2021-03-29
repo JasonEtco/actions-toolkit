@@ -82,8 +82,9 @@ describe('CustomSignale', () => {
     it('should work with message + custom prefix option', () => {
       logger[key]({ message: 'abc', prefix: '123' })
       expect(spy).toHaveBeenCalledTimes(2)
-      expect(spy).toHaveBeenNthCalledWith(1, '123')
+      expect(spy).toHaveBeenNthCalledWith(1, prefix)
       expect(spy).toHaveBeenNthCalledWith(2, expect.stringMatching(/abc\n$/g))
+      expect(spy).toHaveBeenNthCalledWith(2, expect.stringMatching(/^123/g))
     })
 
     it('should work with errors', () => {

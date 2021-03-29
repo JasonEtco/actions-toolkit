@@ -13,7 +13,7 @@ export class CustomSignale extends Signale {
       config: { underlineLabel: false }
     })
 
-    defaultCommands.forEach(([key, prefix]) => this.addPrefix(key, prefix))
+    defaultCommands.forEach(([key, prefix]) => this.replaceMethod(key, prefix))
   }
 
   public startGroup(title: string) {
@@ -24,7 +24,7 @@ export class CustomSignale extends Signale {
     process.stdout.write('::endgroup::\n')
   }
 
-  private addPrefix(key: DefaultMethods, prefix: string): void {
+  private replaceMethod(key: DefaultMethods, prefix: string): void {
     if (!this[key])
       throw `Can't extend ${key} method, base function does not exist`
 
@@ -49,15 +49,15 @@ export class CustomSignale extends Signale {
 
       // Unless the user wants to use the original method...
       if (!options?.noIssue) {
-        // Write the prefix to stdout
-        process.stdout.write(options?.prefix || prefix)
+        // Write the gh prefix to stdout
+        process.stdout.write(prefix)
 
-        // Remove the custom prefix from the options
-        if (options?.prefix) delete options.prefix
+        // Run the default log method
+        return this.log(...args)
+      } else {
+        // Run the original method
+        return method(...args)
       }
-
-      // Run the original method
-      return method(...args)
     }
   }
 }
