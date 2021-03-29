@@ -1,4 +1,5 @@
 import { CustomSignale, defaultCommands } from '../src/logger'
+import * as loggerModule from '../src/logger'
 
 describe('defaultCommands', () => {
   it('should be an array of 2-strings arrays', () => {
@@ -19,6 +20,28 @@ describe('CustomSignale', () => {
 
   afterEach(() => {
     spy.mockReset()
+  })
+
+  describe('#constructor', () => {
+    const original = defaultCommands
+    it('should throw when defaultCommands is not valid', () => {
+      // eslint-disable-next-line no-import-assign
+      Object.defineProperty(loggerModule, 'defaultCommands', {
+        value: ['asd', 'asd']
+      })
+      expect(() => {
+        new loggerModule.CustomSignale()
+      }).toThrow()
+    })
+    it('should not throw when defaultCommands is valid', () => {
+      // eslint-disable-next-line no-import-assign
+      Object.defineProperty(loggerModule, 'defaultCommands', {
+        value: original
+      })
+      expect(() => {
+        new CustomSignale()
+      }).not.toThrow()
+    })
   })
 
   describe('#startGroup', () => {
