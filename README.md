@@ -43,16 +43,16 @@ This will create a new folder `my-cool-action` with the following files:
 
 ## API
 
-- [The Toolkit class](#toolkit-options)
-- [Authenticated GitHub API client](#toolsgithub)
-- [Logging](#toolslog)
-- [Getting workflows' inputs](#toolsinputs)
-- [Output information from your action](#toolsoutputs)
-- [Slash commands](#toolscommandcommand-args-match--promise)
-- [Reading files](#toolsreadfilepath-encoding--utf8)
-- [Run a CLI command](#toolsexec)
-- [End the action's process](#toolsexit)
-- [Inspect the webhook event payload](#toolscontext)
+* [The Toolkit class](#toolkit-options)
+* [Authenticated GitHub API client](#toolsgithub)
+* [Logging](#toolslog)
+* [Getting workflows' inputs](#toolsinputs)
+* [Output information from your action](#toolsoutputs)
+* [Slash commands](#toolscommandcommand-args-match--promise)
+* [Reading files](#toolsreadfilepath-encoding--utf8)
+* [Run a CLI command](#toolsexec)
+* [End the action's process](#toolsexit)
+* [Inspect the webhook event payload](#toolscontext)
 
 ### Toolkit options
 
@@ -113,14 +113,10 @@ Run an asynchronous function that receives an instance of `Toolkit` as its argum
 The toolkit instance can be configured by passing `Toolkit` options as the second argument to `Toolkit.run`.
 
 ```js
-Toolkit.run(
-  async (tools) => {
-    // Action code
-  },
-  { event: 'push' }
-)
+Toolkit.run(async tools => {
+  // Action code
+}, { event: 'push' })
 ```
-
 <br>
 
 ### tools.github
@@ -259,9 +255,7 @@ The handler will run multiple times for each match:
 
 ```ts
 let i = 0
-await tools.command('deploy', () => {
-  i++
-})
+await tools.command('deploy', () => { i++ })
 console.log(i)
 // -> 3
 ```
@@ -373,12 +367,12 @@ Similar to building CLIs, GitHub Actions usually works by running a file with `n
 
 ```js
 const { Toolkit } = require('actions-toolkit')
-Toolkit.run(async (tools) => {
+Toolkit.run(async tools => {
   tools.log.success('Yay!')
 })
 ```
-
 </details>
+
 
 <details>
 <summary>index.test.js</summary>
@@ -390,9 +384,7 @@ describe('tests', () => {
 
   beforeAll(() => {
     // Mock `Toolkit.run` to redefine `action` when its called
-    Toolkit.run = (fn) => {
-      action = fn
-    }
+    Toolkit.run = fn => { action = fn }
     // Require the index.js file, after we've mocked `Toolkit.run`
     require('./index.js')
   })
@@ -407,7 +399,6 @@ describe('tests', () => {
   })
 })
 ```
-
 </details>
 
 You can then mock things by tweaking environment variables and redefining `tools.context.payload`. You can check out [this repo's tests](https://github.com/JasonEtco/create-an-issue/blob/HEAD/tests/) as an example.
