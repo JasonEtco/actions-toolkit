@@ -18,6 +18,7 @@ export class Exit {
 
   constructor (logger: Signale) {
     this.logger = logger
+    this.failure = this.failure.bind(this)
   }
 
   /**
