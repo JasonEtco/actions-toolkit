@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind'
 import { Signale } from 'signale'
 
 /**
@@ -16,15 +17,15 @@ export const NeutralCode = 78
 export class Exit {
   public logger: Signale
 
-  constructor (logger: Signale) {
+  constructor(logger: Signale) {
     this.logger = logger
-    this.failure = this.failure.bind(this)
+    autoBind(this)
   }
 
   /**
    * Stop the action with a "success" status
    */
-  public success (message?: string): never {
+  public success(message?: string): never {
     if (message) this.logger.success(message)
     process.exit(SuccessCode)
   }
@@ -32,7 +33,7 @@ export class Exit {
   /**
    * Stop the action with a "neutral" status
    */
-  public neutral (message?: string): never {
+  public neutral(message?: string): never {
     if (message) this.logger.info(message)
     process.exit(NeutralCode)
   }
@@ -40,7 +41,7 @@ export class Exit {
   /**
    * Stop the action with a "failed" status
    */
-  public failure (message?: string): never {
+  public failure(message?: string): never {
     if (message) this.logger.fatal(message)
     process.exit(FailureCode)
   }
