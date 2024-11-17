@@ -41,7 +41,7 @@
     "@typescript-eslint/parser": "^2.33.0",
     "eslint": "^7.0.0",
     "eslint-config-prettier": "^6.11.0",
-    "jest": "^26.0.1",
+    "jest": "^29.7.0",
     "nock": "^12.0.3",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.0.0",
@@ -55,7 +55,7 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
-    "@octokit/rest": "^17.9.0",
+    "@octokit/rest": "^21.0.2",
     "@types/flat-cache": "^2.0.0",
     "@types/minimist": "^1.2.0",
     "@types/signale": "^1.4.1",
