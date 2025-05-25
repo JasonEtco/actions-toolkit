@@ -1,3 +1,7 @@
+This project is no longer actively maintained. See [actions/toolkit](https://github.com/actions/toolkit) for the officially supported SDK for GitHub Actions.
+
+---
+
 <h3 align="center">GitHub Actions Toolkit</h3>
 
 <p align="center">
